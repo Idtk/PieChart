@@ -1,6 +1,6 @@
 # CustomView<br>
 ## Introduction<br>
-<font size=1px>[显示数据百分比的环形图]</font><br>
+>>显示数据百分比的环形图<br>
 ## Usage<br>
 * 新建Pieview<br>
 ```java
@@ -29,5 +29,6 @@ private void initData(){
 * [Download](https://github.com/Idtk/CustomView/blob/master/jar/)<br>
 * [Demo](https://github.com/Idtk/CustomView/tree/master/demo/PieViewDemo)<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
+
 ## Reminders<br>
-环形块显示的名字,建议不超过4个中文字符
+>>环形块显示的名字,建议不超过4个中文字符
