@@ -1,8 +1,8 @@
 # CustomView
 显示数据百分比的环形图  
 # Usage  
-*新建Pieview  
-```
+* 新建Pieview  
+```java
 PieView mPieView = new PieView(this);
 mPieView.setStartAngle(0);
 mPieView.setPieData(mPieDatas);
