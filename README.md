@@ -17,6 +17,7 @@ mPieView.setPieData(mPieDatas);
 private void initData(){
         for (int i=0; i<9; i++){
             PieData pieData = new PieData();
+            pieData.setName("区域名);
             pieData.setValue(i+1);
             pieData.setColor(mColors[i]);
             Log.i("colorOld",Integer.toHexString(mColors[i]));
