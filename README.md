@@ -23,7 +23,7 @@ private void initData(){
         }
     }
 ```
-## 更多设置请查看源码<br>
-##Download(https://github.com/Idtk/CustomView/tree/master/jar)<br>
+## 更多设置请查看源码<br><br>
+##[Download](https://github.com/Idtk/CustomView/tree/master/jar)<br><br>
 ## Demo<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
