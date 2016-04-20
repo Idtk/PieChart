@@ -31,4 +31,4 @@ private void initData(){
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
 
 ## Remind<br>
-&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不超过4个中文字符
+&nbsp;&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不超过4个中文字符
