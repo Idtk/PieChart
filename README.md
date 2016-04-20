@@ -24,11 +24,10 @@ private void initData(){
         }
     }
 ```
+## Remind<br>
+&nbsp;&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不超过4个中文字符<br>
 ## More<br>
 * PieView更多设置请查看源码<br>
 * [Download](https://github.com/Idtk/CustomView/blob/master/jar/)<br>
 * [Demo](https://github.com/Idtk/CustomView/tree/master/demo/PieViewDemo)<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
-
-## Remind<br>
-&nbsp;&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不超过4个中文字符
