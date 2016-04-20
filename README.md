@@ -1,5 +1,5 @@
 # CustomView<br>
-<font size=100px>显示数据百分比的环形图</font><br>
+<font size=4>显示数据百分比的环形图</font><br>
 ## Usage<br>
 * 新建Pieview<br>
 ```java
