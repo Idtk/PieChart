@@ -26,7 +26,7 @@ private void initData(){
     }
 ```
 ## Remind<br>
-&nbsp;&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不超过4个中文字符<br>
+&nbsp;&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不要过长,以致遮挡附近的环形区域<br>
 ## More<br>
 * PieView更多设置请查看源码<br>
 * [Download](https://github.com/Idtk/CustomView/blob/master/jar/)<br>
