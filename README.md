@@ -1,5 +1,5 @@
 # CustomView<br>
-显示数据百分比的环形图<br>
+ 显示数据百分比的环形图<br>
 ## Usage<br>
 * 新建Pieview<br>
 ```java
@@ -23,7 +23,9 @@ private void initData(){
         }
     }
 ```
-## More<br><br>
-## [Download](https://github.com/Idtk/CustomView/tree/master/jar)<br><br>
-## Demo<br>
+## More<br>
+* PieData
+* PieView
+## [Download](https://github.com/Idtk/CustomView/blob/master/jar/PieView.jar)<br>
+## Demo(https://github.com/Idtk/CustomView/tree/master/demo/PieViewDemo)<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
