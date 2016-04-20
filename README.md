@@ -30,5 +30,5 @@ private void initData(){
 * [Demo](https://github.com/Idtk/CustomView/tree/master/demo/PieViewDemo)<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
 
-## Reminders<br>
+## Remind<br>
  环形块显示的名字,建议不超过4个中文字符
