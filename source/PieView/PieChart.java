@@ -20,7 +20,7 @@ import java.util.Arrays;
  * Created by DoBest on 2016/4/15.
  * author : Idtk
  */
-public class PieView extends View {
+public class PieChart extends View {
 
     //画笔
     private Paint mPaint = new Paint();
@@ -58,15 +58,17 @@ public class PieView extends View {
     private int centerTextColor = Color.BLACK;
     //百分比文字颜色
     private int percentTextColor = Color.WHITE;
+    //百分比的小数位
+    private int percentDecimal = 0;
 
-    public PieView(Context context) {
+    public PieChart(Context context) {
         super(context);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(true);//抗锯齿
         initAnimator(animatorDuration);
     }
 
-    public PieView(Context context, AttributeSet attrs) {
+    public PieChart(Context context, AttributeSet attrs) {
         super(context, attrs);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(true);
@@ -150,21 +152,28 @@ public class PieView extends View {
         //扇形百分比文字
         for (int i=0; i<mPieData.size(); i++){
             PieData pie = mPieData.get(i);
+            mPaint.setColor(percentTextColor);
+            mPaint.setTextSize(percentTextSize);
+            mPaint.setTextAlign(Paint.Align.CENTER);
+
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(percentDecimal);
+            //根据Paint的TextSize计算Y轴的值
+            Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
             int textPathX;
             int textPathY;
             if (i==angleId){
                 textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(rF+rTraF)/2);
                 textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(rF+rTraF)/2);
+                canvas.drawText(pie.getName(),textPathX,textPathY,mPaint);
+                canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
+                        (fontMetrics.bottom+fontMetrics.ascent)/-2-(fontMetrics.bottom+fontMetrics.ascent),mPaint);
             }else {
                 textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
                 textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
+                canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
+                        (fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);
             }
-            mPaint.setColor(percentTextColor);
-            mPaint.setTextSize(percentTextSize);
-            mPaint.setTextAlign(Paint.Align.CENTER);
-            NumberFormat numberFormat =NumberFormat.getPercentInstance();
-            numberFormat.setMinimumFractionDigits(0);
-            canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY,mPaint);
             currentStartAngle += pie.getAngle();
         }
         //白色圆
@@ -374,5 +383,13 @@ public class PieView extends View {
      */
     public void setTimeInterpolator(TimeInterpolator timeInterpolator) {
         this.timeInterpolator = timeInterpolator;
+    }
+
+    /**
+     * 设置百分比的小数位
+     * @param percentDecimal 百分比的小数位
+     */
+    public void setPercentDecimal(int percentDecimal) {
+        this.percentDecimal = percentDecimal;
     }
 }
