@@ -1,6 +1,6 @@
 # CustomView<br>
 ## Introduction<br>
-&nbsp;&nbsp;&nbsp;&nbsp;可定义环形块颜色与名称，显示数据百分比的环形图。用户可自定义动画效果，百分比小数位，画笔颜色，字体大小等<br>
+&nbsp;&nbsp;&nbsp;&nbsp;可定义环形块颜色与名称，显示数据百分比的环形图。用户可自定义动画效果，百分比小数位，画笔颜色，字体大小等。<br>
 ## Usage<br>
 * 新建Pieview<br>
 ```java
