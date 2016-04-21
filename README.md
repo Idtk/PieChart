@@ -25,10 +25,12 @@ private void initData(){
         }
     }
 ```
-## Remind<br>
-&nbsp;&nbsp;&nbsp;&nbsp;环形块显示的名字,建议不要过长,以致遮挡附近的环形块<br>
+
 ## More<br>
 * PieView更多设置请查看源码<br>
-* [Download](https://github.com/Idtk/CustomView/blob/master/jar/)<br>
-* [Demo](https://github.com/Idtk/CustomView/tree/master/demo/PieViewDemo)<br>
+
+## Download<br>
+* [jar](https://github.com/Idtk/CustomView/blob/master/jar/)<br>
+
+## Demo<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
