@@ -60,19 +60,23 @@ public class LineChart extends View {
         canvas.drawLine(0,0,x,0,mPaint);
         canvas.drawLine(0,0,0,y,mPaint);
 //        canvas.drawLine(x/3,0,x/3,y,mPaint);
-        int timesX = (int) Math.floor(x/(coordinate[1]-coordinate[0]));
-        Log.i("TAG", Arrays.toString(coordinate));
+        int timesX = (int) Math.floor((x-x/50)/(coordinate[1]-coordinate[0]));
+        Log.i("TAG1", Arrays.toString(coordinate));
         for (int i=0;(coordinate[2]*i+coordinate[0])<=coordinate[1];i++){
-            canvas.drawLine((coordinate[2]*i+coordinate[0])*timesX,0,
-                    (coordinate[2]*i+coordinate[0])*timesX,y/50,mPaint);
-            Log.i("TAGX",(coordinate[2]*i+coordinate[0])*timesX+"");
+            canvas.drawLine((coordinate[2]*i)*timesX,0,
+                    (coordinate[2]*i)*timesX,y/50,mPaint);
+            Log.i("TAGX",(coordinate[2]*i)*timesX+"");
         }
-        int timesY = (int) Math.floor(y/(coordinate[4]-coordinate[3]));
+        canvas.drawLine(x,0,x-x/50,x/50,mPaint);
+        canvas.drawLine(x,0,x-x/50,-x/50,mPaint);
+        int timesY = (int) Math.floor((y-y/50)/(coordinate[4]-coordinate[3]));
         for (int i=0;(coordinate[5]*i+coordinate[3])<=coordinate[4];i++){
-            canvas.drawLine(0,(coordinate[5]*i+coordinate[3])*timesY,
-                    x/50,(coordinate[5]*i+coordinate[3])*timesY,mPaint);
-            Log.i("TAGY",(coordinate[5]*i+coordinate[3])*timesY+"");
+            canvas.drawLine(0,(coordinate[5]*i)*timesY,
+                    x/50,(coordinate[5]*i)*timesY,mPaint);
+            Log.i("TAGY",(coordinate[5]*i)*timesY+"");
         }
+        canvas.drawLine(0,y,y/50,y-y/50,mPaint);
+        canvas.drawLine(0,y,-y/50,y-y/50,mPaint);
         super.onDraw(canvas);
     }
 
