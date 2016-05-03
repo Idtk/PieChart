@@ -10,10 +10,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+
+import com.example.administrator.customview.R;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -52,6 +56,8 @@ public class CubicLineChart extends View {
     private Path cubicPath = new Path();
     private Paint cubicPaint = new Paint();
     private float intensity = 0.2f;
+    private Path cubicFillPath = new Path();
+    private int drawId = R.drawable.fade_red;
 
     public CubicLineChart(Context context) {
         super(context);
@@ -59,7 +65,7 @@ public class CubicLineChart extends View {
         mPaint.setAntiAlias(true);
         cubicPaint.setStrokeWidth(2);
         cubicPaint.setAntiAlias(true);
-        cubicPaint.setColor(Color.RED);
+        cubicPaint.setColor(Color.BLACK);
         cubicPaint.setStyle(Paint.Style.STROKE);
         cubicPaint.setStrokeCap(Paint.Cap.ROUND);
     }
@@ -176,8 +182,8 @@ public class CubicLineChart extends View {
                                 +fontMetrics.bottom)/2,mPaint);
                 canvas.restore();
             }
-            drawCubicBezier(canvas);
         }
+        drawCubicBezier(canvas);
     }
 
     @Override
@@ -205,7 +211,7 @@ public class CubicLineChart extends View {
             animator.cancel();
             animator.start();
         }else {
-            animator= ValueAnimator.ofFloat(0,y).setDuration(duration);
+            animator= ValueAnimator.ofFloat(0,1).setDuration(duration);
             animator.setInterpolator(timeInterpolator);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -352,7 +358,7 @@ public class CubicLineChart extends View {
             LineData mLineData = mLineDatas.get(i);
             mPath.incReserve(mLineData.getValue().length);//为添加更多点准备路径,可以更有效地分配其存储的路径
             cubicPath.moveTo((mLineData.getValue()[0][0]-coordinate[0])*timesX,
-                    (mLineData.getValue()[0][1]-coordinate[3])*timesY);
+                    ((mLineData.getValue()[0][1]-coordinate[3])*timesY)*animatedValue);
             for (int j=1; j< mLineData.getValue().length; j++){
                 prevPrev = mLineDatas.get(i).getValue()[j == 1 ? 0 : j - 2];
                 prev = mLineDatas.get(i).getValue()[j-1];
@@ -364,24 +370,51 @@ public class CubicLineChart extends View {
                 curDx = (next[0]-prev[0])*intensity*timesX;
                 curDy = (next[1]-prev[1])*intensity*timesY;
 
-                cubicPath.cubicTo((prev[0]-coordinate[0])*timesX+prevDx,(prev[1]-coordinate[3])*timesY+prevDy,
-                        (cur[0]-coordinate[0])*timesX-curDx,(cur[1]-coordinate[3])*timesY-curDy,
-                        (cur[0]-coordinate[0])*timesX,(cur[1]-coordinate[3])*timesY);
+                cubicPath.cubicTo((prev[0]-coordinate[0])*timesX+prevDx,((prev[1]-coordinate[3])*timesY+prevDy)*animatedValue,
+                        (cur[0]-coordinate[0])*timesX-curDx,((cur[1]-coordinate[3])*timesY-curDy)*animatedValue,
+                        (cur[0]-coordinate[0])*timesX,((cur[1]-coordinate[3])*timesY)*animatedValue);
 
                 mPaint.setStrokeWidth(1);
                 mPaint.setStyle(Paint.Style.FILL);
                 mPaint.setColor(Color.BLACK);
                 canvas.drawCircle((mLineData.getValue()[j][0]-coordinate[0])*timesX,
-                        (mLineData.getValue()[j][1]-coordinate[3])*timesY,horizontal/70,mPaint);
+                        ((mLineData.getValue()[j][1]-coordinate[3])*timesY)*animatedValue,horizontal/70,mPaint);
             }
-            canvas.drawPath(cubicPath,cubicPaint);
-            cubicPath.rewind();
-            mPaint.setStrokeWidth(1);
-            mPaint.setStyle(Paint.Style.FILL);
-            mPaint.setColor(Color.BLACK);
+
             canvas.drawCircle((mLineData.getValue()[0][0]-coordinate[0])*timesX,
-                    (mLineData.getValue()[0][1]-coordinate[3])*timesY,horizontal/70,mPaint);
+                    ((mLineData.getValue()[0][1]-coordinate[3])*timesY)*animatedValue,horizontal/70,mPaint);
+
+            cubicPaint.setPathEffect(mPathEffect);
+            canvas.drawPath(cubicPath,cubicPaint);
+
+            cubicFillPath.addPath(cubicPath);
+
+            cubicPath.rewind();
+
+            //填充颜色
+            cubicFillPath.lineTo((mLineData.getValue()[mLineData.getValue().length-1][0]-coordinate[0])*timesX,0);
+            cubicFillPath.lineTo((mLineData.getValue()[0][0]-coordinate[0])*timesX,0);
+            cubicFillPath.close();
+
+            canvas.save();
+            canvas.clipPath(cubicFillPath);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), drawId);
+            drawable.setBounds(0,0,(int)horizontal,(int) vertical);
+            drawable.draw(canvas);
+            canvas.restore();
+            cubicFillPath.rewind();
         }
+    }
+
+    private void drawFillPath(Canvas canvas,Path fillPath, float x1, float x2){
+
+        fillPath.lineTo(x2,0);
+        fillPath.lineTo(x1,0);
+        fillPath.close();
+        canvas.clipPath(fillPath);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), drawId);
+        drawable.setBounds((int)x1,0,(int)x2,(int) vertical);
+        drawable.draw(canvas);
     }
 
     public void setLineDatas(ArrayList<LineData> lineDatas) {
@@ -392,6 +425,9 @@ public class CubicLineChart extends View {
     public void setFlag(int flag) {
         this.flag = flag;
     }
-}
 
+    public void setInvalidate(){
+        invalidate();
+    }
+}
 
