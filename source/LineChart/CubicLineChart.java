@@ -1,4 +1,4 @@
-package com.dongbang.yutian.graphic;
+package com.example.administrator.customview.LineChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -434,6 +434,8 @@ public class CubicLineChart extends View {
 
             canvas.drawCircle((mLineData.getValue()[0][0]-coordinate[0])*timesX,
                     ((mLineData.getValue()[0][1]-coordinate[3])*timesY)*animatedValue,horizontal/70,mPaint);
+
+            cubicPaint.setColor(mLineData.getColor());
             cubicPaint.setPathEffect(mPathEffect);
             canvas.drawPath(cubicPath,cubicPaint);
 
