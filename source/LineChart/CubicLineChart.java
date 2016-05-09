@@ -350,7 +350,7 @@ public class CubicLineChart extends View {
         if ((max-min)>=(length-1)){
             scaling = 5;
         }
-        if (!flag){
+        if (flag){
             coordinate[2] = scaling;
         }else {
             coordinate[5] = scaling;
