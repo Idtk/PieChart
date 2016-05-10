@@ -1,4 +1,4 @@
-package com.example.administrator.customview.LineChart;
+package com.customview.LineChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -62,7 +62,12 @@ public class CubicLineChart extends View {
     //填充
     private Path cubicFillPath = new Path();
     private int drawId = Color.WHITE;
-
+    private int decimalPlaces = 0;
+    //坐标单位
+    private String axisX = "";
+    private String axisY = "";
+    //X轴刻度值字符长度
+    private NumberFormat numberFormat;
     /**
      * 设置画笔
      * @param context Setting Paint
@@ -120,6 +125,29 @@ public class CubicLineChart extends View {
         initAnimator(animatorDuration);
         horizontal = mWidth*3/5;
         vertical = mHeight*3/5;
+        timesX = (horizontal-(horizontal/50))/(coordinate[1]-coordinate[0]);
+        timesY = (vertical-(vertical/50))/(coordinate[4]-coordinate[3]);
+
+        int count = 0;
+        int newCount = 0;
+        mPaint.setPathEffect(null);
+        mPaint.setTextSize(20);
+        mPaint.setAlpha(0xFF);
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setTypeface(font);
+        //设置小数点位数
+        numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMaximumFractionDigits(decimalPlaces);
+
+        while ((coordinate[2]*count+coordinate[0])<=coordinate[1]){
+            count++;
+        }
+        float stringLength = mPaint.measureText(numberFormat.format(coordinate[2]*1+coordinate[0]));
+        while (count*stringLength>horizontal){
+            count = count/2;
+            newCount++;
+        }
+        coordinate[2] = newCount!=0 ? coordinate[2]*newCount*2:coordinate[2];
     }
 
     /**
@@ -130,68 +158,46 @@ public class CubicLineChart extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-//        float x = mWidth*3/5;
-//        float y = mHeight*3/5;
         canvas.translate(mWidth/5,mHeight*4/5);
         canvas.scale(1,-1);//翻转Y轴
         canvas.drawLine(0,0,horizontal,0,mPaint);
         canvas.drawLine(0,0,0,vertical,mPaint);
         //X轴
-        timesX = (horizontal-(horizontal/50))/(coordinate[1]-coordinate[0]);
-        if (timesX>1){
-            timesX = Math.floor(timesX);
-        }
-        Log.d("TAG3","X"+":"+horizontal+":"+coordinate[1]+":"+coordinate[0]+":"+timesX);
         for (int i=0;(coordinate[2]*i+coordinate[0])<=coordinate[1];i++){
             canvas.drawLine((float) (coordinate[2]*i*timesX),0, (float) (coordinate[2]*i*timesX),
                     -vertical/50,mPaint);
-
-            mPaint.setPathEffect(null);
-//            mPaint.setAntiAlias(true);
-            mPaint.setTextSize(20);
-            mPaint.setAlpha(0xFF);
-            mPaint.setTextAlign(Paint.Align.CENTER);
-            mPaint.setTypeface(font);
             canvas.save();
             canvas.scale(1,-1);
-            //设置小数点位数
-            NumberFormat numberFormat = NumberFormat.getNumberInstance();
-            numberFormat.setMaximumFractionDigits(0);
             //根据Paint的TextSize计算X轴的值
             float TextPathX = (float) (coordinate[2]*i*timesX);
             float TextPathY = (mPaint.descent()+mPaint.ascent())-vertical/50;
             canvas.drawText(numberFormat.format(coordinate[2]*i+coordinate[0]), TextPathX,-TextPathY,mPaint);
             canvas.restore();
-            Log.d("TAG2","X"+":"+TextPathX+":"+(-TextPathY)+":"+timesX);
         }
         canvas.drawLine(horizontal,0,horizontal-horizontal/50,horizontal/50,mPaint);
         canvas.drawLine(horizontal,0,horizontal-horizontal/50,-horizontal/50,mPaint);
+        canvas.save();
+        canvas.scale(1,-1);
+        canvas.drawText(axisX,horizontal,(mPaint.descent()+mPaint.ascent())-vertical/50,mPaint);
+        canvas.restore();
+
+
         //Y轴
-        timesY = (vertical-(vertical/50))/(coordinate[4]-coordinate[3]);
-        if (timesY>1){
-            timesY = Math.floor(timesY);
-        }
-        Log.d("TAG3","Y"+":"+vertical+":"+coordinate[4]+":"+coordinate[3]+":"+timesY);
         for (int i=0;(coordinate[5]*i+coordinate[3])<=coordinate[4];i++){
             //坐标轴刻度
-            mPaint.setPathEffect(null);
-            mPaint.setTextSize(20);
-            mPaint.setAlpha(0xFF);
-            mPaint.setTextAlign(Paint.Align.CENTER);
-            mPaint.setTypeface(font);
             canvas.save();
             canvas.scale(1,-1);
-            //设置小数点位数
-            NumberFormat numberFormat = NumberFormat.getNumberInstance();
-            numberFormat.setMaximumFractionDigits(0);
             //根据Paint的TextSize计算X轴的值
-            float TextPathX = mPaint.measureText(coordinate[5]*i+coordinate[3]+"");
+            float TextPathX = mPaint.measureText(coordinate[5]*1+coordinate[3]+"");
             float TextPathY = (mPaint.descent()+mPaint.ascent())/2+(float) (coordinate[5]*i*timesY);
-//            canvas.drawText(numberFormat.format(coordinate[5]*i+coordinate[3]),-TextPathX,-TextPathY,mPaint);
             canvas.drawText(numberFormat.format(coordinate[5]*i+coordinate[3]),-TextPathX,-TextPathY,mPaint);
             canvas.restore();
-            Log.d("TAG2","Y"+":"+(-TextPathX)+":"+(-TextPathY)+":"+timesY);
         }
+        canvas.save();
+        canvas.scale(1,-1);
+        canvas.drawText(axisY,0,-vertical+(mPaint.descent()+mPaint.ascent())*2,mPaint);
+        canvas.restore();
+
         mPath.rewind();//清除
         mPaint.setAntiAlias(true);
         canvas.drawLine(0,vertical,vertical/50,vertical-vertical/50,mPaint);
@@ -204,7 +210,6 @@ public class CubicLineChart extends View {
                 mPaint.setTextAlign(Paint.Align.CENTER);
                 mPaint.setStrokeWidth(1);
                 mPaint.setStyle(Paint.Style.FILL);
-//                mPaint.setColor(Color.BLACK);
                 Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
 
                 canvas.save();
@@ -280,17 +285,17 @@ public class CubicLineChart extends View {
             float maxY = mLineData.getValue()[0][1];
             float minY = mLineData.getValue()[0][1];
             initAxis(1,mLineData,maxY,minY,i);
-            initMaxMin(maxX,minX,false,i);
+            initMaxMin(maxX,minX,false,i,mLineDatas.get(0).getValue().length);
 
-            for (int j=0; j<mLineData.getValue().length; j++){
+            /*for (int j=0; j<mLineData.getValue().length; j++){
                 Log.i("TAG1",(mLineData.getValue()[j][0])+":"+(mLineData.getValue()[j][1]));
-            }
+            }*/
         }
         //默认所有的LineData。getValue()长度相同
         initScaling(coordinate[0],coordinate[1],mLineDatas.get(0).getValue().length,false);
         initScaling(coordinate[3],coordinate[4],mLineDatas.get(0).getValue().length,true);
 
-        Log.i("TAG1", Arrays.toString(coordinate));
+//        Log.i("TAG1", Arrays.toString(coordinate));
     }
 
     /**
@@ -306,7 +311,7 @@ public class CubicLineChart extends View {
             max = Math.max(mLineData.getValue()[i][j],max);
             min = Math.min(mLineData.getValue()[i][j],min);
         }
-        initMaxMin(max,min,true,count);
+        initMaxMin(max,min,true,count,mLineDatas.get(0).getValue().length);
     }
 
     /**
@@ -316,23 +321,39 @@ public class CubicLineChart extends View {
      * @param flag X or Y 轴
      * @param count 第几组数据
      */
-    private void initMaxMin(float max, float min, boolean flag, int count){
-        max = (float) Math.ceil(max);
-        min = (float) Math.floor(min);
-        for (int i=1; i<6; i++){
-            max += 1;
-            if ((int)max%5 == 0)
-                break;
-        }
-        for (int i=5; i>0; i--){
-            min -= 1;
-            if (min>=0&&(int)min%5 == 0)
-                break;
-            else if (min<0){
-                min = 0;
-                break;
+    private void initMaxMin(float max, float min, boolean flag, int count,int length){
+        /*float scaling;
+        if (length<11){
+            scaling = (max-min)/length;
+        }else {
+            scaling = (max-min)/10;
+        }*/
+        int number = 0;
+        //判断刻度值精度
+        if (max>1){
+            while (max>10){
+                max=max/10;
+                number++;
             }
+            max = (float) (Math.ceil(max)*Math.pow(10,number));
+            min = (float) (Math.floor(min/Math.pow(10,number))*Math.pow(10,number));
+//            scaling = (float) (Math.ceil(scaling/Math.pow(10,number))*Math.pow(10,number));
+        }else {
+            while (max<1){
+                max=max*10;
+                number++;
+            }
+            max = (float) (Math.ceil(max)*Math.pow(10,-number));
+            min = (float) (Math.floor(min/Math.pow(10,-number))*Math.pow(10,-number));
+//            scaling = (float) (Math.ceil(scaling/Math.pow(10,-number))*Math.pow(10,-number));
+//            decimalPlaces=number;
         }
+
+        /*if (!flag){
+            coordinate[2] = scaling;
+        }else {
+            coordinate[5] = scaling;
+        }*/
         if (count == 0){
             if (!flag){
                 coordinate[0] = min;
@@ -361,7 +382,7 @@ public class CubicLineChart extends View {
      */
     private void initScaling(float min, float max,int length,boolean flag){
         float scaling;
-        double count = 0;
+        int count = 0;
         //初步计算刻度值
         if (length<11){
             scaling = (max-min)/length;
@@ -376,11 +397,12 @@ public class CubicLineChart extends View {
             }
             scaling = (float) (Math.ceil(scaling)*Math.pow(10,count));
         }else {
-            while (scaling<10){
+            while (scaling<1){
                 scaling=scaling*10;
                 count++;
             }
-            scaling = (float) (Math.ceil(scaling)*Math.pow(0.1,count-1));
+            scaling = (float) (Math.ceil(scaling)*Math.pow(10,-count));
+            decimalPlaces=count;
         }
         if (!flag){
             coordinate[2] = scaling;
@@ -458,12 +480,13 @@ public class CubicLineChart extends View {
 
                 mPaint.setStrokeWidth(1);
                 mPaint.setStyle(Paint.Style.FILL);
-//                mPaint.setColor(Color.BLACK);
+                mPaint.setColor(mLineData.getColor());
                 canvas.drawCircle((float)((mLineData.getValue()[j][0]-coordinate[0])*timesX),
                         (float) (((mLineData.getValue()[j][1]-coordinate[3])*timesY)*animatedValue),
                         horizontal/70,mPaint);
+                mPaint.setColor(mXYColor);
             }
-
+            mPaint.setColor(mLineData.getColor());
             canvas.drawCircle((float) ((mLineData.getValue()[0][0]-coordinate[0])*timesX),
                     (float) ((mLineData.getValue()[0][1]-coordinate[3])*timesY)*animatedValue,
                     horizontal/70,mPaint);
@@ -555,6 +578,14 @@ public class CubicLineChart extends View {
      */
     public void setCublicColor(int cublicColor) {
         mCublicColor = cublicColor;
+    }
+
+    public void setAxisX(String axisX) {
+        this.axisX = axisX;
+    }
+
+    public void setAxisY(String axisY) {
+        this.axisY = axisY;
     }
 }
 
