@@ -71,6 +71,8 @@ public class CubicLineChart extends View {
     private String axisY = "";
     //X轴刻度值字符长度
     private NumberFormat numberFormat;
+    //是否循环收敛
+    private boolean convergenceFlag = true;
     /**
      * 设置画笔
      * @param context Setting Paint
@@ -122,8 +124,8 @@ public class CubicLineChart extends View {
         horizontal = mWidth*3/5;
         vertical = mHeight*3/5;
 
-        int count = 0;
-        int newCount = 0;
+        /*int count = 0;
+        int newCount = 0;*/
         /*mPaint.setPathEffect(null);
         mPaint.setTextSize(20);
         mPaint.setAlpha(0xFF);*/
@@ -132,8 +134,12 @@ public class CubicLineChart extends View {
         //设置小数点位数
         numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(decimalPlaces);
-
-        while ((coordinate[2]*count+coordinate[0])<=coordinate[1]){
+        if (convergenceFlag){
+            //循环收敛
+            convergence();
+        }
+        //处理字符过长
+        /*while ((coordinate[2]*count+coordinate[0])<=coordinate[1]){
             count++;
         }
         float stringLength = mPaint.measureText(numberFormat.format(coordinate[2]*1+coordinate[0]));
@@ -142,7 +148,7 @@ public class CubicLineChart extends View {
             newCount++;
         }
         coordinate[2] = newCount!=0 ? coordinate[2]*newCount*2:coordinate[2];
-
+        //收敛
         while (coordinate[6]-coordinate[0]>coordinate[2]){
             coordinate[0] += coordinate[2];
         }
@@ -151,6 +157,9 @@ public class CubicLineChart extends View {
             coordinate[1] -= coordinate[2];
         }
 
+        if (coordinate[1]-coordinate[0]<=(coordinate[2]*2)){
+            convergence(count,stringLength,newCount);
+        }*/
         timesX = (horizontal-(horizontal/50))/(coordinate[1]-coordinate[0]);
         timesY = (vertical-(vertical/50))/(coordinate[4]-coordinate[3]);
     }
@@ -515,6 +524,34 @@ public class CubicLineChart extends View {
         }
     }
 
+    private void convergence(){
+        int count = 0;
+        int newCount = 0;
+        initScaling(coordinate[0],coordinate[1],mLineDatas.get(0).getValue().length,false);
+        //二次处理字符过长
+        while ((coordinate[2]*count+coordinate[0])<=coordinate[1]){
+            count++;
+        }
+        float stringLength = mPaint.measureText(numberFormat.format(coordinate[2]*1+coordinate[0]));
+        while (count*stringLength>horizontal){
+            count = count/2;
+            newCount++;
+        }
+        coordinate[2] = newCount!=0 ? coordinate[2]*newCount*2:coordinate[2];
+        //收敛
+        while (coordinate[6]-coordinate[0]>coordinate[2]){
+            coordinate[0] += coordinate[2];
+        }
+
+        while (coordinate[1]-coordinate[7]>coordinate[2]){
+            coordinate[1] -= coordinate[2];
+        }
+
+        if (coordinate[1]-coordinate[0]<=(coordinate[2]*2)){
+            convergence();
+        }
+    }
+
     /**
      * 设置数据集
      * @param lineDatas 数据集
@@ -593,6 +630,14 @@ public class CubicLineChart extends View {
 
     public void setAxisSize(int axisSize) {
         this.axisSize = axisSize;
+    }
+
+    /**
+     * 是否开启循环收敛
+     * @param convergenceFlag 默认true，开启
+     */
+    public void setConvergenceFlag(boolean convergenceFlag) {
+        this.convergenceFlag = convergenceFlag;
     }
 }
 
