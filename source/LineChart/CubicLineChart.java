@@ -1,4 +1,4 @@
-package com.customview.LineChart;
+package com.example.administrator.customview.LineChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -12,14 +12,12 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by DoBest on 2016/4/21.
@@ -44,21 +42,26 @@ public class CubicLineChart extends View {
     private boolean touchFlag = true;
     private int touchId = 0;
     private int touchArrayId = 0;
+    private Paint touchPaint = new Paint();
     //坐标系长宽及比例
     private float horizontal;
     private float vertical;
     private double timesX;
     private double timesY;
-    private float[] coordinate = new float[6];
-    //坐标系及点
+    private float[] coordinate = new float[8];
+    private int axisSize = 28;
+    //坐标系
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
-    private int mXYColor = Color.BLACK;
+    private int mXYColor = Color.DKGRAY;
     //曲线
     private Path cubicPath = new Path();
     private Paint cubicPaint = new Paint();
     private float intensity = 0.2f;//Bezier 强度
     private int mCublicColor = Color.BLACK;
+    //点
+    private Paint pointPaint = new Paint();
+    private int pointSize = 30;
     //填充
     private Path cubicFillPath = new Path();
     private int drawId = Color.WHITE;
@@ -74,38 +77,14 @@ public class CubicLineChart extends View {
      */
     public CubicLineChart(Context context) {
         super(context);
-        mPaint.setStrokeWidth(1);
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(mXYColor);
-        cubicPaint.setStrokeWidth(2);
-        cubicPaint.setAntiAlias(true);
-        cubicPaint.setColor(mCublicColor);
-        cubicPaint.setStyle(Paint.Style.STROKE);
-        cubicPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
     public CubicLineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaint.setStrokeWidth(1);
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(mXYColor);
-        cubicPaint.setStrokeWidth(2);
-        cubicPaint.setAntiAlias(true);
-        cubicPaint.setColor(mCublicColor);
-        cubicPaint.setStyle(Paint.Style.STROKE);
-        cubicPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
     public CubicLineChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mPaint.setStrokeWidth(1);
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(mXYColor);
-        cubicPaint.setStrokeWidth(2);
-        cubicPaint.setAntiAlias(true);
-        cubicPaint.setColor(mCublicColor);
-        cubicPaint.setStyle(Paint.Style.STROKE);
-        cubicPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
 
@@ -119,20 +98,35 @@ public class CubicLineChart extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        //初始画笔
+        mPaint.setStrokeWidth(1);
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(mXYColor);
+        mPaint.setTextSize(axisSize);
+        cubicPaint.setStrokeWidth(5);
+        cubicPaint.setAntiAlias(true);
+        cubicPaint.setColor(mCublicColor);
+        cubicPaint.setStyle(Paint.Style.STROKE);
+        cubicPaint.setStrokeCap(Paint.Cap.ROUND);
+        pointPaint.setStrokeWidth(2);
+        pointPaint.setStyle(Paint.Style.FILL);
+        touchPaint.setTextAlign(Paint.Align.CENTER);
+        touchPaint.setTextSize(pointSize);
+        touchPaint.setStrokeWidth(1);
+        touchPaint.setStyle(Paint.Style.FILL);
+
         mWidth = w;
         mHeight = h;
         touchId = mLineDatas.get(0).getValue().length;
         initAnimator(animatorDuration);
         horizontal = mWidth*3/5;
         vertical = mHeight*3/5;
-        timesX = (horizontal-(horizontal/50))/(coordinate[1]-coordinate[0]);
-        timesY = (vertical-(vertical/50))/(coordinate[4]-coordinate[3]);
 
         int count = 0;
         int newCount = 0;
-        mPaint.setPathEffect(null);
+        /*mPaint.setPathEffect(null);
         mPaint.setTextSize(20);
-        mPaint.setAlpha(0xFF);
+        mPaint.setAlpha(0xFF);*/
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTypeface(font);
         //设置小数点位数
@@ -148,6 +142,17 @@ public class CubicLineChart extends View {
             newCount++;
         }
         coordinate[2] = newCount!=0 ? coordinate[2]*newCount*2:coordinate[2];
+
+        while (coordinate[6]-coordinate[0]>coordinate[2]){
+            coordinate[0] += coordinate[2];
+        }
+
+        while (coordinate[1]-coordinate[7]>coordinate[2]){
+            coordinate[1] -= coordinate[2];
+        }
+
+        timesX = (horizontal-(horizontal/50))/(coordinate[1]-coordinate[0]);
+        timesY = (vertical-(vertical/50))/(coordinate[4]-coordinate[3]);
     }
 
     /**
@@ -206,19 +211,15 @@ public class CubicLineChart extends View {
         for (int i=0; i<mLineDatas.size(); i++){
             if (i==touchArrayId && touchId < mLineDatas.get(0).getValue().length){
                 LineData mLineDataPoint = mLineDatas.get(i);
-                mPaint.setTextSize(30);
-                mPaint.setTextAlign(Paint.Align.CENTER);
-                mPaint.setStrokeWidth(1);
-                mPaint.setStyle(Paint.Style.FILL);
-                Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
-
+                Paint.FontMetrics fontMetrics = touchPaint.getFontMetrics();
+                touchPaint.setColor(mXYColor);
                 canvas.save();
                 canvas.scale(1,-1);
                 canvas.drawText("("+(mLineDataPoint.getValue()[touchId][0])+
                                 ", "+mLineDataPoint.getValue()[touchId][1]+")",
                         (float)((mLineDataPoint.getValue()[touchId][0]-coordinate[0])*timesX),
                         -(float)((mLineDataPoint.getValue()[touchId][1]-coordinate[3])*timesY)+
-                                (fontMetrics.top +fontMetrics.bottom)/2,mPaint);
+                                (fontMetrics.top +fontMetrics.bottom)/2,touchPaint);
                 canvas.restore();
             }
         }
@@ -288,8 +289,10 @@ public class CubicLineChart extends View {
             initMaxMin(maxX,minX,false,i,mLineDatas.get(0).getValue().length);
 
             /*for (int j=0; j<mLineData.getValue().length; j++){
-                Log.i("TAG1",(mLineData.getValue()[j][0])+":"+(mLineData.getValue()[j][1]));
+                Log.i("TAG1",(mLineData.getValue()[j][0])+":"+(mLineData.getValue()[j][1])+":"+i);
             }*/
+            coordinate[6] = minX;
+            coordinate[7] = maxX;
         }
         //默认所有的LineData。getValue()长度相同
         initScaling(coordinate[0],coordinate[1],mLineDatas.get(0).getValue().length,false);
@@ -460,6 +463,7 @@ public class CubicLineChart extends View {
             mPath.incReserve(mLineData.getValue().length);//为添加更多点准备路径,可以更有效地分配其存储的路径
             cubicPath.moveTo((float) ((mLineData.getValue()[0][0]-coordinate[0])*timesX),
                     (float) ((mLineData.getValue()[0][1]-coordinate[3])*timesY)*animatedValue);
+            pointPaint.setColor(mLineData.getColor());
             for (int j=1; j< mLineData.getValue().length; j++){
                 prevPrev = mLineDatas.get(i).getValue()[j == 1 ? 0 : j - 2];
                 prev = mLineDatas.get(i).getValue()[j-1];
@@ -478,18 +482,13 @@ public class CubicLineChart extends View {
                         (float) ((cur[0]-coordinate[0])*timesX),
                         (float) (((cur[1]-coordinate[3])*timesY)*animatedValue));
 
-                mPaint.setStrokeWidth(1);
-                mPaint.setStyle(Paint.Style.FILL);
-                mPaint.setColor(mLineData.getColor());
                 canvas.drawCircle((float)((mLineData.getValue()[j][0]-coordinate[0])*timesX),
                         (float) (((mLineData.getValue()[j][1]-coordinate[3])*timesY)*animatedValue),
-                        horizontal/70,mPaint);
-                mPaint.setColor(mXYColor);
+                        horizontal/70,pointPaint);
             }
-            mPaint.setColor(mLineData.getColor());
             canvas.drawCircle((float) ((mLineData.getValue()[0][0]-coordinate[0])*timesX),
                     (float) ((mLineData.getValue()[0][1]-coordinate[3])*timesY)*animatedValue,
-                    horizontal/70,mPaint);
+                    horizontal/70,pointPaint);
 
             cubicPaint.setColor(mLineData.getColor());
             cubicPaint.setPathEffect(mPathEffect);
@@ -586,6 +585,14 @@ public class CubicLineChart extends View {
 
     public void setAxisY(String axisY) {
         this.axisY = axisY;
+    }
+
+    public void setPointSize(int pointSize) {
+        this.pointSize = pointSize;
+    }
+
+    public void setAxisSize(int axisSize) {
+        this.axisSize = axisSize;
     }
 }
 
