@@ -29,8 +29,5 @@ private void initData(){
 ## More<br>
 * PieView更多设置请查看源码<br>
 
-## Download<br>
-* [jar](https://github.com/Idtk/CustomView/blob/master/jar/)<br>
-
 ## Demo<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
