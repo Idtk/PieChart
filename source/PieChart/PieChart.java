@@ -1,4 +1,4 @@
-package com.example.administrator.customview;
+package com.example.administrator.customview.PieChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -8,9 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class PieChart extends View {
     private ValueAnimator animator;
     private float animatedValue;
     private long animatorDuration = 5000;
-    private TimeInterpolator timeInterpolator = new DecelerateInterpolator();
+    private TimeInterpolator timeInterpolator = new AccelerateDecelerateInterpolator();
     //Touch
     private boolean touchFlag = true;
     private float[] pieAngles;
@@ -70,6 +71,13 @@ public class PieChart extends View {
 
     public PieChart(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setAntiAlias(true);
+        initAnimator(animatorDuration);
+    }
+
+    public PieChart(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(true);
         initAnimator(animatorDuration);
@@ -109,9 +117,11 @@ public class PieChart extends View {
         super.onDraw(canvas);
         if (mPieData == null)
             return;
-        float currentStartAngle = mStartAngle;// 当前起始角度
+        float currentStartAngle = 0;// 当前起始角度
         canvas.translate(mWidth/2,mHeight/2);// 将画布坐标原点移动到中心位置
 
+        canvas.save();
+        canvas.rotate(mStartAngle);
         for (int i=0; i<mPieData.size(); i++){
             PieData pie = mPieData.get(i);
             float drawAngle;
@@ -148,6 +158,7 @@ public class PieChart extends View {
             }
             currentStartAngle += pie.getAngle();
         }
+        canvas.restore();
         currentStartAngle = mStartAngle;
         //扇形百分比文字
         for (int i=0; i<mPieData.size(); i++){
@@ -187,6 +198,7 @@ public class PieChart extends View {
         Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
 //        Log.i("TAG",fontMetrics.bottom+":"+fontMetrics.top+":"+fontMetrics.ascent+":"+fontMetrics.descent+":"+fontMetrics.leading);
         canvas.drawText("饼图名",0,(fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);
+//        canvas.restore();
     }
 
     @Override
@@ -205,11 +217,24 @@ public class PieChart extends View {
                         touchAngle += 180;
                     }
                     touchAngle +=Math.toDegrees(Math.atan(y/x));
-//                    Log.i("Search",Arrays.binarySearch(pieAngles,touchAngle)+":"+pieAngles.length+":"+touchAngle);
+                    /*while (touchAngle>360){
+                        touchAngle -= 360;
+                    }*/
+//                    touchAngle = touchAngle+mStartAngle;
+                    /*if(touchAngle<360){
+                        touchAngle = touchAngle-mStartAngle;
+                    }else {
+                        touchAngle = touchAngle+mStartAngle-360;
+                    }*/
+                    touchAngle = touchAngle-mStartAngle;
+                    if (touchAngle<0){
+                        touchAngle = touchAngle+360;
+                    }
+                    Log.i("Search",Arrays.binarySearch(pieAngles,(touchAngle))+":"+pieAngles.length+":"+touchAngle);
                     float touchRadius = (float) Math.sqrt(y*y+x*x);
                     if (rTra< touchRadius && touchRadius< r){
 //                        Log.i("touch",-Arrays.binarySearch(pieAngles,touchAngle)+"");
-                        angleId = -Arrays.binarySearch(pieAngles,touchAngle)-1;
+                        angleId = -Arrays.binarySearch(pieAngles,(touchAngle))-1;
                         invalidate();
                     }
                     return true;
@@ -241,9 +266,12 @@ public class PieChart extends View {
             pie.setPercentage(percentage);
             pie.setAngle(angle);
             sumAngle += angle;
+            /*while (sumAngle>360){
+                sumAngle -= 360;
+            }*/
             pieAngles[i]=sumAngle;
         }
-//        Log.i("Search", Arrays.toString(pieAngles));
+        Log.i("Search", Arrays.toString(pieAngles));
         angleId =mPieData.size();
     }
 
@@ -270,6 +298,12 @@ public class PieChart extends View {
      * @param mStartAngle 起始角度
      */
     public void setStartAngle(float mStartAngle) {
+        while (mStartAngle<0){
+            mStartAngle = mStartAngle+360;
+        }
+        while (mStartAngle>360){
+            mStartAngle = mStartAngle-360;
+        }
         this.mStartAngle = mStartAngle;
     }
 
