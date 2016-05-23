@@ -1,4 +1,4 @@
-package com.example.administrator.customview.PieChart;
+package com.customview.PieChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -6,9 +6,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -32,9 +32,9 @@ public class PieChart extends View {
     private ArrayList<PieData> mPieData = new ArrayList<>();
     //饼状图初始绘制角度
     private float mStartAngle = 0;
-    private RectF rectF,rectFTra;
+    private RectF rectF=new RectF(),rectFTra = new RectF();
     private float r,rTra,rWhite;
-    private RectF rectFF,rectFTraF,reatFWhite;
+    private RectF rectFF = new RectF(),rectFTraF = new RectF(),reatFWhite = new RectF();
     private float rF,rTraF;
     //动画
     private ValueAnimator animator;
@@ -61,6 +61,12 @@ public class PieChart extends View {
     private int percentTextColor = Color.WHITE;
     //百分比的小数位
     private int percentDecimal = 0;
+    //饼图名
+    private String name = "饼图名";
+    //居中点
+    private Point mPoint = new Point();
+    //小于此角度在未点击状态下不显示百分比
+    private float minAngle = 30;
 
     public PieChart(Context context) {
         super(context);
@@ -91,25 +97,45 @@ public class PieChart extends View {
         //标准圆环
         //圆弧
         r = (float) (Math.min(mWidth,mHeight)/2*widthScaleRadius);// 饼状图半径
-        rectF = new RectF(-r,-r,r,r);// 饼状图绘制区域
+//        rectF = new RectF(-r,-r,r,r);// 饼状图绘制区域
+        rectF.left = -r;
+        rectF.top = -r;
+        rectF.right =r;
+        rectF.bottom = r;
         //白色圆弧
         //透明圆弧
         rTra = (float) (r*radiusScaleTransparent);
-        rectFTra = new RectF(-rTra,-rTra,rTra,rTra);
+//        rectFTra = new RectF(-rTra,-rTra,rTra,rTra);
+        rectFTra.left = -rTra;
+        rectFTra.top = -rTra;
+        rectFTra.right = rTra;
+        rectFTra.bottom = rTra;
         //白色圆
         rWhite = (float) (r*radiusScaleInside);
 
         //浮出圆环
         //圆弧
         rF = (float) (Math.min(mWidth,mHeight)/2*widthScaleRadius*offsetScaleRadius);// 饼状图半径
-        rectFF = new RectF(-rF,-rF,rF,rF);// 饼状图绘制区域
+//        rectFF = new RectF(-rF,-rF,rF,rF);// 饼状图绘制区域
+        rectFF.left = -rF;
+        rectFF.top = -rF;
+        rectFF.right = rF;
+        rectFF.bottom = rF;
         //白色圆弧
         //透明圆弧
         rTraF = (float) (rF*radiusScaleTransparent);
-        rectFTraF = new RectF(-rTraF,-rTraF,rTraF,rTraF);
+//        rectFTraF = new RectF(-rTraF,-rTraF,rTraF,rTraF);
+        rectFTraF.left = -rTraF;
+        rectFTraF.top = -rTraF;
+        rectFTraF.right = rTraF;
+        rectFTraF.bottom = rTraF;
         //白色扇形
         float rWhiteF = (float) (rF*radiusScaleInside);
-        reatFWhite = new RectF(-rWhiteF,-rWhiteF,rWhiteF,rWhiteF);
+//        reatFWhite = new RectF(-rWhiteF,-rWhiteF,rWhiteF,rWhiteF);
+        reatFWhite.left = -rWhiteF;
+        reatFWhite.top = -rWhiteF;
+        reatFWhite.right = rWhiteF;
+        reatFWhite.bottom = rWhiteF;
     }
 
     @Override
@@ -176,14 +202,22 @@ public class PieChart extends View {
             if (i==angleId){
                 textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(rF+rTraF)/2);
                 textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(rF+rTraF)/2);
-                canvas.drawText(pie.getName(),textPathX,textPathY,mPaint);
+                /*canvas.drawText(pie.getName(),textPathX,textPathY,mPaint);
                 canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
-                        (fontMetrics.bottom+fontMetrics.ascent)/-2-(fontMetrics.bottom+fontMetrics.ascent),mPaint);
+                        (fontMetrics.bottom+fontMetrics.ascent)/-2-(fontMetrics.bottom+fontMetrics.ascent),mPaint);*/
+                mPoint.x = textPathX;
+                mPoint.y = textPathY;
+                textCenter(new String[]{pie.getName(),numberFormat.format(pie.getPercentage())},mPaint,canvas,mPoint, Paint.Align.CENTER);
             }else {
-                textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
-                textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
-                canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
-                        (fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);
+                if (pie.getAngle()>minAngle){
+                    textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
+                    textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
+                    /*canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
+                        (fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);*/
+                    mPoint.x = textPathX;
+                    mPoint.y = textPathY;
+                    textCenter(new String[]{numberFormat.format(pie.getPercentage())},mPaint,canvas,mPoint, Paint.Align.CENTER);
+                }
             }
             currentStartAngle += pie.getAngle();
         }
@@ -197,7 +231,10 @@ public class PieChart extends View {
         //根据Paint的TextSize计算Y轴的值
         Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
 //        Log.i("TAG",fontMetrics.bottom+":"+fontMetrics.top+":"+fontMetrics.ascent+":"+fontMetrics.descent+":"+fontMetrics.leading);
-        canvas.drawText("饼图名",0,(fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);
+//        canvas.drawText("饼图名",0,(fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);
+        mPoint.x=0;
+        mPoint.y=0;
+        textCenter(new String[]{name},mPaint,canvas,mPoint, Paint.Align.CENTER);
 //        canvas.restore();
     }
 
@@ -230,7 +267,7 @@ public class PieChart extends View {
                     if (touchAngle<0){
                         touchAngle = touchAngle+360;
                     }
-                    Log.i("Search",Arrays.binarySearch(pieAngles,(touchAngle))+":"+pieAngles.length+":"+touchAngle);
+//                    Log.i("Search",Arrays.binarySearch(pieAngles,(touchAngle))+":"+pieAngles.length+":"+touchAngle);
                     float touchRadius = (float) Math.sqrt(y*y+x*x);
                     if (rTra< touchRadius && touchRadius< r){
 //                        Log.i("touch",-Arrays.binarySearch(pieAngles,touchAngle)+"");
@@ -271,7 +308,7 @@ public class PieChart extends View {
             }*/
             pieAngles[i]=sumAngle;
         }
-        Log.i("Search", Arrays.toString(pieAngles));
+//        Log.i("Search", Arrays.toString(pieAngles));
         angleId =mPieData.size();
     }
 
@@ -290,6 +327,20 @@ public class PieChart extends View {
                 }
             });
             animator.start();
+        }
+    }
+
+    private void textCenter(String[] strings, Paint paint, Canvas canvas, Point point, Paint.Align align){
+        mPaint.setTextAlign(align);
+        Paint.FontMetrics fontMetrics= mPaint.getFontMetrics();
+        float top = fontMetrics.top;
+        float bottom = fontMetrics.bottom;
+        int length = strings.length;
+        float total = (length-1)*(-top+bottom)+(-fontMetrics.ascent+fontMetrics.descent);
+        float offset = total/2-bottom;
+        for (int i=0; i<length; i++){
+            float yAxis = -(length-i-1)*(-top+bottom)+offset;
+            canvas.drawText(strings[i],point.x,point.y+yAxis,mPaint);
         }
     }
 
@@ -425,5 +476,13 @@ public class PieChart extends View {
      */
     public void setPercentDecimal(int percentDecimal) {
         this.percentDecimal = percentDecimal;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMinAngle(float minAngle) {
+        this.minAngle = minAngle;
     }
 }
