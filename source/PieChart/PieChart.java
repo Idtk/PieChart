@@ -1,4 +1,4 @@
-package com.customview.PieChart;
+package com.example.administrator.customview.PieChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -11,13 +11,11 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 
-import com.customview.R;
+import com.example.administrator.customview.R;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -275,14 +273,21 @@ public class PieChart extends View {
     }
 
     private void init(Context context,AttributeSet attrs, int defStyleAttr, int defStyleRes){
-
-        Log.d("TAG",context.toString());
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PieChart, defStyleAttr,defStyleRes);
-        if (array.getString(R.styleable.PieChart_name)!=null){
-            name = array.getString(R.styleable.PieChart_name);
+        int n = array.getIndexCount();
+        for (int i=0; i<n; i++){
+            switch (i){
+                case R.styleable.PieChart_name:
+                    name = array.getString(R.styleable.PieChart_name);
+                    break;
+                case R.styleable.PieChart_percentDecimal:
+                    percentDecimal = array.getInt(R.styleable.PieChart_percentDecimal,percentDecimal);
+                    break;
+                case R.styleable.PieChart_textSize:
+                    percentTextSize = array.getDimensionPixelSize(R.styleable.PieChart_textSize,percentTextSize);
+                    break;
+            }
         }
-        percentDecimal = array.getInt(R.styleable.PieChart_percentDecimal,percentDecimal);
-        percentTextSize = array.getDimensionPixelSize(R.styleable.PieChart_textSize,percentTextSize);
         array.recycle();
 
         mPaint.setStyle(Paint.Style.FILL);
