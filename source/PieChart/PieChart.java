@@ -3,15 +3,21 @@ package com.customview.PieChart;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
+
+import com.customview.R;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -69,24 +75,24 @@ public class PieChart extends View {
     private float minAngle = 30;
 
     public PieChart(Context context) {
-        super(context);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setAntiAlias(true);//抗锯齿
-        initAnimator(animatorDuration);
+//        super(context);
+        this(context,null);
     }
 
-    public PieChart(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setAntiAlias(true);
-        initAnimator(animatorDuration);
+    public PieChart(Context context, @Nullable AttributeSet attrs) {
+//        super(context, attrs);
+        this(context,attrs,0);
     }
 
-    public PieChart(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PieChart(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setAntiAlias(true);
-        initAnimator(animatorDuration);
+//        this(context,attrs,defStyleAttr,0);
+        init(context,attrs,defStyleAttr,0);
+    }
+
+    public PieChart(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context,attrs,defStyleAttr,defStyleRes);
     }
 
     @Override
@@ -97,7 +103,7 @@ public class PieChart extends View {
         //标准圆环
         //圆弧
         r = (float) (Math.min(mWidth,mHeight)/2*widthScaleRadius);// 饼状图半径
-//        rectF = new RectF(-r,-r,r,r);// 饼状图绘制区域
+        // 饼状图绘制区域
         rectF.left = -r;
         rectF.top = -r;
         rectF.right =r;
@@ -105,7 +111,6 @@ public class PieChart extends View {
         //白色圆弧
         //透明圆弧
         rTra = (float) (r*radiusScaleTransparent);
-//        rectFTra = new RectF(-rTra,-rTra,rTra,rTra);
         rectFTra.left = -rTra;
         rectFTra.top = -rTra;
         rectFTra.right = rTra;
@@ -116,7 +121,7 @@ public class PieChart extends View {
         //浮出圆环
         //圆弧
         rF = (float) (Math.min(mWidth,mHeight)/2*widthScaleRadius*offsetScaleRadius);// 饼状图半径
-//        rectFF = new RectF(-rF,-rF,rF,rF);// 饼状图绘制区域
+        // 饼状图绘制区域
         rectFF.left = -rF;
         rectFF.top = -rF;
         rectFF.right = rF;
@@ -124,14 +129,12 @@ public class PieChart extends View {
         //白色圆弧
         //透明圆弧
         rTraF = (float) (rF*radiusScaleTransparent);
-//        rectFTraF = new RectF(-rTraF,-rTraF,rTraF,rTraF);
         rectFTraF.left = -rTraF;
         rectFTraF.top = -rTraF;
         rectFTraF.right = rTraF;
         rectFTraF.bottom = rTraF;
         //白色扇形
         float rWhiteF = (float) (rF*radiusScaleInside);
-//        reatFWhite = new RectF(-rWhiteF,-rWhiteF,rWhiteF,rWhiteF);
         reatFWhite.left = -rWhiteF;
         reatFWhite.top = -rWhiteF;
         reatFWhite.right = rWhiteF;
@@ -202,21 +205,20 @@ public class PieChart extends View {
             if (i==angleId){
                 textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(rF+rTraF)/2);
                 textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(rF+rTraF)/2);
-                /*canvas.drawText(pie.getName(),textPathX,textPathY,mPaint);
-                canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
-                        (fontMetrics.bottom+fontMetrics.ascent)/-2-(fontMetrics.bottom+fontMetrics.ascent),mPaint);*/
                 mPoint.x = textPathX;
                 mPoint.y = textPathY;
-                textCenter(new String[]{pie.getName(),numberFormat.format(pie.getPercentage())},mPaint,canvas,mPoint, Paint.Align.CENTER);
+                String[] strings = new String[]{pie.getName()+"",numberFormat.format(pie.getPercentage())+""};
+                if (strings.length==2)
+                textCenter(strings,mPaint,canvas,mPoint, Paint.Align.CENTER);
             }else {
                 if (pie.getAngle()>minAngle){
                     textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
                     textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle+(pie.getAngle()/2)))*(r+rTra)/2);
-                    /*canvas.drawText(numberFormat.format(pie.getPercentage()),textPathX,textPathY+
-                        (fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);*/
                     mPoint.x = textPathX;
                     mPoint.y = textPathY;
-                    textCenter(new String[]{numberFormat.format(pie.getPercentage())},mPaint,canvas,mPoint, Paint.Align.CENTER);
+                    String[] strings = new String[]{numberFormat.format(pie.getPercentage())+""};
+                    if (strings.length==1)
+                    textCenter(strings,mPaint,canvas,mPoint, Paint.Align.CENTER);
                 }
             }
             currentStartAngle += pie.getAngle();
@@ -230,17 +232,16 @@ public class PieChart extends View {
         mPaint.setTextAlign(Paint.Align.CENTER);
         //根据Paint的TextSize计算Y轴的值
         Paint.FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();
-//        Log.i("TAG",fontMetrics.bottom+":"+fontMetrics.top+":"+fontMetrics.ascent+":"+fontMetrics.descent+":"+fontMetrics.leading);
-//        canvas.drawText("饼图名",0,(fontMetrics.bottom+fontMetrics.ascent)/-2,mPaint);
         mPoint.x=0;
         mPoint.y=0;
-        textCenter(new String[]{name},mPaint,canvas,mPoint, Paint.Align.CENTER);
-//        canvas.restore();
+        String[] strings = new String[]{name+""};
+        if (strings.length==1)
+        textCenter(strings,mPaint,canvas,mPoint, Paint.Align.CENTER);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (touchFlag){
+        if (touchFlag&&mPieData.size()>0){
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     float x = event.getX()-(mWidth/2);
@@ -254,23 +255,12 @@ public class PieChart extends View {
                         touchAngle += 180;
                     }
                     touchAngle +=Math.toDegrees(Math.atan(y/x));
-                    /*while (touchAngle>360){
-                        touchAngle -= 360;
-                    }*/
-//                    touchAngle = touchAngle+mStartAngle;
-                    /*if(touchAngle<360){
-                        touchAngle = touchAngle-mStartAngle;
-                    }else {
-                        touchAngle = touchAngle+mStartAngle-360;
-                    }*/
                     touchAngle = touchAngle-mStartAngle;
                     if (touchAngle<0){
                         touchAngle = touchAngle+360;
                     }
-//                    Log.i("Search",Arrays.binarySearch(pieAngles,(touchAngle))+":"+pieAngles.length+":"+touchAngle);
                     float touchRadius = (float) Math.sqrt(y*y+x*x);
                     if (rTra< touchRadius && touchRadius< r){
-//                        Log.i("touch",-Arrays.binarySearch(pieAngles,touchAngle)+"");
                         angleId = -Arrays.binarySearch(pieAngles,(touchAngle))-1;
                         invalidate();
                     }
@@ -281,8 +271,23 @@ public class PieChart extends View {
                     return true;
             }
         }
-//        Log.d("TAG",event.getAction()+":"+MotionEvent.ACTION_DOWN+":"+MotionEvent.ACTION_UP);
         return super.onTouchEvent(event);
+    }
+
+    private void init(Context context,AttributeSet attrs, int defStyleAttr, int defStyleRes){
+
+        Log.d("TAG",context.toString());
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PieChart, defStyleAttr,defStyleRes);
+        if (array.getString(R.styleable.PieChart_name)!=null){
+            name = array.getString(R.styleable.PieChart_name);
+        }
+        percentDecimal = array.getInt(R.styleable.PieChart_percentDecimal,percentDecimal);
+        percentTextSize = array.getDimensionPixelSize(R.styleable.PieChart_textSize,percentTextSize);
+        array.recycle();
+
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setAntiAlias(true);//抗锯齿
+        initAnimator(animatorDuration);
     }
 
     private void initDate(ArrayList<PieData> mPieData){
@@ -303,12 +308,8 @@ public class PieChart extends View {
             pie.setPercentage(percentage);
             pie.setAngle(angle);
             sumAngle += angle;
-            /*while (sumAngle>360){
-                sumAngle -= 360;
-            }*/
             pieAngles[i]=sumAngle;
         }
-//        Log.i("Search", Arrays.toString(pieAngles));
         angleId =mPieData.size();
     }
 
@@ -338,11 +339,13 @@ public class PieChart extends View {
         int length = strings.length;
         float total = (length-1)*(-top+bottom)+(-fontMetrics.ascent+fontMetrics.descent);
         float offset = total/2-bottom;
-        for (int i=0; i<length; i++){
-            float yAxis = -(length-i-1)*(-top+bottom)+offset;
-            canvas.drawText(strings[i],point.x,point.y+yAxis,mPaint);
+        for (int i = 0; i < length; i++) {
+            float yAxis = -(length - i - 1) * (-top + bottom) + offset;
+            canvas.drawText(strings[i], point.x, point.y + yAxis, mPaint);
         }
     }
+
+
 
     /**
      * 设置起始角度
@@ -363,6 +366,7 @@ public class PieChart extends View {
      * @param mPieData 数据
      */
     public void setPieData(ArrayList<PieData> mPieData) {
+        if (mPieData!=null)
         this.mPieData = mPieData;
         initDate(mPieData);
     }
