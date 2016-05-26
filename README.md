@@ -41,4 +41,4 @@ private void initData(){
 * PieView更多设置请查看源码<br>
 
 ## Demo<br>
-<img src="https://github.com/Idtk/CustomView/blob/master/gif/CustomView.gif" alt="GitHub" title="GitHub,Social Coding"/><br>
+<img src="https://github.com/Idtk/CustomView/blob/master/gif/PieChart.gif" alt="PieChart" title="PieChart"/><br>
