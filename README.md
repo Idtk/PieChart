@@ -6,6 +6,17 @@
 ```java
 PieView mPieView = new PieView(this);
 ```
+or
+```Java
+<com.example.administrator.customviewdeom.PieChart.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:textSize="20dp"
+        app:name="Demo"/>
+        
+PieChart pieChart = (PieChart) findViewById(R.id.pieChart);
+```
 * 设置初始角度<br>
 ```java
 mPieView.setStartAngle(0);
