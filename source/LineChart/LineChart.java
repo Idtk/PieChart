@@ -21,6 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by DoBest on 2016/4/21.
  * author : Idtk
+ * 坐标系，生成算法存在bug
  */
 public class LineChart extends View {
 
