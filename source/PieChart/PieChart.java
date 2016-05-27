@@ -1,4 +1,4 @@
-package com.customview.PieChart;
+package com.example.administrator.customview.PieChart;
 
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -16,9 +16,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.TextView;
 
-import com.customview.R;
+import com.example.administrator.customview.R;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -60,11 +59,7 @@ public class PieChart extends View {
     private double radiusScaleInside = 0.43;
     //Paint的字体大小
     private int percentTextSize = 45;
-<<<<<<< HEAD
     private int centerTextSize = 60;
-=======
-    private int centerTextSize = 80;
->>>>>>> origin/master
 
     //中间文字颜色
     private int centerTextColor = Color.BLACK;
@@ -84,15 +79,10 @@ public class PieChart extends View {
     private Path inPath = new Path();
     private Path outMidPath = new Path();
     private Path midInPath = new Path();
-<<<<<<< HEAD
     //百分比最长字符
     private int stringId = 0;
     //wrap_content尺寸
 //    private float wrapSize;
-=======
-    //context
-    private Context context;
->>>>>>> origin/master
 
     public PieChart(Context context) {
         this(context,null);
@@ -111,7 +101,6 @@ public class PieChart extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context,attrs,defStyleAttr,defStyleRes);
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -292,10 +281,6 @@ public class PieChart extends View {
     }
 
     private void init(Context context,AttributeSet attrs, int defStyleAttr, int defStyleRes){
-<<<<<<< HEAD
-=======
-        this.context = context;
->>>>>>> origin/master
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PieChart, defStyleAttr,defStyleRes);
         int n = array.getIndexCount();
         for (int i=0; i<n; i++){
@@ -383,7 +368,7 @@ public class PieChart extends View {
         for (int i = 0; i < length; i++) {
             float yAxis = -(length - i - 1) * (-top + bottom) + offset;
             canvas.drawText(strings[i], point.x, point.y + yAxis, paint);
-            Log.d("TAG",mPaint.measureText(strings[i])+":"+strings[i]);
+//            Log.d("TAG",mPaint.measureText(strings[i])+":"+strings[i]);
         }
     }
 
@@ -417,7 +402,7 @@ public class PieChart extends View {
             float percentWidth = paint.measureText(numberFormat.format(mPieData.get(stringId).getPercentage())+"");
             paint.setTextSize(centerTextSize);
             float nameWidth = paint.measureText(name+"");
-            wrapSize = (percentWidth*4+nameWidth*2)*(float) offsetScaleRadius;
+            wrapSize = (percentWidth*4+nameWidth*1.2f)*(float) offsetScaleRadius;
         }else {
             wrapSize = 0;
         }
@@ -446,28 +431,6 @@ public class PieChart extends View {
         }
         return size;
     }
-
-    private void drawArc(Canvas canvas, float currentStartAngle, float drawAngle, PieData pie,
-                         float outR, float midR, float inR, RectF outRectF, RectF midRectF, RectF inRectF,Paint paint){
-        outPath.lineTo(outR*(float) Math.cos(Math.toRadians(currentStartAngle)),outR*(float) Math.sin(Math.toRadians(currentStartAngle)));
-        outPath.arcTo(outRectF,currentStartAngle,drawAngle);
-        midPath.lineTo(midR*(float) Math.cos(Math.toRadians(currentStartAngle)),midR*(float) Math.sin(Math.toRadians(currentStartAngle)));
-        midPath.arcTo(midRectF,currentStartAngle,drawAngle);
-        inPath.lineTo(inR*(float) Math.cos(Math.toRadians(currentStartAngle)),inR*(float) Math.sin(Math.toRadians(currentStartAngle)));
-        inPath.arcTo(inRectF,currentStartAngle,drawAngle);
-        outMidPath.op(outPath,midPath, Path.Op.DIFFERENCE);
-        midInPath.op(midPath,inPath, Path.Op.DIFFERENCE);
-        paint.setColor(pie.getColor());
-        canvas.drawPath(outMidPath,paint);
-        paint.setAlpha(0x80);//设置透明度
-        canvas.drawPath(midInPath,paint);
-        outPath.reset();
-        midPath.reset();
-        inPath.reset();
-        outMidPath.reset();
-        midInPath.reset();
-    }
-    
 
     /**
      * 设置起始角度
