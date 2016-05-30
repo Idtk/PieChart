@@ -123,7 +123,7 @@ public class PieChart extends View {
         if (r>Math.min(mWidth,mHeight)){
             r =0;
             percentFlag = false;
-            name = "PieChart已超出视图范围";
+            name = "";
         }
         // 饼状图绘制区域
         rectF.left = -r;
@@ -288,7 +288,7 @@ public class PieChart extends View {
     }
 
     private void init(Context context,AttributeSet attrs, int defStyleAttr, int defStyleRes){
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PieChart, defStyleAttr,defStyleRes);
         int n = array.getIndexCount();
         for (int i=0; i<n; i++){
@@ -410,7 +410,7 @@ public class PieChart extends View {
             float percentWidth = paint.measureText(numberFormat.format(mPieData.get(stringId).getPercentage())+"");
             paint.setTextSize(centerTextSize);
             float nameWidth = paint.measureText(name+"");
-            wrapSize = (percentWidth*4+nameWidth*1.2f)*(float) offsetScaleRadius;
+            wrapSize = (percentWidth*4+nameWidth*1.0f)*(float) offsetScaleRadius;
         }else {
             wrapSize = 0;
         }
