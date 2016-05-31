@@ -382,11 +382,11 @@ public class PieChart extends View {
 
     private void drawArc(Canvas canvas, float currentStartAngle, float drawAngle, PieData pie,
                          float outR, float midR, float inR, RectF outRectF, RectF midRectF, RectF inRectF,Paint paint){
-        outPath.lineTo(outR*(float) Math.cos(Math.toRadians(currentStartAngle)),outR*(float) Math.sin(Math.toRadians(currentStartAngle)));
+        outPath.moveTo(0,0);
         outPath.arcTo(outRectF,currentStartAngle,drawAngle);
-        midPath.lineTo(midR*(float) Math.cos(Math.toRadians(currentStartAngle)),midR*(float) Math.sin(Math.toRadians(currentStartAngle)));
+        midPath.moveTo(0,0);
         midPath.arcTo(midRectF,currentStartAngle,drawAngle);
-        inPath.lineTo(inR*(float) Math.cos(Math.toRadians(currentStartAngle)),inR*(float) Math.sin(Math.toRadians(currentStartAngle)));
+        inPath.moveTo(0,0);
         inPath.arcTo(inRectF,currentStartAngle,drawAngle);
         outMidPath.op(outPath,midPath, Path.Op.DIFFERENCE);
         midInPath.op(midPath,inPath, Path.Op.DIFFERENCE);
