@@ -212,8 +212,6 @@ public class PieChart extends View {
             NumberFormat numberFormat =NumberFormat.getPercentInstance();
             numberFormat.setMinimumFractionDigits(percentDecimal);
             //根据Paint的TextSize计算Y轴的值
-            int textPathX;
-            int textPathY;
 
             if (animatedValue>pieAngles[i]-pie.getAngle()/2&&percentFlag) {
                 if (i == angleId) {
@@ -347,50 +345,12 @@ public class PieChart extends View {
             animator.start();
         }
     }
-<<<<<<< HEAD
 	
 	private float textWidth(String string, int size, Paint paint){
         paint.setTextSize(size);
         float textWidth =paint.measureText(string+"");
         return textWidth;
-=======
-
-    private void textCenter(String[] strings, Paint paint, Canvas canvas, Point point, Paint.Align align){
-        paint.setTextAlign(align);
-        Paint.FontMetrics fontMetrics= paint.getFontMetrics();
-        float top = fontMetrics.top;
-        float bottom = fontMetrics.bottom;
-        int length = strings.length;
-        float total = (length-1)*(-top+bottom)+(-fontMetrics.ascent+fontMetrics.descent);
-        float offset = total/2-bottom;
-        for (int i = 0; i < length; i++) {
-            float yAxis = -(length - i - 1) * (-top + bottom) + offset;
-            canvas.drawText(strings[i], point.x, point.y + yAxis, paint);
-//            Log.d("TAG",mPaint.measureText(strings[i])+":"+strings[i]);
-        }
-    }
-
-    private void drawArc(Canvas canvas, float currentStartAngle, float drawAngle, PieData pie,
-                         float outR, float midR, float inR, RectF outRectF, RectF midRectF, RectF inRectF,Paint paint){
-        outPath.moveTo(0,0);
-        outPath.arcTo(outRectF,currentStartAngle,drawAngle);
-        midPath.moveTo(0,0);
-        midPath.arcTo(midRectF,currentStartAngle,drawAngle);
-        inPath.moveTo(0,0);
-        inPath.arcTo(inRectF,currentStartAngle,drawAngle);
-        outMidPath.op(outPath,midPath, Path.Op.DIFFERENCE);
-        midInPath.op(midPath,inPath, Path.Op.DIFFERENCE);
-        paint.setColor(pie.getColor());
-        canvas.drawPath(outMidPath,paint);
-        paint.setAlpha(0x80);//设置透明度
-        canvas.drawPath(midInPath,paint);
-        outPath.reset();
-        midPath.reset();
-        inPath.reset();
-        outMidPath.reset();
-        midInPath.reset();
->>>>>>> origin/master
-    }
+	}
 
     private int measureWrap(Paint paint){
         float wrapSize;
