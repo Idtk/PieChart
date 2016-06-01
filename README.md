@@ -46,3 +46,8 @@ private void initData(){
 
 ## Demo<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/PieChart.gif" alt="PieChart" title="PieChart"/><br>
+
+## About
+**博客:www.idtkm.com**<br>
+**GitHub:https://github.com/Idtk**<br>
+**邮箱:IdtkMa@gmail.com**<br>
