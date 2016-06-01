@@ -217,22 +217,10 @@ public class PieChart extends View {
 
             if (animatedValue>pieAngles[i]-pie.getAngle()/2&&percentFlag) {
                 if (i == angleId) {
-                    textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle + (pie.getAngle() / 2))) * (rF + rTraF) / 2);
-                    textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle + (pie.getAngle() / 2))) * (rF + rTraF) / 2);
-                    mPoint.x = textPathX;
-                    mPoint.y = textPathY;
-                    String[] strings = new String[]{pie.getName() + "", numberFormat.format(pie.getPercentage()) + ""};
-                    if (strings.length == 2)
-                        textCenter(strings, mPaint, canvas, mPoint, Paint.Align.CENTER);
+                    drawText(canvas,pie,currentStartAngle,numberFormat,true);
                 } else {
                     if (pie.getAngle() > minAngle) {
-                        textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle + (pie.getAngle() / 2))) * (r + rTra) / 2);
-                        textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle + (pie.getAngle() / 2))) * (r + rTra) / 2);
-                        mPoint.x = textPathX;
-                        mPoint.y = textPathY;
-                        String[] strings = new String[]{numberFormat.format(pie.getPercentage()) + ""};
-                        if (strings.length == 1)
-                            textCenter(strings, mPaint, canvas, mPoint, Paint.Align.CENTER);
+                        drawText(canvas,pie,currentStartAngle,numberFormat,false);
                     }
                 }
                 currentStartAngle += pie.getAngle();
@@ -292,15 +280,16 @@ public class PieChart extends View {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PieChart, defStyleAttr,defStyleRes);
         int n = array.getIndexCount();
         for (int i=0; i<n; i++){
-            switch (i){
+            int attr = array.getIndex(i);
+            switch (attr){
                 case R.styleable.PieChart_name:
-                    name = array.getString(i);
+                    name = array.getString(attr);
                     break;
                 case R.styleable.PieChart_percentDecimal:
-                    percentDecimal = array.getInt(i,percentDecimal);
+                    percentDecimal = array.getInt(attr,percentDecimal);
                     break;
                 case R.styleable.PieChart_textSize:
-                    percentTextSize = array.getDimensionPixelSize(i,percentTextSize);
+                    percentTextSize = array.getDimensionPixelSize(attr,percentTextSize);
                     break;
             }
         }
@@ -341,12 +330,6 @@ public class PieChart extends View {
         angleId = -1;
     }
 
-    private float textWidth(String string, int size, Paint paint){
-        paint.setTextSize(size);
-        float textWidth =paint.measureText(string+"");
-        return textWidth;
-    }
-
     private void initAnimator(long duration){
         if (animator !=null &&animator.isRunning()){
             animator.cancel();
@@ -364,41 +347,11 @@ public class PieChart extends View {
             animator.start();
         }
     }
-
-    private void textCenter(String[] strings, Paint paint, Canvas canvas, Point point, Paint.Align align){
-        paint.setTextAlign(align);
-        Paint.FontMetrics fontMetrics= paint.getFontMetrics();
-        float top = fontMetrics.top;
-        float bottom = fontMetrics.bottom;
-        int length = strings.length;
-        float total = (length-1)*(-top+bottom)+(-fontMetrics.ascent+fontMetrics.descent);
-        float offset = total/2-bottom;
-        for (int i = 0; i < length; i++) {
-            float yAxis = -(length - i - 1) * (-top + bottom) + offset;
-            canvas.drawText(strings[i], point.x, point.y + yAxis, paint);
-//            Log.d("TAG",mPaint.measureText(strings[i])+":"+strings[i]);
-        }
-    }
-
-    private void drawArc(Canvas canvas, float currentStartAngle, float drawAngle, PieData pie,
-                         float outR, float midR, float inR, RectF outRectF, RectF midRectF, RectF inRectF,Paint paint){
-        outPath.lineTo(outR*(float) Math.cos(Math.toRadians(currentStartAngle)),outR*(float) Math.sin(Math.toRadians(currentStartAngle)));
-        outPath.arcTo(outRectF,currentStartAngle,drawAngle);
-        midPath.lineTo(midR*(float) Math.cos(Math.toRadians(currentStartAngle)),midR*(float) Math.sin(Math.toRadians(currentStartAngle)));
-        midPath.arcTo(midRectF,currentStartAngle,drawAngle);
-        inPath.lineTo(inR*(float) Math.cos(Math.toRadians(currentStartAngle)),inR*(float) Math.sin(Math.toRadians(currentStartAngle)));
-        inPath.arcTo(inRectF,currentStartAngle,drawAngle);
-        outMidPath.op(outPath,midPath, Path.Op.DIFFERENCE);
-        midInPath.op(midPath,inPath, Path.Op.DIFFERENCE);
-        paint.setColor(pie.getColor());
-        canvas.drawPath(outMidPath,paint);
-        paint.setAlpha(0x80);//设置透明度
-        canvas.drawPath(midInPath,paint);
-        outPath.reset();
-        midPath.reset();
-        inPath.reset();
-        outMidPath.reset();
-        midInPath.reset();
+	
+	private float textWidth(String string, int size, Paint paint){
+        paint.setTextSize(size);
+        float textWidth =paint.measureText(string+"");
+        return textWidth;
     }
 
     private int measureWrap(Paint paint){
@@ -438,6 +391,56 @@ public class PieChart extends View {
                 break;
         }
         return size;
+    }
+	
+	private void drawArc(Canvas canvas, float currentStartAngle, float drawAngle, PieData pie,
+                         float outR, float midR, float inR, RectF outRectF, RectF midRectF, RectF inRectF,Paint paint){
+        outPath.lineTo(outR*(float) Math.cos(Math.toRadians(currentStartAngle)),outR*(float) Math.sin(Math.toRadians(currentStartAngle)));
+        outPath.arcTo(outRectF,currentStartAngle,drawAngle);
+        midPath.lineTo(midR*(float) Math.cos(Math.toRadians(currentStartAngle)),midR*(float) Math.sin(Math.toRadians(currentStartAngle)));
+        midPath.arcTo(midRectF,currentStartAngle,drawAngle);
+        inPath.lineTo(inR*(float) Math.cos(Math.toRadians(currentStartAngle)),inR*(float) Math.sin(Math.toRadians(currentStartAngle)));
+        inPath.arcTo(inRectF,currentStartAngle,drawAngle);
+        outMidPath.op(outPath,midPath, Path.Op.DIFFERENCE);
+        midInPath.op(midPath,inPath, Path.Op.DIFFERENCE);
+        paint.setColor(pie.getColor());
+        canvas.drawPath(outMidPath,paint);
+        paint.setAlpha(0x80);//设置透明度
+        canvas.drawPath(midInPath,paint);
+        outPath.reset();
+        midPath.reset();
+        inPath.reset();
+        outMidPath.reset();
+        midInPath.reset();
+    }
+	
+	private void drawText(Canvas canvas, PieData pie ,float currentStartAngle, NumberFormat numberFormat,boolean flag){
+        int textPathX = (int) (Math.cos(Math.toRadians(currentStartAngle + (pie.getAngle() / 2))) * (r + rTra) / 2);
+        int textPathY = (int) (Math.sin(Math.toRadians(currentStartAngle + (pie.getAngle() / 2))) * (r + rTra) / 2);
+        mPoint.x = textPathX;
+        mPoint.y = textPathY;
+        String[] strings;
+        if (flag){
+            strings = new String[]{pie.getName() + "", numberFormat.format(pie.getPercentage()) + ""};
+        }else {
+            strings = new String[]{numberFormat.format(pie.getPercentage()) + ""};
+        }
+        textCenter(strings, mPaint, canvas, mPoint, Paint.Align.CENTER);
+    }
+	
+	private void textCenter(String[] strings, Paint paint, Canvas canvas, Point point, Paint.Align align){
+        paint.setTextAlign(align);
+        Paint.FontMetrics fontMetrics= paint.getFontMetrics();
+        float top = fontMetrics.top;
+        float bottom = fontMetrics.bottom;
+        int length = strings.length;
+        float total = (length-1)*(-top+bottom)+(-fontMetrics.ascent+fontMetrics.descent);
+        float offset = total/2-bottom;
+        for (int i = 0; i < length; i++) {
+            float yAxis = -(length - i - 1) * (-top + bottom) + offset;
+            canvas.drawText(strings[i], point.x, point.y + yAxis, paint);
+//            Log.d("TAG",mPaint.measureText(strings[i])+":"+strings[i]);
+        }
     }
 
     /**
