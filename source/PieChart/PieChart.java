@@ -385,7 +385,7 @@ public class PieChart extends View {
     }
 
     private int measureDimension(int measureSpec){
-        int size;
+        int size = measureWrap(mPaint);
 
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
@@ -399,9 +399,6 @@ public class PieChart extends View {
                 break;
             case MeasureSpec.AT_MOST:
                 size = Math.min(specSize,measureWrap(mPaint));
-                break;
-            default:
-                size = measureWrap(mPaint);
                 break;
         }
         return size;
