@@ -1,0 +1,111 @@
+package com.idtk.smallchart.compute;
+
+import android.graphics.Paint;
+
+import com.idtk.smallchart.data.AxisData;
+import com.idtk.smallchart.data.YAxisData;
+import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+
+/**
+ * Created by Idtk on 2016/6/6.
+ * Blog : http://www.idtkm.com
+ * GitHub : https://github.com/Idtk
+ */
+public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
+
+    protected YAxisData yAxisData = new YAxisData();
+    private NumberFormat numberFormat;
+    private Paint paint = new Paint();
+
+    public ComputeYAxis(AxisData axisData) {
+        super(axisData);
+        yAxisData = (YAxisData) axisData;
+        paint.setColor(yAxisData.getColor());
+        paint.setTextSize(yAxisData.getTextSize());
+        paint.setStrokeWidth(yAxisData.getPaintWidth());
+        //设置小数点位数
+        numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMaximumFractionDigits(yAxisData.getDecimalPlaces());
+    }
+
+    /**
+     * 计算坐标系
+     * @param mBarLineCurveDatas 坐标集合
+     */
+    public void computeYAxis(ArrayList<T> mBarLineCurveDatas){
+        for (int i=0; i<mBarLineCurveDatas.size();i++){
+            IBarLineCurveData mBarLineCurveData = mBarLineCurveDatas.get(i);
+            float maxY = mBarLineCurveData.getValue().get(0).y;
+            float minY = mBarLineCurveData.getValue().get(0).y;
+            initAxis(mBarLineCurveData,maxY,minY,i);
+
+            /*for (int j=0; j<mBarLineCurveData.getValue().length; j++){
+                Log.i("TAG1",(mBarLineCurveData.getValue()[j][0])+":"+(mBarLineCurveData.getValue()[j][1])+":"+i);
+            }*/
+        }
+        //默认所有的BarLineCurveData。getValue()长度相同
+        initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
+    }
+
+    /**
+     * * 计算Y轴数据
+     * @param mBarLineCurveData 单条曲线点数据
+     * @param max 最大值
+     * @param min 最小值
+     * @param count 第几组数据
+     */
+    private void initAxis(IBarLineCurveData mBarLineCurveData, float max, float min, int count){
+        for (int i=1; i<mBarLineCurveData.getValue().size();i++){
+            max = Math.max(mBarLineCurveData.getValue().get(i).y,max);
+            min = Math.min(mBarLineCurveData.getValue().get(i).y,min);
+        }
+//        yAxisData.setNarrowMin(min);
+//        yAxisData.setNarrowMax(max);
+        initMaxMin(max,min,count,yAxisData);
+    }
+
+    @Override
+    protected void initMaxMin(float max, float min, int count, AxisData axisData) {
+        super.initMaxMin(max, min, count, axisData);
+    }
+
+    @Override
+    protected void initScaling(float min, float max, int length, AxisData axisData) {
+        super.initScaling(min, max, length, axisData);
+    }
+
+    public void convergence(ArrayList<T> barLineCurveDatas){
+        int count = 0;
+        int newCount = 0;
+//        initScaling(xAxisData.getMinimum(),xAxisData.getMaximum(),BarLineCurveDatas.get(0).getValue().size(),xAxisData);
+        //二次处理字符过长
+        while ((yAxisData.getInterval()*count+yAxisData.getMinimum())<=yAxisData.getMaximum()){
+            count++;
+        }
+        Paint.FontMetrics fontMetrics= paint.getFontMetrics();
+        float ascent = fontMetrics.ascent;
+        float descent = fontMetrics.descent;
+        float stringLength = descent-ascent;
+        while (count*stringLength>yAxisData.getAxisLength()){
+            count = count/2;
+            newCount++;
+        }
+        yAxisData.setInterval(newCount!=0? yAxisData.getInterval()*newCount*2:yAxisData.getInterval());
+        //收敛
+        while (yAxisData.getNarrowMin()-yAxisData.getMinimum()>yAxisData.getInterval()){
+            yAxisData.setMinimum(yAxisData.getMinimum()+yAxisData.getInterval());
+        }
+
+        while (yAxisData.getMaximum()-yAxisData.getNarrowMax()>yAxisData.getInterval()){
+            yAxisData.setMaximum(yAxisData.getMaximum()-yAxisData.getInterval());
+        }
+
+        if (yAxisData.getMaximum()-yAxisData.getMinimum()<=(yAxisData.getInterval()*2)){
+            initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),barLineCurveDatas.get(0).getValue().size(),yAxisData);
+            convergence(barLineCurveDatas);
+        }
+    }
+}
