@@ -67,10 +67,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         Animated();
 
         if (convergenceFlag){
-            mXAxisData.setNarrowMax(mXAxisData.getMaximum());
-            mXAxisData.setNarrowMin(mXAxisData.getMinimum());
-            mYAxisData.setNarrowMax(mYAxisData.getMaximum());
-            mYAxisData.setNarrowMin(mYAxisData.getMinimum());
+
             /**
              * 循环收敛
              */
@@ -99,6 +96,8 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     public void computeAxis() {
         mComputeXAxis.computeXAxis(mDataList);
         mComputeYAxis.computeYAxis(mDataList);
+//        LogUtil.d("TAG",mXAxisData.toString());
+//        LogUtil.d("TAG",mYAxisData.toString());
     }
 
     @Override
@@ -138,5 +137,9 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     @Override
     public void setYAxisUnit(String YAxisUnit) {
         this.YAxisUnit = YAxisUnit;
+    }
+
+    public void setConvergenceFlag(boolean convergenceFlag) {
+        this.convergenceFlag = convergenceFlag;
     }
 }

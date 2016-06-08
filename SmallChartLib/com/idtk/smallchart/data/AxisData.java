@@ -126,4 +126,12 @@ public class AxisData extends BaseData implements IAxisData{
     public float getNarrowMin() {
         return narrowMin;
     }
+
+    @Override
+    public String toString() {
+        return "textSize : "+textSize+" axisLength : "+ axisLength+" paintWidth : "+ paintWidth+
+                " maximum : " +maximum+" minimum : "+ minimum+" interval: "+ interval+ " unit : "
+                + unit+" narrowMax : "+ narrowMax+" narrowMin : "+ narrowMin + " decimalPlaces : "
+                +decimalPlaces+ " axisScale : "+ axisScale;
+    }
 }

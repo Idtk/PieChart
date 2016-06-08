@@ -15,4 +15,6 @@ public interface IBarLineCurveChart extends IChart{
     void setXAxisUnit(String XAxisUnit);
 
     void setYAxisUnit(String YAxisUnit);
+
+    void setConvergenceFlag(boolean convergenceFlag);
 }

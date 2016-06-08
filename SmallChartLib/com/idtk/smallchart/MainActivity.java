@@ -29,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData(){
+//        mPointArrayList.add(new PointF(-1,-1));
         for (int i=0; i<10; i++){
-            mPointArrayList.add(new PointF(i*10,i*1f));
-            mPointArrayList2.add(new PointF(i*0.1f,i*1f));
+            mPointArrayList.add(new PointF(-i*100f,-i*100+100));
+            mPointArrayList2.add(new PointF(-i*100+100,-i*100f));
         }
         mLineData.setValue(mPointArrayList);
         mLineData.setColor(Color.BLUE);

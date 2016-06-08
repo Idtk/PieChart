@@ -73,7 +73,7 @@ public class LineChartRender extends BarLineCurveRender<LineData> {
         mPath.incReserve(lineData.getValue().size());//为添加更多点准备路径,可以更有效地分配其存储的路径
         pointList.clear();
         for (int j=0; j< lineData.getValue().size(); j++){
-            float currentYAxis;
+            float currentYAxis,currentXAxis;
             if (animatedValue<yAxisData.getAxisLength()/2){
                 currentYAxis = animatedValue;
             }else {
@@ -102,15 +102,22 @@ public class LineChartRender extends BarLineCurveRender<LineData> {
                     }
                 }
             }
+            if (currentYAxis<0){
+                currentYAxis=0;
+            }
+            currentXAxis = (lineData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale();
+            if (currentXAxis<0){
+                currentXAxis=0;
+            }
             if (j==0){
-                mPath.moveTo((lineData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale(), currentYAxis);
+                mPath.moveTo(currentXAxis, currentYAxis);
             }else {
-                mPath.lineTo((lineData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale(), currentYAxis);
+                mPath.lineTo(currentXAxis, currentYAxis);
             }
             /**
              * 保存
              */
-            pointList.add(new PointF((lineData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale(),currentYAxis));
+            pointList.add(new PointF(currentXAxis,currentYAxis));
         }
         linePaint.setColor(lineData.getColor());
         canvas.drawPath(mPath,linePaint);

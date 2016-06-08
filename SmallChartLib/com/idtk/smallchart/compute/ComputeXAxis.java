@@ -40,13 +40,28 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
             int length = mBarLineCurveData.getValue().size();
             float maxX = Math.max(mBarLineCurveData.getValue().get(length-1).x,mBarLineCurveData.getValue().get(0).x);
             float minX = Math.min(mBarLineCurveData.getValue().get(length-1).x,mBarLineCurveData.getValue().get(0).x);
-            initMaxMin(maxX,minX,i,xAxisData);
 
             /*for (int j=0; j<mBarLineCurveData.getValue().length; j++){
                 Log.i("TAG1",(mBarLineCurveData.getValue()[j][0])+":"+(mBarLineCurveData.getValue()[j][1])+":"+i);
             }*/
-//            xAxisData.setNarrowMin(minX);
-//            xAxisData.setNarrowMax(maxX);
+            if (maxX<0){
+                maxX=-maxX;
+                maxAxisSgin = -1;
+            }
+            if (minX<0){
+                minX=-minX;
+                minAxisSgin = -1;
+            }
+
+            if (i==0){
+                xAxisData.setNarrowMin(minX*minAxisSgin);
+                xAxisData.setNarrowMax(maxX*maxAxisSgin);
+            }else {
+                xAxisData.setNarrowMin(minX*minAxisSgin<xAxisData.getNarrowMin()?minX*minAxisSgin:xAxisData.getNarrowMin());
+                xAxisData.setNarrowMax(maxX*maxAxisSgin>xAxisData.getNarrowMax()?maxX*maxAxisSgin:xAxisData.getNarrowMax());
+            }
+
+            initMaxMin(maxX,minX,i,xAxisData);
         }
         //默认所有的BarLineCurveData。getValue()长度相同
         initScaling(xAxisData.getMinimum(),xAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),xAxisData);

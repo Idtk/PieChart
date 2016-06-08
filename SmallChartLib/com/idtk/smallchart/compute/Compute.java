@@ -13,6 +13,10 @@ public class Compute {
         super();
     }
 
+    protected int minAxisSgin = 1;
+    protected int maxAxisSgin = 1;
+    protected int scalAxisSgin = 1;
+
     /**
      * 计算最大最小整数值
      * @param max 最大值
@@ -20,6 +24,7 @@ public class Compute {
      * @param count 第几组数据
      */
     protected void initMaxMin(float max, float min, int count, AxisData axisData){
+
         int number = 0;
         //判断刻度值精度
         if (max>1){
@@ -30,13 +35,16 @@ public class Compute {
             max = (float) (Math.ceil(max)*Math.pow(10,number));
             min = (float) (Math.floor(min/Math.pow(10,number))*Math.pow(10,number));
         }else {
-            while (max<1){
+            while (0<max&&max<1){
                 max=max*10;
                 number++;
             }
             max = (float) (Math.ceil(max)*Math.pow(10,-number));
             min = (float) (Math.floor(min/Math.pow(10,-number))*Math.pow(10,-number));
         }
+
+        min = min*minAxisSgin;
+        max = max*maxAxisSgin;
         //装最大最小值
         if (count == 0){
             axisData.setMinimum(min);
@@ -45,6 +53,8 @@ public class Compute {
             axisData.setMinimum(axisData.getMinimum()>min?min:axisData.getMinimum());
             axisData.setMaximum(axisData.getMaximum()<max?max:axisData.getMaximum());
         }
+        minAxisSgin = 1;
+        maxAxisSgin = 1;
     }
 
     /**
@@ -62,6 +72,10 @@ public class Compute {
         }else {
             scaling = (max-min)/10;
         }
+        if (scaling<0){
+            scaling = -scaling;
+            scalAxisSgin = -1;
+        }
         //判断刻度值精度
         if (scaling>1){
             while (scaling>10){
@@ -78,6 +92,7 @@ public class Compute {
             axisData.setDecimalPlaces(count);
         }
 
-        axisData.setInterval(scaling);
+        axisData.setInterval(scaling*scalAxisSgin);
+        scalAxisSgin = 1;
     }
 }

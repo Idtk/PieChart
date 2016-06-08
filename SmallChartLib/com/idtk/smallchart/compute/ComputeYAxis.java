@@ -62,8 +62,23 @@ public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
             max = Math.max(mBarLineCurveData.getValue().get(i).y,max);
             min = Math.min(mBarLineCurveData.getValue().get(i).y,min);
         }
-//        yAxisData.setNarrowMin(min);
-//        yAxisData.setNarrowMax(max);
+
+        if (max<0){
+            max=-max;
+            maxAxisSgin = -1;
+        }
+        if (min<0){
+            min=-min;
+            minAxisSgin = -1;
+        }
+
+        if (count==0){
+            yAxisData.setNarrowMin(min*minAxisSgin);
+            yAxisData.setNarrowMax(max*maxAxisSgin);
+        }else {
+            yAxisData.setNarrowMin(min*minAxisSgin<yAxisData.getNarrowMin()?min*minAxisSgin:yAxisData.getNarrowMin());
+            yAxisData.setNarrowMax(max*maxAxisSgin>yAxisData.getNarrowMax()?max*maxAxisSgin:yAxisData.getNarrowMax());
+        }
         initMaxMin(max,min,count,yAxisData);
     }
 
