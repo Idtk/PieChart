@@ -102,13 +102,13 @@ public class LineChartRender extends BarLineCurveRender<LineData> {
                     }
                 }
             }
-            if (currentYAxis<0){
+            /*if (currentYAxis<0){
                 currentYAxis=0;
-            }
+            }*/
             currentXAxis = (lineData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale();
-            if (currentXAxis<0){
+            /*if (currentXAxis<0){
                 currentXAxis=0;
-            }
+            }*/
             if (j==0){
                 mPath.moveTo(currentXAxis, currentYAxis);
             }else {

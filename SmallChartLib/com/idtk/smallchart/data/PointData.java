@@ -15,6 +15,7 @@ public class PointData extends BaseData implements IPointData{
     private Paint outPaint;
     private Paint inPaint;
 
+
     public void setOutRadius(float outRadius) {
         this.outRadius = outRadius;
     }
@@ -46,4 +47,5 @@ public class PointData extends BaseData implements IPointData{
     public Paint getInPaint() {
         return inPaint;
     }
+
 }

@@ -28,15 +28,15 @@ public class PointRender extends Render {
         mPointF.y = -pointF.y;
         canvas.drawCircle(pointF.x,pointF.y,pointData.getOutRadius(),pointData.getOutPaint());
         canvas.drawCircle(pointF.x,pointF.y,pointData.getInRadius(),pointData.getInPaint());
-        canvas.save();
-        canvas.scale(1,-1);
+//        canvas.save();
+//        canvas.scale(1,-1);
 //        drawGraph(canvas);
-        canvas.restore();
+//        canvas.restore();
     }
 
     @Override
     public void drawGraph(Canvas canvas) {
-        textCenter(new String[]{"("+mPointF.x+":"+mPointF.y+")"},mPaint,canvas,mPointF, Paint.Align.CENTER);
+        textCenter(new String[]{"("+mPointF.x+" , "+mPointF.y+")"},mPaint,canvas,mPointF, Paint.Align.CENTER);
     }
 
 }
