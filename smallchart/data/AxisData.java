@@ -31,14 +31,6 @@ public class AxisData extends BaseData implements IAxisData{
      */
     protected float axisScale;
 
-    /*public void setColor(int color) {
-        Color = color;
-    }
-
-    public int getColor() {
-        return Color;
-    }*/
-
     public void setTextSize(int textSize) {
         this.textSize = textSize;
     }

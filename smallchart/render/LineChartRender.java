@@ -53,7 +53,6 @@ public class LineChartRender extends BarLineCurveRender<LineData> {
         outpointPaint.setAntiAlias(true);
         inPointPaint.setStyle(Paint.Style.FILL);
         inPointPaint.setAntiAlias(true);
-
     }
 
 

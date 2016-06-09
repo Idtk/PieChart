@@ -2,6 +2,7 @@ package com.idtk.smallchart.chart;
 
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 
 /**
@@ -30,6 +31,11 @@ public class BarChart extends BarLineCurveChart{
 
     @Override
     protected void Animated() {
+
+    }
+
+    @Override
+    protected void drawGraphical(Canvas canvas) {
 
     }
 }

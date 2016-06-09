@@ -22,7 +22,7 @@ public class TouchRender extends Render{
 
     }
 
-    public void drawPointAxis(Canvas canvas,float xAxis, float yAxis ,PointF mPointF){
+    public void drawPointAxis(Canvas canvas,String xAxis, String yAxis ,PointF mPointF){
         textCenter(new String[]{"("+xAxis+" , "+yAxis+")"},mPaint,canvas,mPointF, Paint.Align.CENTER);
     }
 }
