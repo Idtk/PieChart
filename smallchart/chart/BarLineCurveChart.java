@@ -13,6 +13,7 @@ import com.idtk.smallchart.data.XAxisData;
 import com.idtk.smallchart.data.YAxisData;
 import com.idtk.smallchart.interfaces.IChart.IBarLineCurveChart;
 import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
+import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.TouchRender;
 import com.idtk.smallchart.render.XAxisRender;
 import com.idtk.smallchart.render.YAxisRender;
@@ -48,6 +49,8 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
 
     private PointF touchPoint = new PointF();
     private TouchRender mTouchRender = new TouchRender();
+
+    protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
 
     public BarLineCurveChart(Context context) {
         super(context);

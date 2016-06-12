@@ -15,7 +15,7 @@ import java.text.NumberFormat;
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
  */
-public class YAxisRender extends Render {
+public class YAxisRender extends AxisRender {
     private Paint mPaint = new Paint();
     private Paint linePaint = new Paint();
     private YAxisData yAxisData = new YAxisData();

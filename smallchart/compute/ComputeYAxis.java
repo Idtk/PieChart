@@ -47,6 +47,7 @@ public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
             }*/
         }
         //默认所有的BarLineCurveData。getValue()长度相同
+        if (mBarLineCurveDatas.size()>0)
         initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
     }
 

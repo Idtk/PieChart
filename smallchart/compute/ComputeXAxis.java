@@ -64,6 +64,7 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
             initMaxMin(maxX,minX,i,xAxisData);
         }
         //默认所有的BarLineCurveData。getValue()长度相同
+        if (mBarLineCurveDatas.size()>0)
         initScaling(xAxisData.getMinimum(),xAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),xAxisData);
     }
 

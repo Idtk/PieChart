@@ -21,7 +21,6 @@ public abstract class Render {
     public void setData(ChartData data){
         this.data = data;
     }*/
-    public abstract void drawGraph(Canvas canvas);
     protected void textCenter(String[] strings, Paint paint, Canvas canvas, PointF point, Paint.Align align){
         paint.setTextAlign(align);
         Paint.FontMetrics fontMetrics= paint.getFontMetrics();

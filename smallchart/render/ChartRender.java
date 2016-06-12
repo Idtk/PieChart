@@ -7,8 +7,8 @@ import android.graphics.Canvas;
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
  */
-public abstract class BarLineCurveRender<T> extends Render{
+public abstract class ChartRender<T> extends Render{
 
-    public abstract void drawGraph(Canvas canvas, T iBarLineCurveData, float animatedValue);
+    public abstract void drawGraph(Canvas canvas,float animatedValue);
 
 }

@@ -17,11 +17,6 @@ public class TouchRender extends Render{
         mPaint.setTextSize(30);
     }
 
-    @Override
-    public void drawGraph(Canvas canvas) {
-
-    }
-
     public void drawPointAxis(Canvas canvas,String xAxis, String yAxis ,PointF mPointF){
         textCenter(new String[]{"("+xAxis+" , "+yAxis+")"},mPaint,canvas,mPointF, Paint.Align.CENTER);
     }

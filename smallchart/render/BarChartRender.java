@@ -10,19 +10,14 @@ import com.idtk.smallchart.data.BarData;
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
  */
-public class BarChartRender extends BarLineCurveRender<BarData> {
+public class BarChartRender extends ChartRender<BarData> {
 
     public BarChartRender() {
         super();
     }
 
     @Override
-    public void drawGraph(Canvas canvas) {
-//        canvas.drawText("BarChartRender",0,0,paint);
-    }
-
-    @Override
-    public void drawGraph(Canvas canvas, BarData iBarLineCurveData,float animatedValue) {
+    public void drawGraph(Canvas canvas, float animatedValue) {
 
     }
 }

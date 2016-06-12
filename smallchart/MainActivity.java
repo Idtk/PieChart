@@ -5,27 +5,32 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.idtk.smallchart.chart.CurveChart;
 import com.idtk.smallchart.chart.LineChart;
-import com.idtk.smallchart.data.LineData;
+import com.idtk.smallchart.data.CurveData;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private LineChart lineChart;
-    private LineData mLineData = new LineData();
-    private LineData mLineData2 = new LineData();
+    private CurveChart curveChart;
+    private CurveData mLineData = new CurveData();
+    private CurveData mLineData2 = new CurveData();
     private ArrayList<PointF> mPointArrayList = new ArrayList<>();
     private ArrayList<PointF> mPointArrayList2 = new ArrayList<>();
-    private ArrayList<LineData> mLineDatas = new ArrayList<>();
+    private ArrayList<CurveData> mLineDatas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData();
-        lineChart = (LineChart) findViewById(R.id.lineChart);
+//        lineChart = (LineChart) findViewById(R.id.lineChart);
 //        lineChart.setData(mLineData);
-        lineChart.setDataList(mLineDatas);
+//        lineChart.setDataList(mLineDatas);
+
+        curveChart = (CurveChart) findViewById(R.id.curveChart);
+        curveChart.setDataList(mLineDatas);
     }
 
     private void initData(){

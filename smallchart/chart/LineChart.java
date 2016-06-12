@@ -45,15 +45,26 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
         pointInRadius = mXAxisData.getAxisLength()/100;
         mPointData.setInRadius(pointInRadius);
         mPointData.setOutRadius(pointOutRadius);
-        mLineChartRender = new LineChartRender(mXAxisData,mYAxisData,mPointData);
+//        mLineChartRender = new LineChartRender(mXAxisData,mYAxisData,mPointData);
+        chartRenderList.clear();
+        for (int i=0; i<mDataList.size(); i++){
+            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData);
+            chartRenderList.add(mLineChartRender);
+        }
     }
 
     @Override
     protected void drawGraphical(Canvas canvas) {
-        for (int i=0; i<mDataList.size(); i++){
+        /*for (int i=0; i<mDataList.size(); i++){
             canvas.save();
             canvas.scale(1,-1);
             mLineChartRender.drawGraph(canvas,mDataList.get(i),animatedValue);
+            canvas.restore();
+        }*/
+        for (int i=0; i<chartRenderList.size(); i++){
+            canvas.save();
+            canvas.scale(1,-1);
+            chartRenderList.get(i).drawGraph(canvas,animatedValue);
             canvas.restore();
         }
     }

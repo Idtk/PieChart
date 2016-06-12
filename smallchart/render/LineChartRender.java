@@ -18,32 +18,24 @@ import java.util.ArrayList;
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
  */
-public class LineChartRender extends BarLineCurveRender<LineData> {
+public class LineChartRender extends ChartRender<LineData> {
 
-    private LineData mLineData;
+    private LineData lineData;
     private Path mPath = new Path();
     private Paint linePaint = new Paint();
-    private float animatedValue;
     private XAxisData xAxisData = new XAxisData();
     private YAxisData yAxisData = new YAxisData();
     private ArrayList<PointF> pointList = new ArrayList<>();
-    private PointRender mPointRender = new PointRender();
+    private TouchPointRender mPointRender = new TouchPointRender();
     private PointData pointData;
 
-    /**
-     * 测试使用，点需分单独模块
-     */
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
 
-    public LineChartRender(XAxisData xAxisData, YAxisData yAxisData, PointData pointData) {
-        this(null,0,xAxisData,yAxisData,pointData);
-    }
 
-    public LineChartRender(LineData lineData, float animatedValue, XAxisData xAxisData, YAxisData yAxisData, PointData pointData) {
+    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData) {
         super();
-        mLineData = lineData;
-        this.animatedValue = animatedValue;
+        this.lineData = lineData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
@@ -53,21 +45,15 @@ public class LineChartRender extends BarLineCurveRender<LineData> {
         outpointPaint.setAntiAlias(true);
         inPointPaint.setStyle(Paint.Style.FILL);
         inPointPaint.setAntiAlias(true);
-    }
-
-
-    @Override
-    public void drawGraph(Canvas canvas) {
-        if (mLineData != null)
-        this.drawGraph(canvas,mLineData,animatedValue);
-    }
-
-    @Override
-    public void drawGraph(Canvas canvas, LineData lineData, float animatedValue) {
-//        canvas.drawText("LineChartRender",0,0,paint);
         linePaint.setStrokeWidth(lineData.getPaintWidth());
         outpointPaint.setStrokeWidth(linePaint.getStrokeWidth());
         inPointPaint.setStrokeWidth(linePaint.getStrokeWidth());
+    }
+
+
+    @Override
+    public void drawGraph(Canvas canvas, float animatedValue) {
+//        canvas.drawText("LineChartRender",0,0,paint);
 
         mPath.incReserve(lineData.getValue().size());//为添加更多点准备路径,可以更有效地分配其存储的路径
         pointList.clear();

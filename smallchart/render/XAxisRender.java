@@ -13,7 +13,7 @@ import java.text.NumberFormat;
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
  */
-public class XAxisRender extends Render {
+public class XAxisRender extends AxisRender {
 
     private Paint mPaint = new Paint();
     private XAxisData xAxisData = new XAxisData();
