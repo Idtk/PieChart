@@ -8,5 +8,9 @@ import android.graphics.Canvas;
  * GitHub : https://github.com/Idtk
  */
 public abstract class AxisRender extends Render {
+    public AxisRender() {
+        super();
+    }
+
     public abstract void drawGraph(Canvas canvas);
 }

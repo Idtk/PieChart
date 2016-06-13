@@ -26,19 +26,22 @@ public class LineChartRender extends ChartRender<LineData> {
     private XAxisData xAxisData = new XAxisData();
     private YAxisData yAxisData = new YAxisData();
     private ArrayList<PointF> pointList = new ArrayList<>();
-    private TouchPointRender mPointRender = new TouchPointRender();
+    private PointRender mPointRender = new PointRender();
     private PointData pointData;
 
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
 
+    private int textSize;
 
-    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData) {
+
+    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize) {
         super();
         this.lineData = lineData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
+        this.textSize = textSize;
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
         outpointPaint.setStyle(Paint.Style.FILL);
@@ -48,6 +51,7 @@ public class LineChartRender extends ChartRender<LineData> {
         linePaint.setStrokeWidth(lineData.getPaintWidth());
         outpointPaint.setStrokeWidth(linePaint.getStrokeWidth());
         inPointPaint.setStrokeWidth(linePaint.getStrokeWidth());
+        linePaint.setColor(lineData.getColor());
     }
 
 
@@ -104,7 +108,6 @@ public class LineChartRender extends ChartRender<LineData> {
              */
             pointList.add(new PointF(currentXAxis,currentYAxis));
         }
-        linePaint.setColor(lineData.getColor());
         canvas.drawPath(mPath,linePaint);
         mPath.rewind();//清除
 
@@ -114,7 +117,7 @@ public class LineChartRender extends ChartRender<LineData> {
         pointData.setOutPaint(outpointPaint);
 
         for (int j=0; j<pointList.size(); j++) {
-            mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData);
+            mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,textSize,lineData.getValue().get(j));
         }
     }
 }

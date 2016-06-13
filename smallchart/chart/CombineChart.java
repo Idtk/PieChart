@@ -28,12 +28,22 @@ public class CombineChart extends BarLineCurveChart {
     }
 
     @Override
-    protected void Animated() {
+    protected void animated() {
 
     }
 
     @Override
     protected void drawGraphical(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void axisScale() {
+
+    }
+
+    @Override
+    protected void axisRender(Canvas canvas) {
 
     }
 }

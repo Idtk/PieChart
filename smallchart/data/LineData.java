@@ -7,18 +7,17 @@ import com.idtk.smallchart.interfaces.IData.ILineData;
  */
 public class LineData extends BarLineCurveData implements ILineData {
 
-    public enum animatedMod{
+    public enum AnimatedMod{
         SYNC,ASYNC
-
     }
 
-    private animatedMod mAnimatedMod = animatedMod.SYNC;
+    private AnimatedMod mAnimatedMod = AnimatedMod.SYNC;
 
-    public void setAnimatedMod(animatedMod animatedMod) {
+    public void setAnimatedMod(AnimatedMod animatedMod) {
         mAnimatedMod = animatedMod;
     }
 
-    public animatedMod getAnimatedMod() {
+    public AnimatedMod getAnimatedMod() {
         return mAnimatedMod;
     }
 }

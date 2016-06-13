@@ -4,7 +4,9 @@ package com.idtk.smallchart.interfaces.IChart;
  * Created by Administrator on 2016/6/7.
  */
 public interface IBarLineCurveChart extends IChart{
-    void computeAxis();
+    void computeXAxis();
+
+    void computeYAxis();
 
     void setAxisTextSize(int axisTextSize);
 
@@ -18,5 +20,5 @@ public interface IBarLineCurveChart extends IChart{
 
     void setConvergenceFlag(boolean convergenceFlag);
 
-    void setTouchFlag(boolean touchFlag);
+    void setTextSize(int textSize);
 }

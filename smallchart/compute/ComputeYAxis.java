@@ -51,6 +51,21 @@ public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
         initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
     }
 
+    public void computeYAxisMin(ArrayList<T> mBarLineCurveDatas){
+        for (int i=0; i<mBarLineCurveDatas.size();i++){
+            IBarLineCurveData mBarLineCurveData = mBarLineCurveDatas.get(i);
+            float maxY = mBarLineCurveData.getValue().get(0).y;
+            initAxis(mBarLineCurveData,maxY,0,i);
+
+            /*for (int j=0; j<mBarLineCurveData.getValue().length; j++){
+                Log.i("TAG1",(mBarLineCurveData.getValue()[j][0])+":"+(mBarLineCurveData.getValue()[j][1])+":"+i);
+            }*/
+        }
+        //默认所有的BarLineCurveData。getValue()长度相同
+        if (mBarLineCurveDatas.size()>0)
+            initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
+    }
+
     /**
      * * 计算Y轴数据
      * @param mBarLineCurveData 单条曲线点数据

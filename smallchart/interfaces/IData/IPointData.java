@@ -2,6 +2,8 @@ package com.idtk.smallchart.interfaces.IData;
 
 import android.graphics.Paint;
 
+import com.idtk.smallchart.data.PointData;
+
 /**
  * Created by Idtk on 2016/6/8.
  * Blog : http://www.idtkm.com
@@ -24,5 +26,11 @@ public interface IPointData extends IBaseData {
     void setInPaint(Paint inPaint);
 
     Paint getInPaint();
+
+    void setPointShape(PointData.PointShape pointShape);
+
+    PointData.PointShape getPointShape();
+
+
 
 }

@@ -10,11 +10,16 @@ import com.idtk.smallchart.interfaces.IData.IPointData;
  * GitHub : https://github.com/Idtk
  */
 public class PointData extends BaseData implements IPointData{
+
+    public enum PointShape{
+        CIRCLE,RECT,TRIANGLE
+    }
+
     private float outRadius;
     private float inRadius;
     private Paint outPaint;
     private Paint inPaint;
-
+    private PointShape pointShape;
 
     public void setOutRadius(float outRadius) {
         this.outRadius = outRadius;
@@ -47,5 +52,14 @@ public class PointData extends BaseData implements IPointData{
     public Paint getInPaint() {
         return inPaint;
     }
+
+    public void setPointShape(PointShape pointShape) {
+        this.pointShape = pointShape;
+    }
+
+    public PointShape getPointShape() {
+        return pointShape;
+    }
+
 
 }

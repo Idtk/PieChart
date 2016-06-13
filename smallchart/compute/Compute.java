@@ -32,15 +32,15 @@ public class Compute {
                 max=max/10;
                 number++;
             }
-            max = (float) (Math.ceil(max)*Math.pow(10,number));
-            min = (float) (Math.floor(min/Math.pow(10,number))*Math.pow(10,number));
+            max = (float) (Math.ceil(max*Math.pow(10,number)));
+            min = (float) (Math.floor(min/Math.pow(10,number)*Math.pow(10,number)));
         }else {
             while (0<max&&max<1){
                 max=max*10;
                 number++;
             }
-            max = (float) (Math.ceil(max)*Math.pow(10,-number));
-            min = (float) (Math.floor(min/Math.pow(10,-number))*Math.pow(10,-number));
+            max = (float) (Math.ceil(max*Math.pow(10,-number)));
+            min = (float) (Math.floor(min/Math.pow(10,-number)*Math.pow(10,-number)));
         }
 
         min = min*minAxisSgin;
@@ -67,10 +67,11 @@ public class Compute {
         float scaling;
         int count = 0;
         //初步计算刻度值
-        if (length<11){
+        if (length<16){
             scaling = (max-min)/(length-1);
+//            LogUtil.d("TAG",max+":"+min+":"+scaling+":"+length);
         }else {
-            scaling = (max-min)/10;
+            scaling = (max-min)/15;
         }
         if (scaling<0){
             scaling = -scaling;

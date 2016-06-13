@@ -7,7 +7,7 @@ import com.idtk.smallchart.data.LineData;
  */
 public interface ILineData extends IBarLineCurveData {
 
-    void setAnimatedMod(LineData.animatedMod animatedMod);
+    void setAnimatedMod(LineData.AnimatedMod animatedMod);
 
-    LineData.animatedMod getAnimatedMod();
+    LineData.AnimatedMod getAnimatedMod();
 }

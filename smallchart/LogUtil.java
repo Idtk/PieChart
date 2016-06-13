@@ -44,7 +44,7 @@ public class LogUtil {
         }
     }*/
 
-    private static int flag = 1;
+    private static int flag = 0;
 
     public static void v(String tag, String msg){
         if (Log.VERBOSE>flag){

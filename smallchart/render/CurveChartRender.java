@@ -1,6 +1,7 @@
 package com.idtk.smallchart.render;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
@@ -25,18 +26,20 @@ public class CurveChartRender extends ChartRender<CurveData> {
     private XAxisData xAxisData = new XAxisData();
     private YAxisData yAxisData = new YAxisData();
     private ArrayList<PointF> pointList = new ArrayList<>();
-    private TouchPointRender mPointRender = new TouchPointRender();
+    private PointRender mPointRender = new PointRender();
     private PointData pointData;
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
     private float intensity;
+    private int textSize;
 
-    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData) {
+    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize) {
         super();
         this.curveData = curveData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
+        this.textSize = textSize;
         cubicPaint.setStyle(Paint.Style.STROKE);
         cubicPaint.setAntiAlias(true);
         outpointPaint.setStyle(Paint.Style.FILL);
@@ -61,8 +64,14 @@ public class CurveChartRender extends ChartRender<CurveData> {
         PointF cur = prev;
         PointF next = curveData.getValue().get(1);
 
+        pointList.clear();
         cubicPath.moveTo((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale(),
                 (cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()*animatedValue);
+        /**
+         * 保存
+         */
+        pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale(),
+                (cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()*animatedValue));
 
         for (int j=1; j< curveData.getValue().size(); j++){
             prevPrev = curveData.getValue().get(j == 1 ? 0 : j - 2);
@@ -81,11 +90,25 @@ public class CurveChartRender extends ChartRender<CurveData> {
                     (float) (((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue),
                     (float) ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()),
                     (float) (((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
+            /**
+             * 保存
+             */
+            pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()-curDx,
+                    ((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue));
         }
+
         cubicPaint.setColor(curveData.getColor());
 //        cubicPaint.setPathEffect(mPathEffect);
         canvas.drawPath(cubicPath,cubicPaint);
 //        cubicFillPath.addPath(cubicPath);
         cubicPath.rewind();
+
+        outpointPaint.setColor(curveData.getColor());
+        inPointPaint.setColor(Color.WHITE);
+        pointData.setInPaint(inPointPaint);
+        pointData.setOutPaint(outpointPaint);
+        for (int j=0; j<pointList.size(); j++) {
+            mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,textSize,curveData.getValue().get(j));
+        }
     }
 }

@@ -10,6 +10,8 @@ import com.idtk.smallchart.data.CurveData;
 import com.idtk.smallchart.data.PointData;
 import com.idtk.smallchart.interfaces.IChart.ICurveChart;
 import com.idtk.smallchart.render.CurveChartRender;
+import com.idtk.smallchart.render.XAxisRender;
+import com.idtk.smallchart.render.YAxisRender;
 
 /**
  * Created by Idtk on 2016/6/6.
@@ -20,11 +22,11 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
 
     private float intensity = 0.2f;
     private CurveChartRender curveChartRender;
-    private ChartAnimator mChartAnimator;
-    private float animatedValue;
     private PointData mPointData = new PointData();
     private float pointOutRadius;
     private float pointInRadius;
+    private PointData.PointShape pointShape  = PointData.PointShape.CIRCLE;
+    private boolean isPointInRadius = false, isPointOutRadius=false;
 
     public CurveChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -41,13 +43,19 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        pointOutRadius = mXAxisData.getAxisLength()/70;
-        pointInRadius = mXAxisData.getAxisLength()/100;
+        if (!isPointOutRadius){
+            pointOutRadius = mXAxisData.getAxisLength()/70;
+        }
+        if (!isPointInRadius){
+            pointInRadius = mXAxisData.getAxisLength()/100;
+        }
+
         mPointData.setInRadius(pointInRadius);
         mPointData.setOutRadius(pointOutRadius);
+        mPointData.setPointShape(pointShape);
         chartRenderList.clear();
         for (int i=0; i<mDataList.size(); i++){
-            curveChartRender = new CurveChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData);
+            curveChartRender = new CurveChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,textSize);
             chartRenderList.add(curveChartRender);
         }
     }
@@ -58,16 +66,35 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
     }
 
     @Override
-    protected void Animated() {
-        mAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                animatedValue = (float) animation.getAnimatedValue();
-                invalidate();
-            }
-        };
-        mChartAnimator = new ChartAnimator(mAnimatorUpdateListener);
-        mChartAnimator.animatedY(4000,1);
+    protected void animated() {
+        animatedTarget = 1;
+        if (!isAnimated){
+            animatedValue = 1;
+        }
+        else {
+            mAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    animatedValue = (float) animation.getAnimatedValue();
+                    invalidate();
+                }
+            };
+            mChartAnimator = new ChartAnimator(mAnimatorUpdateListener);
+            mChartAnimator.animatedY(2000,1);
+        }
+    }
+
+    @Override
+    protected void axisScale() {
+        mXAxisData.setAxisScale(mXAxisData.getAxisLength()/(mXAxisData.getMaximum()-mXAxisData.getMinimum()));
+        mYAxisData.setAxisScale(mYAxisData.getAxisLength()/(mYAxisData.getMaximum()-mYAxisData.getMinimum()));
+        mXAxisRender = new XAxisRender(mXAxisData);
+        mYAxisRender = new YAxisRender(mYAxisData,mXAxisData);
+    }
+    @Override
+    protected void axisRender(Canvas canvas) {
+        mXAxisRender.drawGraph(canvas);
+        mYAxisRender.drawGraph(canvas);
     }
 
     @Override
@@ -85,10 +112,16 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
     }
 
     public void setPointInRadius(float pointInRadius) {
+        isPointInRadius = true;
         this.pointInRadius = pointInRadius;
     }
 
     public void setPointOutRadius(float pointOutRadius) {
+        isPointOutRadius = true;
         this.pointOutRadius = pointOutRadius;
+    }
+
+    public void setPointShape(PointData.PointShape pointShape) {
+        this.pointShape = pointShape;
     }
 }
