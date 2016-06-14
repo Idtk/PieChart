@@ -38,8 +38,12 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
         for (int i=0; i<mBarLineCurveDatas.size();i++){
             IBarLineCurveData mBarLineCurveData = mBarLineCurveDatas.get(i);
             int length = mBarLineCurveData.getValue().size();
-            float maxX = Math.max(mBarLineCurveData.getValue().get(length-1).x,mBarLineCurveData.getValue().get(0).x);
-            float minX = Math.min(mBarLineCurveData.getValue().get(length-1).x,mBarLineCurveData.getValue().get(0).x);
+            float maxX =0;
+            float minX =0;
+            if (length>0){
+                maxX = Math.max(mBarLineCurveData.getValue().get(length-1).x,mBarLineCurveData.getValue().get(0).x);
+                minX = Math.min(mBarLineCurveData.getValue().get(length-1).x,mBarLineCurveData.getValue().get(0).x);
+            }
 
             /*for (int j=0; j<mBarLineCurveData.getValue().length; j++){
                 Log.i("TAG1",(mBarLineCurveData.getValue()[j][0])+":"+(mBarLineCurveData.getValue()[j][1])+":"+i);

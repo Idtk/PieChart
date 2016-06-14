@@ -55,7 +55,7 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
         mPointData.setPointShape(pointShape);
         chartRenderList.clear();
         for (int i=0; i<mDataList.size(); i++){
-            curveChartRender = new CurveChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,textSize);
+            curveChartRender = new CurveChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,textSize,0);
             chartRenderList.add(curveChartRender);
         }
     }
@@ -67,7 +67,6 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
 
     @Override
     protected void animated() {
-        animatedTarget = 1;
         if (!isAnimated){
             animatedValue = 1;
         }
@@ -100,10 +99,10 @@ public class CurveChart extends BarLineCurveChart<CurveData> implements ICurveCh
     @Override
     protected void drawGraphical(Canvas canvas) {
         for (int i=0; i<chartRenderList.size(); i++){
-            canvas.save();
-            canvas.scale(1,-1);
+//            canvas.save();
+//            canvas.scale(1,-1);
             chartRenderList.get(i).drawGraph(canvas,animatedValue);
-            canvas.restore();
+//            canvas.restore();
         }
     }
 

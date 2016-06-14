@@ -57,10 +57,16 @@ public class BarChartRender extends ChartRender<BarData> {
             NumberFormat numberFormatY = NumberFormat.getNumberInstance();
             numberFormatY.setMaximumFractionDigits(yAxisData.getDecimalPlaces());
             barPaint.setColor(xAxisData.getColor());
+//            canvas.save();
+//            canvas.scale(1,-1);
             textCenter(new String[]{numberFormatY.format(barData.getValue().get(j).y)},barPaint,canvas,mPointF, Paint.Align.CENTER);
+//            canvas.restore();
         }
         barPaint.setColor(barData.getColor());
+//        canvas.save();
+//        canvas.scale(1,-1);
         canvas.drawPath(barPath,barPaint);
+//        canvas.restore();
         barPath.reset();
     }
 }

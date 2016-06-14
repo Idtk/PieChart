@@ -54,7 +54,6 @@ public class BarChart extends BarLineCurveChart<BarData> implements IBarChart{
 
     @Override
     protected void animated() {
-        animatedTarget = 1;
         if (!isAnimated){
             animatedValue = 1;
         }
@@ -87,10 +86,10 @@ public class BarChart extends BarLineCurveChart<BarData> implements IBarChart{
     @Override
     protected void drawGraphical(Canvas canvas) {
         for (int i=0; i<chartRenderList.size(); i++){
-            canvas.save();
+//            canvas.save();
 //            canvas.scale(1,-1);
             chartRenderList.get(i).drawGraph(canvas,animatedValue);
-            canvas.restore();
+//            canvas.restore();
         }
     }
 

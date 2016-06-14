@@ -54,7 +54,7 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
         mPointData.setPointShape(pointShape);
         chartRenderList.clear();
         for (int i=0; i<mDataList.size(); i++){
-            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,textSize);
+            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,textSize,0);
             chartRenderList.add(mLineChartRender);
         }
     }
@@ -82,10 +82,10 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
             canvas.restore();
         }*/
         for (int i=0; i<chartRenderList.size(); i++){
-            canvas.save();
-            canvas.scale(1,-1);
+//            canvas.save();
+//            canvas.scale(1,-1);
             chartRenderList.get(i).drawGraph(canvas,animatedValue);
-            canvas.restore();
+//            canvas.restore();
         }
     }
 
@@ -96,9 +96,8 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
 
     @Override
     protected void animated() {
-        animatedTarget = mYAxisData.getAxisLength();
         if (!isAnimated) {
-            animatedValue = mYAxisData.getAxisLength();
+            animatedValue = 1;
         } else {
             mAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -108,7 +107,7 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
                 }
             };
             mChartAnimator = new ChartAnimator(mAnimatorUpdateListener);
-            mChartAnimator.animatedY(2000,mYAxisData.getAxisLength());
+            mChartAnimator.animatedY(2000,1);
         }
     }
 

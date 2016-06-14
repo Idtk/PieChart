@@ -32,14 +32,16 @@ public class CurveChartRender extends ChartRender<CurveData> {
     private Paint inPointPaint = new Paint();
     private float intensity;
     private int textSize;
+    private float offset;
 
-    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize) {
+    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize,float offset) {
         super();
         this.curveData = curveData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
         this.textSize = textSize;
+        this.offset = offset;
         cubicPaint.setStyle(Paint.Style.STROKE);
         cubicPaint.setAntiAlias(true);
         outpointPaint.setStyle(Paint.Style.FILL);
@@ -66,12 +68,12 @@ public class CurveChartRender extends ChartRender<CurveData> {
 
         pointList.clear();
         cubicPath.moveTo((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale(),
-                (cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()*animatedValue);
+                -(cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()*animatedValue);
         /**
          * 保存
          */
         pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale(),
-                (cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()*animatedValue));
+                -(cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()*animatedValue));
 
         for (int j=1; j< curveData.getValue().size(); j++){
             prevPrev = curveData.getValue().get(j == 1 ? 0 : j - 2);
@@ -85,18 +87,20 @@ public class CurveChartRender extends ChartRender<CurveData> {
             curDy = (float) ((next.y-prev.y)*intensity*yAxisData.getAxisScale());
 
             cubicPath.cubicTo((float) ((prev.x-xAxisData.getMinimum())*xAxisData.getAxisScale()+prevDx),
-                    (float) (((prev.y-yAxisData.getMinimum())*yAxisData.getAxisScale()+prevDy)*animatedValue),
+                    (float) -(((prev.y-yAxisData.getMinimum())*yAxisData.getAxisScale()+prevDy)*animatedValue),
                     (float) ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()-curDx),
-                    (float) (((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue),
+                    (float) -(((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue),
                     (float) ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()),
-                    (float) (((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
+                    (float) -(((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
             /**
              * 保存
              */
             pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()-curDx,
-                    ((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue));
+                    -((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue));
         }
 
+        canvas.save();
+        canvas.translate(offset,0);
         cubicPaint.setColor(curveData.getColor());
 //        cubicPaint.setPathEffect(mPathEffect);
         canvas.drawPath(cubicPath,cubicPaint);
@@ -110,5 +114,6 @@ public class CurveChartRender extends ChartRender<CurveData> {
         for (int j=0; j<pointList.size(); j++) {
             mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,textSize,curveData.getValue().get(j));
         }
+        canvas.restore();
     }
 }

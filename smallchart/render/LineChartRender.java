@@ -33,15 +33,17 @@ public class LineChartRender extends ChartRender<LineData> {
     private Paint inPointPaint = new Paint();
 
     private int textSize;
+    private float offset;
 
 
-    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize) {
+    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize, float offset) {
         super();
         this.lineData = lineData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
         this.textSize = textSize;
+        this.offset = offset;
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
         outpointPaint.setStyle(Paint.Style.FILL);
@@ -63,17 +65,17 @@ public class LineChartRender extends ChartRender<LineData> {
         pointList.clear();
         for (int j=0; j< lineData.getValue().size(); j++){
             float currentYAxis,currentXAxis;
-            if (animatedValue<yAxisData.getAxisLength()/2){
-                currentYAxis = animatedValue;
+            if (animatedValue<0.5){
+                currentYAxis = animatedValue*yAxisData.getAxisLength();
             }else {
                 if ((lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale() >= yAxisData.getAxisLength()/2){
                     switch (lineData.getAnimatedMod()){
                         case SYNC://同时到达
                             currentYAxis = yAxisData.getAxisLength()/2+((lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale()
-                                    -yAxisData.getAxisLength()/2)/yAxisData.getAxisLength()*2*(animatedValue-yAxisData.getAxisLength()/2);
+                                    -yAxisData.getAxisLength()/2)/yAxisData.getAxisLength()*2*(animatedValue*yAxisData.getAxisLength()-yAxisData.getAxisLength()/2);
                             break;
                         default://先后到达
-                            currentYAxis = Math.min(animatedValue,
+                            currentYAxis = Math.min(animatedValue*yAxisData.getAxisLength(),
                                     (lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale());
                             break;
                     }
@@ -82,10 +84,10 @@ public class LineChartRender extends ChartRender<LineData> {
                         case SYNC:
                             currentYAxis = yAxisData.getAxisLength()/2-(yAxisData.getAxisLength()/2-
                                     (lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale())/
-                                    yAxisData.getAxisLength()*2*(animatedValue-yAxisData.getAxisLength()/2);
+                                    yAxisData.getAxisLength()*2*(animatedValue*yAxisData.getAxisLength()-yAxisData.getAxisLength()/2);
                             break;
                         default:
-                            currentYAxis = Math.max(yAxisData.getAxisLength()-animatedValue,
+                            currentYAxis = Math.max(yAxisData.getAxisLength()-animatedValue*yAxisData.getAxisLength(),
                                     (lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale());
                             break;
                     }
@@ -99,15 +101,17 @@ public class LineChartRender extends ChartRender<LineData> {
                 currentXAxis=0;
             }*/
             if (j==0){
-                mPath.moveTo(currentXAxis, currentYAxis);
+                mPath.moveTo(currentXAxis, -currentYAxis);
             }else {
-                mPath.lineTo(currentXAxis, currentYAxis);
+                mPath.lineTo(currentXAxis, -currentYAxis);
             }
             /**
              * 保存
              */
-            pointList.add(new PointF(currentXAxis,currentYAxis));
+            pointList.add(new PointF(currentXAxis,-currentYAxis));
         }
+        canvas.save();
+        canvas.translate(offset,0);
         canvas.drawPath(mPath,linePaint);
         mPath.rewind();//清除
 
@@ -119,5 +123,6 @@ public class LineChartRender extends ChartRender<LineData> {
         for (int j=0; j<pointList.size(); j++) {
             mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,textSize,lineData.getValue().get(j));
         }
+        canvas.restore();
     }
 }

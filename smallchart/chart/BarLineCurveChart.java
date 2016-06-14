@@ -49,7 +49,6 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     protected float animatedValue;
     public boolean isAnimated = true;
     protected ChartAnimator mChartAnimator;
-    protected float animatedTarget;
 
     public BarLineCurveChart(Context context) {
         super(context);

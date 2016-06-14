@@ -3,6 +3,9 @@ package com.idtk.smallchart.render;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Xfermode;
 
 import com.idtk.smallchart.data.PointData;
 
@@ -19,11 +22,13 @@ public class PointRender extends Render {
     private Paint mPaint = new Paint();
     private Paint.FontMetrics fontMetrics;
     private NumberFormat numberFormatY;
+    private Xfermode mXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
 
     public PointRender() {
         super();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setXfermode(mXfermode);
     }
 
     public void drawCirclePoint(Canvas canvas, PointF pointF, PointData pointData,int textSize,PointF pointF2){
@@ -41,12 +46,12 @@ public class PointRender extends Render {
         }
         numberFormatY = NumberFormat.getNumberInstance();
         numberFormatY.setMaximumFractionDigits(0);
-        canvas.save();
-        canvas.scale(1,-1);
+//        canvas.save();
+//        canvas.scale(1,-1);
         mPaint.setTextSize(textSize);
         fontMetrics= mPaint.getFontMetrics();
-        mPointF.y = mPointF.y+(fontMetrics.top-fontMetrics.bottom);
+        mPointF.y = -mPointF.y+(fontMetrics.top-fontMetrics.bottom);
         textCenter(new String[]{numberFormatY.format(pointF2.y)},mPaint,canvas,mPointF, Paint.Align.CENTER);
-        canvas.restore();
+//        canvas.restore();
     }
 }
