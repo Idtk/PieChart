@@ -63,14 +63,22 @@ public class BarChartRender extends ChartRender<BarData> {
             NumberFormat numberFormatY = NumberFormat.getNumberInstance();
             numberFormatY.setMaximumFractionDigits(yAxisData.getDecimalPlaces());
             barPaint.setColor(xAxisData.getColor());
+<<<<<<< HEAD
             if (barData.isTextSize)
                 textCenter(new String[]{numberFormatY.format(barData.getValue().get(j).y)},barPaint,canvas,mPointF, Paint.Align.CENTER);
+=======
+            textCenter(new String[]{numberFormatY.format(barData.getValue().get(j).y)},barPaint,canvas,mPointF, Paint.Align.CENTER);
+>>>>>>> origin/master
         }
         /**
          * 柱状图图层为0x80半透明状态
          */
         canvas.saveLayerAlpha(-canvas.getWidth()+xAxisData.getAxisLength(), -yAxisData.getAxisLength(), xAxisData.getAxisLength(),canvas.getHeight()-yAxisData.getAxisLength(), 0x80, LAYER_FLAGS);
         barPaint.setColor(barData.getColor());
+<<<<<<< HEAD
+=======
+        canvas.saveLayerAlpha(-canvas.getWidth()+xAxisData.getAxisLength(), -yAxisData.getAxisLength(), xAxisData.getAxisLength(),canvas.getHeight()-yAxisData.getAxisLength(), 0x80, Canvas.ALL_SAVE_FLAG);
+>>>>>>> origin/master
         canvas.drawPath(barPath,barPaint);
         canvas.restore();
         barPath.reset();
