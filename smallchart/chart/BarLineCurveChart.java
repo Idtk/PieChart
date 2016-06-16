@@ -1,5 +1,6 @@
 package com.idtk.smallchart.chart;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,7 +21,10 @@ import com.idtk.smallchart.render.YAxisRender;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2016/6/6.
+ * Created by Idtk on 2016/6/6.
+ * Blog : http://www.idtkm.com
+ * GitHub : https://github.com/Idtk
+ * 描述 : 柱状图、折线图、曲线图绘制类
  */
 public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Chart<T> implements IBarLineCurveChart {
 
@@ -30,8 +34,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     protected ComputeYAxis mComputeYAxis = new ComputeYAxis(mYAxisData);
 
     protected ArrayList<T> mDataList = new ArrayList<>();
-//    protected NumberFormat numberFormat;
-    protected boolean convergenceFlag = true;
+    public boolean convergenceFlag = true;
 
     protected XAxisOffsetRender mXAxisOffsetRender;
     protected XAxisRender mXAxisRender;
@@ -42,8 +45,6 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     protected int axisWidth = 2;
     protected String XAxisUnit = "";
     protected String YAxisUnit = "";
-
-    protected int textSize = 30;
 
     protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
     protected float animatedValue;
@@ -74,6 +75,8 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         mYAxisData.setColor(axisColor);
         mXAxisData.setPaintWidth(axisWidth);
         mYAxisData.setPaintWidth(axisWidth);
+        mXAxisData.setUnit(XAxisUnit);
+        mYAxisData.setUnit(YAxisUnit);
 
         animated();
 
@@ -87,28 +90,27 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
 
         axisScale();
 
-//        mXAxisData.setAxisScale(mXAxisData.getAxisLength()/(mXAxisData.getMaximum()-mXAxisData.getMinimum()));
-//        mYAxisData.setAxisScale(mYAxisData.getAxisLength()/(mYAxisData.getMaximum()-mYAxisData.getMinimum()));
-//        mXAxisRender = new XAxisRender(mXAxisData);
-//        mYAxisRender = new YAxisRender(mYAxisData,mXAxisData);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-//        super.onDraw(canvas);
         canvas.translate(mViewWidth/2-mXAxisData.getAxisLength()/2,mViewHeight/2+mYAxisData.getAxisLength()/2);
         canvas.save();
         canvas.scale(1,-1);
         axisRender(canvas);
-//        mXAxisRender.drawGraph(canvas);
-//        mYAxisRender.drawGraph(canvas);
         canvas.restore();
-
         drawGraphical(canvas);
     }
 
+    /**
+     * 计算坐标轴刻度长度与View长度的比
+     */
     protected abstract void axisScale();
 
+    /**
+     * 渲染X、Y轴
+     * @param canvas 画布
+     */
     protected abstract void axisRender(Canvas canvas);
 
     @Override
@@ -129,15 +131,45 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         computeYAxis();
     }
 
+    /**
+     * 设置图标数据
+     * @param chartDataList 图表数据
+     */
     public void setDataList(ArrayList<T> chartDataList) {
         mDataList = chartDataList;
         computeXAxis();
         computeYAxis();
     }
 
-    protected abstract void animated();
+    /**
+     * 动画方法，默认动画时间两秒，生成监听值animatedValue
+     * 如果不使用动画，则直接设置监听值为1
+     */
+    protected void animated() {
+        if (!isAnimated) {
+            animatedValue = 1;
+        } else {
+            mAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    animatedValue = (float) animation.getAnimatedValue();
+                    invalidate();
+                }
+            };
+            mChartAnimator = new ChartAnimator(mAnimatorUpdateListener);
+            mChartAnimator.animatedY(2000,1);
+        }
+    }
 
-    protected abstract void drawGraphical(Canvas canvas);
+    /**
+     * 图表渲染方法
+     * @param canvas 渲染绘制的画布
+     */
+    protected void drawGraphical(Canvas canvas) {
+        for (int i=0; i<chartRenderList.size(); i++){
+            chartRenderList.get(i).drawGraph(canvas,animatedValue);
+        }
+    }
 
     @Override
     public void setAxisTextSize(int axisTextSize) {
@@ -164,11 +196,4 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         this.YAxisUnit = YAxisUnit;
     }
 
-    public void setConvergenceFlag(boolean convergenceFlag) {
-        this.convergenceFlag = convergenceFlag;
-    }
-
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
-    }
 }

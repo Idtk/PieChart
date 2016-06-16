@@ -17,6 +17,7 @@ import java.util.ArrayList;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; 折线图渲染类
  */
 public class LineChartRender extends ChartRender<LineData> {
 
@@ -32,17 +33,15 @@ public class LineChartRender extends ChartRender<LineData> {
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
 
-    private int textSize;
     private float offset;
 
 
-    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize, float offset) {
+    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData, float offset) {
         super();
         this.lineData = lineData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
-        this.textSize = textSize;
         this.offset = offset;
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
@@ -65,6 +64,9 @@ public class LineChartRender extends ChartRender<LineData> {
         pointList.clear();
         for (int j=0; j< lineData.getValue().size(); j++){
             float currentYAxis,currentXAxis;
+            /**
+             * 动画计算
+             */
             if (animatedValue<0.5){
                 currentYAxis = animatedValue*yAxisData.getAxisLength();
             }else {
@@ -93,13 +95,7 @@ public class LineChartRender extends ChartRender<LineData> {
                     }
                 }
             }
-            /*if (currentYAxis<0){
-                currentYAxis=0;
-            }*/
             currentXAxis = (lineData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale();
-            /*if (currentXAxis<0){
-                currentXAxis=0;
-            }*/
             if (j==0){
                 mPath.moveTo(currentXAxis, -currentYAxis);
             }else {
@@ -115,14 +111,18 @@ public class LineChartRender extends ChartRender<LineData> {
         canvas.drawPath(mPath,linePaint);
         mPath.rewind();//清除
 
+        /**
+         * 点绘制
+         */
         outpointPaint.setColor(lineData.getColor());
         inPointPaint.setColor(Color.WHITE);
         pointData.setInPaint(inPointPaint);
         pointData.setOutPaint(outpointPaint);
 
-        for (int j=0; j<pointList.size(); j++) {
-            mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,textSize,lineData.getValue().get(j));
-        }
+        if (lineData.isTextSize)
+            for (int j=0; j<pointList.size(); j++) {
+                mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,lineData.getTextSize(),lineData.getValue().get(j));
+            }
         canvas.restore();
     }
 }

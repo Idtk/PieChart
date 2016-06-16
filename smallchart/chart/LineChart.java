@@ -1,11 +1,9 @@
 package com.idtk.smallchart.chart;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.animation.ChartAnimator;
 import com.idtk.smallchart.data.LineData;
 import com.idtk.smallchart.data.PointData;
 import com.idtk.smallchart.interfaces.IChart.ILineChart;
@@ -17,6 +15,7 @@ import com.idtk.smallchart.render.YAxisRender;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; 折线图表绘制类
  */
 public class LineChart extends BarLineCurveChart<LineData> implements ILineChart{
 
@@ -54,7 +53,7 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
         mPointData.setPointShape(pointShape);
         chartRenderList.clear();
         for (int i=0; i<mDataList.size(); i++){
-            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,textSize,0);
+            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,0);
             chartRenderList.add(mLineChartRender);
         }
     }
@@ -71,44 +70,6 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
     protected void axisRender(Canvas canvas) {
         mXAxisRender.drawGraph(canvas);
         mYAxisRender.drawGraph(canvas);
-    }
-
-    @Override
-    protected void drawGraphical(Canvas canvas) {
-        /*for (int i=0; i<mDataList.size(); i++){
-            canvas.save();
-            canvas.scale(1,-1);
-            mLineChartRender.drawGraph(canvas,mDataList.get(i),animatedValue);
-            canvas.restore();
-        }*/
-        for (int i=0; i<chartRenderList.size(); i++){
-//            canvas.save();
-//            canvas.scale(1,-1);
-            chartRenderList.get(i).drawGraph(canvas,animatedValue);
-//            canvas.restore();
-        }
-    }
-
-    @Override
-    protected void init() {
-
-    }
-
-    @Override
-    protected void animated() {
-        if (!isAnimated) {
-            animatedValue = 1;
-        } else {
-            mAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    animatedValue = (float) animation.getAnimatedValue();
-                    invalidate();
-                }
-            };
-            mChartAnimator = new ChartAnimator(mAnimatorUpdateListener);
-            mChartAnimator.animatedY(2000,1);
-        }
     }
 
     public void setPointInRadius(float pointInRadius) {

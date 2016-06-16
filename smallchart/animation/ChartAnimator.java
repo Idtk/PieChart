@@ -8,6 +8,7 @@ import android.view.animation.DecelerateInterpolator;
  * Created by Idtk on 2016/6/8.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 : 生成动画帮助类
  */
 public class ChartAnimator {
 
@@ -22,13 +23,12 @@ public class ChartAnimator {
     }
     public ChartAnimator(ValueAnimator.AnimatorUpdateListener listener) {
         this(listener,new DecelerateInterpolator());
-//        this.listener = listener;
     }
 
     /**
      * 使用时，需要 invalidate()
-     * @param duration
-     * @param y
+     * @param duration 动画时间
+     * @param y 动画运动目标值
      */
     public void animatedY(long duration, float y){
         if (animator !=null &&animator.isRunning()){

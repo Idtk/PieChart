@@ -15,6 +15,7 @@ import java.text.NumberFormat;
  * Created by Idtk on 2016/6/8.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; 点形状渲染类
  */
 public class PointRender extends Render {
 
@@ -46,12 +47,9 @@ public class PointRender extends Render {
         }
         numberFormatY = NumberFormat.getNumberInstance();
         numberFormatY.setMaximumFractionDigits(0);
-//        canvas.save();
-//        canvas.scale(1,-1);
         mPaint.setTextSize(textSize);
         fontMetrics= mPaint.getFontMetrics();
         mPointF.y = -mPointF.y+(fontMetrics.top-fontMetrics.bottom);
         textCenter(new String[]{numberFormatY.format(pointF2.y)},mPaint,canvas,mPointF, Paint.Align.CENTER);
-//        canvas.restore();
     }
 }

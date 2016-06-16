@@ -16,6 +16,7 @@ import java.text.NumberFormat;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; 柱状图渲染类
  */
 public class BarChartRender extends ChartRender<BarData> {
 
@@ -28,8 +29,11 @@ public class BarChartRender extends ChartRender<BarData> {
     private PointF mPointF = new PointF();
     private Paint.FontMetrics fontMetrics;
     private float barWidth;
+    /*private static final int LAYER_FLAGS = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG |
+            Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;*/
+    private static final int LAYER_FLAGS = Canvas.ALL_SAVE_FLAG;
 
-    public BarChartRender(BarData barData, XAxisData xAxisData, YAxisData yAxisData,float offset,float barWidth,int textSize) {
+    public BarChartRender(BarData barData, XAxisData xAxisData, YAxisData yAxisData,float offset,float barWidth) {
         super();
         this.barData = barData;
         this.xAxisData = xAxisData;
@@ -39,13 +43,15 @@ public class BarChartRender extends ChartRender<BarData> {
         barPaint.setStyle(Paint.Style.FILL);
         barPaint.setAntiAlias(true);
         barPaint.setStrokeWidth(barData.getPaintWidth());
-        barPaint.setTextSize(textSize);
+        barPaint.setTextSize(barData.getTextSize());
     }
 
     @Override
     public void drawGraph(Canvas canvas, float animatedValue) {
         float currentXAxis,currentYAxis;
-        //为添加更多点准备路径,可以更有效地分配其存储的路径
+        /**
+         * 为添加更多点准备路径,可以更有效地分配其存储的路径
+         */
         barPath.incReserve(barData.getValue().size());
         for (int j=0; j<barData.getValue().size(); j++){
             currentXAxis = (barData.getValue().get(j).x-xAxisData.getMinimum())*xAxisData.getAxisScale()+offset;
@@ -57,16 +63,16 @@ public class BarChartRender extends ChartRender<BarData> {
             NumberFormat numberFormatY = NumberFormat.getNumberInstance();
             numberFormatY.setMaximumFractionDigits(yAxisData.getDecimalPlaces());
             barPaint.setColor(xAxisData.getColor());
-//            canvas.save();
-//            canvas.scale(1,-1);
-            textCenter(new String[]{numberFormatY.format(barData.getValue().get(j).y)},barPaint,canvas,mPointF, Paint.Align.CENTER);
-//            canvas.restore();
+            if (barData.isTextSize)
+                textCenter(new String[]{numberFormatY.format(barData.getValue().get(j).y)},barPaint,canvas,mPointF, Paint.Align.CENTER);
         }
+        /**
+         * 柱状图图层为0x80半透明状态
+         */
+        canvas.saveLayerAlpha(-canvas.getWidth()+xAxisData.getAxisLength(), -yAxisData.getAxisLength(), xAxisData.getAxisLength(),canvas.getHeight()-yAxisData.getAxisLength(), 0x80, LAYER_FLAGS);
         barPaint.setColor(barData.getColor());
-//        canvas.save();
-//        canvas.scale(1,-1);
         canvas.drawPath(barPath,barPaint);
-//        canvas.restore();
+        canvas.restore();
         barPath.reset();
     }
 }

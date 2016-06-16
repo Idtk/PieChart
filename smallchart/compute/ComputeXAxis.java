@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; X轴计算类
  */
 public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
 
@@ -72,16 +73,10 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
         initScaling(xAxisData.getMinimum(),xAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),xAxisData);
     }
 
-    @Override
-    protected void initMaxMin(float max, float min, int count, AxisData axisData) {
-        super.initMaxMin(max, min, count, axisData);
-    }
-
-    @Override
-    protected void initScaling(float min, float max, int length, AxisData axisData) {
-        super.initScaling(min, max, length, axisData);
-    }
-
+    /**
+     * 收敛X轴
+     * @param barLineCurveDatas  X轴数据
+     */
     public void convergence(ArrayList<T> barLineCurveDatas){
         int count = 0;
         int newCount = 0;

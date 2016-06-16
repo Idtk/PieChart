@@ -17,11 +17,13 @@ import java.util.ArrayList;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; 曲线图渲染类
  */
 public class CurveChartRender extends ChartRender<CurveData> {
 
     private CurveData curveData;
     private Path cubicPath = new Path();
+    private Path cubicFillPath = new Path();
     private Paint cubicPaint = new Paint();
     private XAxisData xAxisData = new XAxisData();
     private YAxisData yAxisData = new YAxisData();
@@ -31,16 +33,14 @@ public class CurveChartRender extends ChartRender<CurveData> {
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
     private float intensity;
-    private int textSize;
     private float offset;
 
-    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData,int textSize,float offset) {
+    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData,float offset) {
         super();
         this.curveData = curveData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
         this.pointData = pointData;
-        this.textSize = textSize;
         this.offset = offset;
         cubicPaint.setStyle(Paint.Style.STROKE);
         cubicPaint.setAntiAlias(true);
@@ -95,8 +95,8 @@ public class CurveChartRender extends ChartRender<CurveData> {
             /**
              * 保存
              */
-            pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()-curDx,
-                    -((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue));
+            pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale(),
+                    -((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
         }
 
         canvas.save();
@@ -104,16 +104,40 @@ public class CurveChartRender extends ChartRender<CurveData> {
         cubicPaint.setColor(curveData.getColor());
 //        cubicPaint.setPathEffect(mPathEffect);
         canvas.drawPath(cubicPath,cubicPaint);
-//        cubicFillPath.addPath(cubicPath);
+        cubicFillPath.addPath(cubicPath);
         cubicPath.rewind();
 
+        /**
+         * 填充曲线图
+         */
+        if (curveData.getDrawable()!=null){
+            //填充颜色
+            cubicFillPath.lineTo((float) ((curveData.getValue().get(curveData.getValue().size()-1).x
+                    -xAxisData.getMinimum())*xAxisData.getAxisScale()),0);
+            cubicFillPath.lineTo((float) ((curveData.getValue().get(0).x-xAxisData.getMinimum())*
+                    xAxisData.getAxisScale()),0);
+            cubicFillPath.close();
+
+            canvas.save();
+            canvas.clipPath(cubicFillPath);
+            curveData.getDrawable().setBounds(-canvas.getWidth()+(int) xAxisData.getAxisLength(), -(int) yAxisData.getAxisLength(), (int) xAxisData.getAxisLength(),canvas.getHeight()-(int) yAxisData.getAxisLength());
+            curveData.getDrawable().draw(canvas);
+            canvas.restore();
+            cubicFillPath.rewind();
+        }
+
+
+        /**
+         * 点绘制
+         */
         outpointPaint.setColor(curveData.getColor());
         inPointPaint.setColor(Color.WHITE);
         pointData.setInPaint(inPointPaint);
         pointData.setOutPaint(outpointPaint);
-        for (int j=0; j<pointList.size(); j++) {
-            mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,textSize,curveData.getValue().get(j));
-        }
+        if (curveData.isTextSize)
+            for (int j=0; j<pointList.size(); j++) {
+                mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,curveData.getTextSize(),curveData.getValue().get(j));
+            }
         canvas.restore();
     }
 }

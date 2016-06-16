@@ -14,6 +14,7 @@ import java.text.NumberFormat;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ; Y轴渲染类
  */
 public class YAxisRender extends AxisRender {
     private Paint mPaint = new Paint();
@@ -33,26 +34,26 @@ public class YAxisRender extends AxisRender {
         mPaint.setStrokeWidth(yAxisData.getPaintWidth());
 
         linePaint.setAntiAlias(true);
-        linePaint.setColor(Color.BLACK);
-
-        //设置小数点位数
+        linePaint.setColor(Color.GRAY);
+        /**
+         * 设置小数点位数
+         */
         numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(yAxisData.getDecimalPlaces());
     }
 
     @Override
     public void drawGraph(Canvas canvas) {
-//        canvas.drawText("YAxisRender",0,0,paint);
         canvas.drawLine(0,0,0,yAxisData.getAxisLength(),mPaint);
-        //Y轴
+
         for (int i=0;(yAxisData.getInterval()*i+yAxisData.getMinimum())<=yAxisData.getMaximum();i++){
-            //坐标轴刻度
             canvas.save();
             canvas.scale(1,-1);
-            //根据Paint的TextSize计算X轴的值
+            /**
+             * 坐标数值
+             */
             float TextPathX = yAxisData.getAxisLength()/100;
             float TextPathY = (mPaint.descent()+mPaint.ascent())/2+(float) (yAxisData.getInterval()*i*yAxisData.getAxisScale());
-//            canvas.drawText(numberFormat.format(yAxisData.getInterval()*i+yAxisData.getMinimum()),-TextPathX,-TextPathY,mPaint);
             mPoint.x =-TextPathX;
             mPoint.y =-TextPathY;
             textCenter(new String[]{numberFormat.format(yAxisData.getInterval()*i+yAxisData.getMinimum())},
@@ -61,6 +62,9 @@ public class YAxisRender extends AxisRender {
             canvas.drawLine(0,-TextPathY,xAxisData.getAxisLength(),-TextPathY,linePaint);
             canvas.restore();
         }
+        /**
+         * 箭头
+         */
         canvas.drawLine(0,yAxisData.getAxisLength(),yAxisData.getAxisLength()*0.01f,yAxisData.getAxisLength()*0.99f,mPaint);
         canvas.drawLine(0,yAxisData.getAxisLength(),-yAxisData.getAxisLength()*0.01f,yAxisData.getAxisLength()*0.99f,mPaint);
         canvas.save();

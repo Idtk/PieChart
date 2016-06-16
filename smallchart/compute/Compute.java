@@ -6,6 +6,7 @@ import com.idtk.smallchart.data.AxisData;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 : 坐标轴计算帮助类
  */
 public class Compute {
 

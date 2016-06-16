@@ -6,17 +6,16 @@ import com.idtk.smallchart.interfaces.IData.IAxisData;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 : 坐标轴数据基类
  */
 public class AxisData extends BaseData implements IAxisData{
 
-//    protected int Color = android.graphics.Color.BLACK;
-    protected int textSize;
     protected float axisLength;
     protected float paintWidth;
     protected float maximum;
     protected float minimum;
     protected float interval;
-    protected String unit = "";
+    protected String unit;
     /**
      * 辅助收敛坐标轴
      */
@@ -30,14 +29,6 @@ public class AxisData extends BaseData implements IAxisData{
      * 数据坐标与实际坐标比例
      */
     protected float axisScale;
-
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
-    }
-
-    public int getTextSize() {
-        return textSize;
-    }
 
     public void setAxisLength(float axisLength) {
         this.axisLength = axisLength;
@@ -121,7 +112,7 @@ public class AxisData extends BaseData implements IAxisData{
 
     @Override
     public String toString() {
-        return "textSize : "+textSize+" axisLength : "+ axisLength+" paintWidth : "+ paintWidth+
+        return " axisLength : "+ axisLength+" paintWidth : "+ paintWidth+
                 " maximum : " +maximum+" minimum : "+ minimum+" interval: "+ interval+ " unit : "
                 + unit+" narrowMax : "+ narrowMax+" narrowMin : "+ narrowMin + " decimalPlaces : "
                 +decimalPlaces+ " axisScale : "+ axisScale;

@@ -1,19 +1,17 @@
 package com.idtk.smallchart.chart;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.animation.ChartAnimator;
 import com.idtk.smallchart.data.BarData;
+import com.idtk.smallchart.data.BarLineCurveData;
 import com.idtk.smallchart.data.CurveData;
 import com.idtk.smallchart.data.LineData;
 import com.idtk.smallchart.data.PointData;
 import com.idtk.smallchart.interfaces.IChart.IBarChart;
 import com.idtk.smallchart.interfaces.IChart.ICurveChart;
 import com.idtk.smallchart.interfaces.IChart.ILineChart;
-import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
 import com.idtk.smallchart.render.BarChartRender;
 import com.idtk.smallchart.render.CurveChartRender;
 import com.idtk.smallchart.render.LineChartRender;
@@ -24,14 +22,14 @@ import com.idtk.smallchart.render.YAxisRender;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 : 混合图表绘制类
  */
-public class CombineChart extends BarLineCurveChart<IBarLineCurveData> implements IBarChart,ILineChart,ICurveChart{
+public class CombineChart extends BarLineCurveChart<BarLineCurveData> implements IBarChart,ILineChart,ICurveChart{
 
     private BarChartRender mBarChartRender;
     private LineChartRender mLineChartRender;
     private CurveChartRender curveChartRender;
     private float barWidth = 30;
-    private float intensity = 0.2f;
     private PointData mPointData = new PointData();
     private float pointOutRadius;
     private float pointInRadius;
@@ -53,69 +51,63 @@ public class CombineChart extends BarLineCurveChart<IBarLineCurveData> implement
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        /**
+         * 如果用户没有输入点的外半径值，则设置默认值
+         */
         if (!isPointOutRadius){
             pointOutRadius = mXAxisData.getAxisLength()/70;
         }
+        /**
+         * 如果用户没有输入点的内半径值，则设置默认值
+         */
         if (!isPointInRadius){
             pointInRadius = mXAxisData.getAxisLength()/100;
         }
+
         mPointData.setInRadius(pointInRadius);
         mPointData.setOutRadius(pointOutRadius);
         mPointData.setPointShape(pointShape);
 
+        /**
+         * 装载渲染
+         */
         chartRenderList.clear();
         float offset ;
         int j=0,k=0;
 
+        /**
+         * 计算柱状图个数
+         */
         for (int i=0; i<mDataList.size(); i++){
-            String cl = mDataList.get(i).getClass().getSimpleName().toString();
+            String cl = mDataList.get(i).getClass().getSimpleName();
             if (cl.equals("BarData")){
                 k++;
             }
         }
 
         for (int i=0; i<mDataList.size(); i++){
-            String cl = mDataList.get(i).getClass().getSimpleName().toString();
-            if (cl.equals("BarData")){
-//                LogUtil.d("TAG2",cl);
-                offset = mXAxisData.getInterval()*mXAxisData.getAxisScale()/2-barWidth*k/2+barWidth*j;
-                mBarChartRender = new BarChartRender((BarData) mDataList.get(i),mXAxisData,mYAxisData,offset,barWidth,textSize);
-                chartRenderList.add(mBarChartRender);
-                j++;
-            }else if (cl.equals("CurveData")){
-                curveChartRender = new CurveChartRender((CurveData) mDataList.get(i),mXAxisData,mYAxisData,
-                        mPointData,textSize,mXAxisData.getInterval()*mXAxisData.getAxisScale()/2);
-                chartRenderList.add(curveChartRender);
-            }else if (cl.equals("LineData")){
-                mLineChartRender = new LineChartRender((LineData) mDataList.get(i),mXAxisData,mYAxisData,
-                        mPointData,textSize,mXAxisData.getInterval()*mXAxisData.getAxisScale()/2);
-                chartRenderList.add(mLineChartRender);
+            String cl = mDataList.get(i).getClass().getSimpleName();
+            /**
+             * 判断Data类型
+             */
+            switch (cl){
+                case "BarData":
+                    offset = mXAxisData.getInterval()*mXAxisData.getAxisScale()/2-barWidth*k/2+barWidth*j;
+                    mBarChartRender = new BarChartRender((BarData) mDataList.get(i),mXAxisData,mYAxisData,offset,barWidth);
+                    chartRenderList.add(mBarChartRender);
+                    j++;
+                    break;
+                case "CurveData":
+                    curveChartRender = new CurveChartRender((CurveData) mDataList.get(i),mXAxisData,mYAxisData,
+                            mPointData,mXAxisData.getInterval()*mXAxisData.getAxisScale()/2);
+                    chartRenderList.add(curveChartRender);
+                    break;
+                case "LineData":
+                    mLineChartRender = new LineChartRender((LineData) mDataList.get(i),mXAxisData,mYAxisData,
+                            mPointData,mXAxisData.getInterval()*mXAxisData.getAxisScale()/2);
+                    chartRenderList.add(mLineChartRender);
+                    break;
             }
-        }
-        j=0;
-        k=0;
-    }
-
-    @Override
-    protected void init() {
-
-    }
-
-    @Override
-    protected void animated() {
-        if (!isAnimated){
-            animatedValue = 1;
-        }
-        else {
-            mAnimatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    animatedValue = (float) animation.getAnimatedValue();
-                    invalidate();
-                }
-            };
-            mChartAnimator = new ChartAnimator(mAnimatorUpdateListener);
-            mChartAnimator.animatedY(2000,1);
         }
     }
 
@@ -132,16 +124,6 @@ public class CombineChart extends BarLineCurveChart<IBarLineCurveData> implement
         mYAxisRender.drawGraph(canvas);
     }
 
-    @Override
-    protected void drawGraphical(Canvas canvas) {
-        for (int i=0; i<chartRenderList.size(); i++){
-//            canvas.save();
-//            canvas.scale(1,-1);
-            chartRenderList.get(i).drawGraph(canvas,animatedValue);
-//            canvas.restore();
-        }
-    }
-
     public void setBarWidth(float barWidth) {
         this.barWidth = barWidth;
     }
@@ -151,9 +133,7 @@ public class CombineChart extends BarLineCurveChart<IBarLineCurveData> implement
         mComputeYAxis.computeYAxisMin(mDataList);
     }
 
-    public void setIntensity(float intensity) {
-        this.intensity = intensity;
-    }
+
     public void setPointInRadius(float pointInRadius) {
         isPointInRadius = true;
         this.pointInRadius = pointInRadius;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 ： Y轴计算类
  */
 public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
 
@@ -51,6 +52,10 @@ public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
         initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
     }
 
+    /**
+     * 计算Y轴最大值、最小值
+     * @param mBarLineCurveDatas 图表数据
+     */
     public void computeYAxisMin(ArrayList<T> mBarLineCurveDatas){
         for (int i=0; i<mBarLineCurveDatas.size();i++){
             IBarLineCurveData mBarLineCurveData = mBarLineCurveDatas.get(i);
@@ -98,16 +103,10 @@ public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
         initMaxMin(max,min,count,yAxisData);
     }
 
-    @Override
-    protected void initMaxMin(float max, float min, int count, AxisData axisData) {
-        super.initMaxMin(max, min, count, axisData);
-    }
-
-    @Override
-    protected void initScaling(float min, float max, int length, AxisData axisData) {
-        super.initScaling(min, max, length, axisData);
-    }
-
+    /**
+     * Y轴收敛方法
+     * @param barLineCurveDatas 图表数据
+     */
     public void convergence(ArrayList<T> barLineCurveDatas){
         int count = 0;
         int newCount = 0;

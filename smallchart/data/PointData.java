@@ -8,9 +8,13 @@ import com.idtk.smallchart.interfaces.IData.IPointData;
  * Created by Idtk on 2016/6/8.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
+ * 描述 : 图表点形状数据类
  */
 public class PointData extends BaseData implements IPointData{
 
+    /**
+     * 图表点形状
+     */
     public enum PointShape{
         CIRCLE,RECT,TRIANGLE
     }
