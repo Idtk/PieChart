@@ -96,11 +96,7 @@ public class CurveChartRender extends ChartRender<CurveData> {
              * 保存
              */
             pointList.add(new PointF((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale(),
-<<<<<<< HEAD
                     -((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
-=======
-                -((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
->>>>>>> origin/master
         }
 
         canvas.save();
