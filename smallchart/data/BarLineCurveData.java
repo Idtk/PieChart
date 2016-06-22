@@ -14,7 +14,6 @@ import java.util.ArrayList;
  */
 public class BarLineCurveData extends ChartData implements IBarLineCurveData {
     protected ArrayList<PointF> value;
-    private int paintWidth = 5;
 
     public void setValue(ArrayList<PointF> value) {
         this.value = value;
@@ -24,11 +23,4 @@ public class BarLineCurveData extends ChartData implements IBarLineCurveData {
         return value;
     }
 
-    public void setPaintWidth(int paintWidth) {
-        this.paintWidth = paintWidth;
-    }
-
-    public int getPaintWidth() {
-        return paintWidth;
-    }
 }

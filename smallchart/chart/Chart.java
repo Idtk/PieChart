@@ -8,6 +8,8 @@ import android.view.View;
 import com.idtk.smallchart.interfaces.IChart.IChart;
 import com.idtk.smallchart.interfaces.IData.IChartData;
 
+import java.util.ArrayList;
+
 /**
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
@@ -18,6 +20,7 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
 
     protected int mViewWidth,mViewHeight;
     protected int mWidth,mHeight;
+    protected ArrayList<T> mDataList = new ArrayList<>();
 
     protected ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener;
 
@@ -48,4 +51,10 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
      * @param chartData 图表数据
      */
     public abstract void setData(T chartData);
+
+    /**
+     * 设置图标数据
+     * @param chartDataList 图表数据
+     */
+    public abstract void setDataList(ArrayList<T> chartDataList);
 }

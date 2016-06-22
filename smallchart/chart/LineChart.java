@@ -4,9 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.data.LineData;
-import com.idtk.smallchart.data.PointData;
 import com.idtk.smallchart.interfaces.IChart.ILineChart;
+import com.idtk.smallchart.interfaces.IData.ILineData;
 import com.idtk.smallchart.render.LineChartRender;
 import com.idtk.smallchart.render.XAxisRender;
 import com.idtk.smallchart.render.YAxisRender;
@@ -17,13 +16,13 @@ import com.idtk.smallchart.render.YAxisRender;
  * GitHub : https://github.com/Idtk
  * 描述 ; 折线图表绘制类
  */
-public class LineChart extends BarLineCurveChart<LineData> implements ILineChart{
+public class LineChart extends BarLineCurveChart<ILineData> implements ILineChart{
 
     private LineChartRender mLineChartRender;
-    private PointData mPointData = new PointData();
+//    private PointData mPointData = new PointData();
     private float pointOutRadius;
     private float pointInRadius;
-    private PointData.PointShape pointShape  = PointData.PointShape.CIRCLE;
+//    private PointData.PointShape pointShape  = PointData.PointShape.CIRCLE;
     private boolean isPointInRadius = false, isPointOutRadius=false;
 
     public LineChart(Context context) {
@@ -42,7 +41,7 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (!isPointOutRadius){
+        /*if (!isPointOutRadius){
             pointOutRadius = mXAxisData.getAxisLength()/70;
         }
         if (!isPointInRadius){
@@ -50,10 +49,10 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
         }
         mPointData.setInRadius(pointInRadius);
         mPointData.setOutRadius(pointOutRadius);
-        mPointData.setPointShape(pointShape);
+        mPointData.setPointShape(pointShape);*/
         chartRenderList.clear();
         for (int i=0; i<mDataList.size(); i++){
-            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,mPointData,0);
+            mLineChartRender = new LineChartRender(mDataList.get(i),mXAxisData,mYAxisData,0);
             chartRenderList.add(mLineChartRender);
         }
     }
@@ -70,19 +69,5 @@ public class LineChart extends BarLineCurveChart<LineData> implements ILineChart
     protected void axisRender(Canvas canvas) {
         mXAxisRender.drawGraph(canvas);
         mYAxisRender.drawGraph(canvas);
-    }
-
-    public void setPointInRadius(float pointInRadius) {
-        isPointInRadius = true;
-        this.pointInRadius = pointInRadius;
-    }
-
-    public void setPointOutRadius(float pointOutRadius) {
-        isPointOutRadius = true;
-        this.pointOutRadius = pointOutRadius;
-    }
-
-    public void setPointShape(PointData.PointShape pointShape) {
-        this.pointShape = pointShape;
     }
 }

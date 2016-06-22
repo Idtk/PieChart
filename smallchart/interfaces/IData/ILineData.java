@@ -1,6 +1,6 @@
 package com.idtk.smallchart.interfaces.IData;
 
-import com.idtk.smallchart.data.LineData;
+import com.idtk.smallchart.data.LineAnimated;
 
 /**
  * Created by Idtk on 2016/6/7.
@@ -8,17 +8,17 @@ import com.idtk.smallchart.data.LineData;
  * GitHub : https://github.com/Idtk
  * 描述 : 折线图数据类接口
  */
-public interface ILineData extends IBarLineCurveData {
+public interface ILineData extends IBarLineCurveData{
 
     /**
      * 设置折线图动画模式
-     * @param animatedMod 动画模式
+     * @param LineAnimated 动画模式
      */
-    void setAnimatedMod(LineData.AnimatedMod animatedMod);
+    void setAnimatedMod(LineAnimated LineAnimated);
 
     /**
      * 获取折线图动画模式
      * @return 动画模式
      */
-    LineData.AnimatedMod getAnimatedMod();
+    LineAnimated getLineAnimated();
 }

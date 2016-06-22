@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.data.XAxisData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
 
 import java.text.NumberFormat;
 
@@ -17,11 +17,11 @@ import java.text.NumberFormat;
 public class XAxisRender extends AxisRender {
 
     private Paint mPaint = new Paint();
-    private XAxisData xAxisData = new XAxisData();
+    private IXAxisData xAxisData;
     private NumberFormat numberFormat;
     private PointF mPoint = new PointF();
 
-    public XAxisRender(XAxisData xAxisData) {
+    public XAxisRender(IXAxisData xAxisData) {
         super();
         this.xAxisData = xAxisData;
         mPaint.setColor(xAxisData.getColor());

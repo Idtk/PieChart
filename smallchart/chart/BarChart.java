@@ -5,8 +5,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.data.BarData;
 import com.idtk.smallchart.interfaces.IChart.IBarChart;
+import com.idtk.smallchart.interfaces.IData.IBarData;
 import com.idtk.smallchart.render.BarChartRender;
 import com.idtk.smallchart.render.XAxisOffsetRender;
 import com.idtk.smallchart.render.YAxisRender;
@@ -17,7 +17,7 @@ import com.idtk.smallchart.render.YAxisRender;
  * GitHub : https://github.com/Idtk
  * 描述 : 柱状图绘制类
  */
-public class BarChart extends BarLineCurveChart<BarData> implements IBarChart{
+public class BarChart extends BarLineCurveChart<IBarData> implements IBarChart{
 
     private BarChartRender mBarChartRender;
     /**

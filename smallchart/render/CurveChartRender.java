@@ -6,10 +6,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.data.CurveData;
-import com.idtk.smallchart.data.PointData;
-import com.idtk.smallchart.data.XAxisData;
-import com.idtk.smallchart.data.YAxisData;
+import com.idtk.smallchart.interfaces.IData.ICurveData;
+import com.idtk.smallchart.interfaces.IData.IPointData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.IData.IYAxisData;
 
 import java.util.ArrayList;
 
@@ -19,28 +19,26 @@ import java.util.ArrayList;
  * GitHub : https://github.com/Idtk
  * 描述 ; 曲线图渲染类
  */
-public class CurveChartRender extends ChartRender<CurveData> {
+public class CurveChartRender extends ChartRender{
 
-    private CurveData curveData;
+    private ICurveData curveData;
     private Path cubicPath = new Path();
     private Path cubicFillPath = new Path();
     private Paint cubicPaint = new Paint();
-    private XAxisData xAxisData = new XAxisData();
-    private YAxisData yAxisData = new YAxisData();
+    private IXAxisData xAxisData;
+    private IYAxisData yAxisData;
     private ArrayList<PointF> pointList = new ArrayList<>();
     private PointRender mPointRender = new PointRender();
-    private PointData pointData;
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
     private float intensity;
     private float offset;
 
-    public CurveChartRender(CurveData curveData, XAxisData xAxisData, YAxisData yAxisData, PointData pointData,float offset) {
+    public CurveChartRender(ICurveData curveData, IXAxisData xAxisData, IYAxisData yAxisData, float offset) {
         super();
         this.curveData = curveData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
-        this.pointData = pointData;
         this.offset = offset;
         cubicPaint.setStyle(Paint.Style.STROKE);
         cubicPaint.setAntiAlias(true);
@@ -81,17 +79,17 @@ public class CurveChartRender extends ChartRender<CurveData> {
             cur = curveData.getValue().get(j);
             next = curveData.getValue().size() > j+1 ? curveData.getValue().get(j+1) : cur;
 
-            prevDx = (float) ((cur.x-prevPrev.x)*intensity*xAxisData.getAxisScale());
-            prevDy = (float) ((cur.y-prevPrev.y)*intensity*yAxisData.getAxisScale());
-            curDx = (float) ((next.x-prev.x)*intensity*xAxisData.getAxisScale());
-            curDy = (float) ((next.y-prev.y)*intensity*yAxisData.getAxisScale());
+            prevDx = (cur.x-prevPrev.x)*intensity*xAxisData.getAxisScale();
+            prevDy = (cur.y-prevPrev.y)*intensity*yAxisData.getAxisScale();
+            curDx = (next.x-prev.x)*intensity*xAxisData.getAxisScale();
+            curDy = (next.y-prev.y)*intensity*yAxisData.getAxisScale();
 
-            cubicPath.cubicTo((float) ((prev.x-xAxisData.getMinimum())*xAxisData.getAxisScale()+prevDx),
-                    (float) -(((prev.y-yAxisData.getMinimum())*yAxisData.getAxisScale()+prevDy)*animatedValue),
-                    (float) ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()-curDx),
-                    (float) -(((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue),
-                    (float) ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()),
-                    (float) -(((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
+            cubicPath.cubicTo((prev.x-xAxisData.getMinimum())*xAxisData.getAxisScale()+prevDx,
+                    -(((prev.y-yAxisData.getMinimum())*yAxisData.getAxisScale()+prevDy)*animatedValue),
+                    ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()-curDx),
+                    -(((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale()-curDy)*animatedValue),
+                    ((cur.x-xAxisData.getMinimum())*xAxisData.getAxisScale()),
+                    -(((cur.y-yAxisData.getMinimum())*yAxisData.getAxisScale())*animatedValue));
             /**
              * 保存
              */
@@ -102,7 +100,6 @@ public class CurveChartRender extends ChartRender<CurveData> {
         canvas.save();
         canvas.translate(offset,0);
         cubicPaint.setColor(curveData.getColor());
-//        cubicPaint.setPathEffect(mPathEffect);
         canvas.drawPath(cubicPath,cubicPaint);
         cubicFillPath.addPath(cubicPath);
         cubicPath.rewind();
@@ -112,10 +109,10 @@ public class CurveChartRender extends ChartRender<CurveData> {
          */
         if (curveData.getDrawable()!=null){
             //填充颜色
-            cubicFillPath.lineTo((float) ((curveData.getValue().get(curveData.getValue().size()-1).x
-                    -xAxisData.getMinimum())*xAxisData.getAxisScale()),0);
-            cubicFillPath.lineTo((float) ((curveData.getValue().get(0).x-xAxisData.getMinimum())*
-                    xAxisData.getAxisScale()),0);
+            cubicFillPath.lineTo((curveData.getValue().get(curveData.getValue().size()-1).x
+                    -xAxisData.getMinimum())*xAxisData.getAxisScale(),0);
+            cubicFillPath.lineTo((curveData.getValue().get(0).x-xAxisData.getMinimum())*
+                    xAxisData.getAxisScale(),0);
             cubicFillPath.close();
 
             canvas.save();
@@ -132,12 +129,15 @@ public class CurveChartRender extends ChartRender<CurveData> {
          */
         outpointPaint.setColor(curveData.getColor());
         inPointPaint.setColor(Color.WHITE);
-        pointData.setInPaint(inPointPaint);
-        pointData.setOutPaint(outpointPaint);
-        if (curveData.isTextSize)
-            for (int j=0; j<pointList.size(); j++) {
-                mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,curveData.getTextSize(),curveData.getValue().get(j));
-            }
+        ((IPointData)curveData).setInPaint(inPointPaint);
+        ((IPointData)curveData).setOutPaint(outpointPaint);
+        if (((IPointData)curveData).getInRadius() == IPointData.NOSETING)
+            ((IPointData)curveData).setInRadius(xAxisData.getAxisLength()/100);
+        if (((IPointData)curveData).getOutRadius() == IPointData.NOSETING)
+            ((IPointData)curveData).setOutRadius(xAxisData.getAxisLength()/70);
+        for (int j=0; j<pointList.size(); j++) {
+            mPointRender.drawCirclePoint(canvas, pointList.get(j),curveData.getValue().get(j),(IPointData) curveData,curveData.getTextSize(),curveData.getIsTextSize());
+        }
         canvas.restore();
     }
 }

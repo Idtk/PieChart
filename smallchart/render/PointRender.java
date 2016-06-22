@@ -3,11 +3,8 @@ package com.idtk.smallchart.render;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Xfermode;
 
-import com.idtk.smallchart.data.PointData;
+import com.idtk.smallchart.interfaces.IData.IPointData;
 
 import java.text.NumberFormat;
 
@@ -17,22 +14,20 @@ import java.text.NumberFormat;
  * GitHub : https://github.com/Idtk
  * 描述 ; 点形状渲染类
  */
-public class PointRender extends Render {
+public class PointRender<T extends IPointData> extends Render {
 
     private PointF mPointF = new PointF();
     private Paint mPaint = new Paint();
     private Paint.FontMetrics fontMetrics;
     private NumberFormat numberFormatY;
-    private Xfermode mXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
 
     public PointRender() {
         super();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setXfermode(mXfermode);
     }
 
-    public void drawCirclePoint(Canvas canvas, PointF pointF, PointData pointData,int textSize,PointF pointF2){
+    public void drawCirclePoint(Canvas canvas, PointF pointF, PointF dataPointF, T pointData, float textSize, boolean isTextSize){
         mPointF.x = pointF.x;
         mPointF.y = -pointF.y;
         switch (pointData.getPointShape()){
@@ -41,15 +36,23 @@ public class PointRender extends Render {
                 canvas.drawCircle(pointF.x,pointF.y,pointData.getInRadius(),pointData.getInPaint());
                 break;
             case RECT:
+                pointData.getOutPaint().setStrokeCap(Paint.Cap.SQUARE);
+                pointData.getOutPaint().setStrokeWidth(pointData.getOutRadius()*2);
+                canvas.drawPoint(pointF.x,pointF.y,pointData.getOutPaint());
                 break;
-            case TRIANGLE:
+            case SOLIDROUND:
+                pointData.getOutPaint().setStrokeCap(Paint.Cap.ROUND);
+                pointData.getOutPaint().setStrokeWidth(pointData.getOutRadius()*2);
+                canvas.drawPoint(pointF.x,pointF.y,pointData.getOutPaint());
                 break;
         }
-        numberFormatY = NumberFormat.getNumberInstance();
-        numberFormatY.setMaximumFractionDigits(0);
-        mPaint.setTextSize(textSize);
-        fontMetrics= mPaint.getFontMetrics();
-        mPointF.y = -mPointF.y+(fontMetrics.top-fontMetrics.bottom);
-        textCenter(new String[]{numberFormatY.format(pointF2.y)},mPaint,canvas,mPointF, Paint.Align.CENTER);
+        if (isTextSize){
+            numberFormatY = NumberFormat.getNumberInstance();
+            numberFormatY.setMaximumFractionDigits(0);
+            mPaint.setTextSize(textSize);
+            fontMetrics= mPaint.getFontMetrics();
+            mPointF.y = -mPointF.y+(fontMetrics.top-fontMetrics.bottom);
+            textCenter(new String[]{numberFormatY.format(dataPointF.y)},mPaint,canvas,mPointF, Paint.Align.CENTER);
+        }
     }
 }

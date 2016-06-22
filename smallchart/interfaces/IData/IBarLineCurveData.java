@@ -23,16 +23,4 @@ public interface IBarLineCurveData extends IChartData {
      * @return 图表数据
      */
     ArrayList<PointF> getValue();
-
-    /**
-     * 设置画笔宽度
-     * @param paintWidth 画笔宽度
-     */
-    void setPaintWidth(int paintWidth);
-
-    /**
-     * 获取画笔宽度
-     * @return 画笔宽度
-     */
-    int getPaintWidth();
 }

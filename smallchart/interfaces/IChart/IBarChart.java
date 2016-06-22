@@ -6,7 +6,7 @@ package com.idtk.smallchart.interfaces.IChart;
  * GitHub : https://github.com/Idtk
  * 描述 : 柱状图绘制接口
  */
-public interface IBarChart extends IBarLineCurveChart {
+public interface IBarChart{
     /**
      * 设置柱状图宽度
      * @param barWidth 宽度

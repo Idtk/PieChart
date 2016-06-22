@@ -13,6 +13,8 @@ import com.idtk.smallchart.data.XAxisData;
 import com.idtk.smallchart.data.YAxisData;
 import com.idtk.smallchart.interfaces.IChart.IBarLineCurveChart;
 import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.IData.IYAxisData;
 import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.XAxisOffsetRender;
 import com.idtk.smallchart.render.XAxisRender;
@@ -24,25 +26,25 @@ import java.util.ArrayList;
  * Created by Idtk on 2016/6/6.
  * Blog : http://www.idtkm.com
  * GitHub : https://github.com/Idtk
- * 描述 : 柱状图、折线图、曲线图绘制类
+ * 描述 : 柱状图、折线图、曲线图绘制基类
  */
 public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Chart<T> implements IBarLineCurveChart {
 
-    protected XAxisData mXAxisData = new XAxisData();
-    protected YAxisData mYAxisData = new YAxisData();
+    protected IXAxisData mXAxisData = new XAxisData();
+    protected IYAxisData mYAxisData = new YAxisData();
     protected ComputeXAxis mComputeXAxis = new ComputeXAxis(mXAxisData);
     protected ComputeYAxis mComputeYAxis = new ComputeYAxis(mYAxisData);
 
-    protected ArrayList<T> mDataList = new ArrayList<>();
+//    protected ArrayList<T> mDataList = new ArrayList<>();
     public boolean convergenceFlag = true;
 
     protected XAxisOffsetRender mXAxisOffsetRender;
     protected XAxisRender mXAxisRender;
     protected YAxisRender mYAxisRender;
 
-    protected int axisTextSize = 30;
+    protected float axisTextSize = 30;
     protected int axisColor = Color.BLACK;
-    protected int axisWidth = 2;
+    protected float axisWidth = 2;
     protected String XAxisUnit = "";
     protected String YAxisUnit = "";
 
@@ -131,10 +133,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         computeYAxis();
     }
 
-    /**
-     * 设置图标数据
-     * @param chartDataList 图表数据
-     */
+    @Override
     public void setDataList(ArrayList<T> chartDataList) {
         mDataList = chartDataList;
         computeXAxis();
@@ -172,7 +171,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     }
 
     @Override
-    public void setAxisTextSize(int axisTextSize) {
+    public void setAxisTextSize(float axisTextSize) {
         this.axisTextSize = axisTextSize;
     }
 
@@ -182,7 +181,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     }
 
     @Override
-    public void setAxisWidth(int axisWidth) {
+    public void setAxisWidth(float axisWidth) {
         this.axisWidth = axisWidth;
     }
 

@@ -7,6 +7,19 @@ package com.idtk.smallchart.interfaces.IData;
  * 描述 : 所有数据类接口
  */
 public interface IBaseData {
+
+    /**
+     * 是否显示Y值
+     * @param isTextSize boolean
+     */
+    void setIsTextSize(boolean isTextSize);
+
+    /**
+     * 是否显示Y值
+     * @return boolean
+     */
+    boolean getIsTextSize();
+
     /**
      * 设置图表颜色
      * @param color 颜色
@@ -23,11 +36,23 @@ public interface IBaseData {
      * 设置图表文字大小
      * @param textSize 文字大小
      */
-    void setTextSize(int textSize);
+    void setTextSize(float textSize);
 
     /**
      * 获取图表文字大小
      * @return 文字大小
      */
-    int getTextSize();
+    float getTextSize();
+
+    /**
+     * 设置画笔宽度
+     * @param paintWidth 画笔宽度
+     */
+    void setPaintWidth(float paintWidth);
+
+    /**
+     * 获取画笔宽度
+     * @return 画笔宽度
+     */
+    float getPaintWidth();
 }

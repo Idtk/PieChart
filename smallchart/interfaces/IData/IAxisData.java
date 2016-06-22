@@ -21,18 +21,6 @@ public interface IAxisData extends IBaseData{
     float getAxisLength();
 
     /**
-     * 设置坐标轴画笔宽度
-     * @param paintWidth 画笔宽度
-     */
-    void setPaintWidth(float paintWidth);
-
-    /**
-     * 获取坐标轴画笔宽度
-     * @return 画笔宽度
-     */
-    float getPaintWidth();
-
-    /**
      * 设置坐标轴最大值
      * @param maximum 最大值
      */

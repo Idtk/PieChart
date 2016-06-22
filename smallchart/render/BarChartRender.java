@@ -6,9 +6,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.data.BarData;
-import com.idtk.smallchart.data.XAxisData;
-import com.idtk.smallchart.data.YAxisData;
+import com.idtk.smallchart.interfaces.IData.IBarData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.IData.IYAxisData;
 
 import java.text.NumberFormat;
 
@@ -18,13 +18,13 @@ import java.text.NumberFormat;
  * GitHub : https://github.com/Idtk
  * 描述 ; 柱状图渲染类
  */
-public class BarChartRender extends ChartRender<BarData> {
+public class BarChartRender extends ChartRender {
 
-    private BarData barData;
+    private IBarData barData;
     private Path barPath = new Path();
     private Paint barPaint = new Paint();
-    private XAxisData xAxisData = new XAxisData();
-    private YAxisData yAxisData = new YAxisData();
+    private IXAxisData xAxisData;
+    private IYAxisData yAxisData;
     private float offset;
     private PointF mPointF = new PointF();
     private Paint.FontMetrics fontMetrics;
@@ -33,7 +33,7 @@ public class BarChartRender extends ChartRender<BarData> {
             Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;*/
     private static final int LAYER_FLAGS = Canvas.ALL_SAVE_FLAG;
 
-    public BarChartRender(BarData barData, XAxisData xAxisData, YAxisData yAxisData,float offset,float barWidth) {
+    public BarChartRender(IBarData barData, IXAxisData xAxisData, IYAxisData yAxisData, float offset, float barWidth) {
         super();
         this.barData = barData;
         this.xAxisData = xAxisData;
@@ -63,13 +63,14 @@ public class BarChartRender extends ChartRender<BarData> {
             NumberFormat numberFormatY = NumberFormat.getNumberInstance();
             numberFormatY.setMaximumFractionDigits(yAxisData.getDecimalPlaces());
             barPaint.setColor(xAxisData.getColor());
-            if (barData.isTextSize)
+            if (barData.getIsTextSize())
                 textCenter(new String[]{numberFormatY.format(barData.getValue().get(j).y)},barPaint,canvas,mPointF, Paint.Align.CENTER);
         }
         /**
          * 柱状图图层为0x80半透明状态
          */
-        canvas.saveLayerAlpha(-canvas.getWidth()+xAxisData.getAxisLength(), -yAxisData.getAxisLength(), xAxisData.getAxisLength(),canvas.getHeight()-yAxisData.getAxisLength(), 0x80, LAYER_FLAGS);
+        canvas.saveLayerAlpha(-canvas.getWidth()+xAxisData.getAxisLength(), -yAxisData.getAxisLength(),
+                xAxisData.getAxisLength(),canvas.getHeight()-yAxisData.getAxisLength(), 0x80, Canvas.ALL_SAVE_FLAG);
         barPaint.setColor(barData.getColor());
         canvas.drawPath(barPath,barPaint);
         canvas.restore();

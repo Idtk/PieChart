@@ -6,10 +6,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.data.LineData;
-import com.idtk.smallchart.data.PointData;
-import com.idtk.smallchart.data.XAxisData;
-import com.idtk.smallchart.data.YAxisData;
+import com.idtk.smallchart.interfaces.IData.ILineData;
+import com.idtk.smallchart.interfaces.IData.IPointData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.IData.IYAxisData;
 
 import java.util.ArrayList;
 
@@ -19,16 +19,15 @@ import java.util.ArrayList;
  * GitHub : https://github.com/Idtk
  * 描述 ; 折线图渲染类
  */
-public class LineChartRender extends ChartRender<LineData> {
+public class LineChartRender extends ChartRender {
 
-    private LineData lineData;
+    private ILineData lineData;
     private Path mPath = new Path();
     private Paint linePaint = new Paint();
-    private XAxisData xAxisData = new XAxisData();
-    private YAxisData yAxisData = new YAxisData();
+    private IXAxisData xAxisData;
+    private IYAxisData yAxisData;
     private ArrayList<PointF> pointList = new ArrayList<>();
     private PointRender mPointRender = new PointRender();
-    private PointData pointData;
 
     private Paint outpointPaint = new Paint();
     private Paint inPointPaint = new Paint();
@@ -36,12 +35,11 @@ public class LineChartRender extends ChartRender<LineData> {
     private float offset;
 
 
-    public LineChartRender(LineData lineData,XAxisData xAxisData, YAxisData yAxisData, PointData pointData, float offset) {
+    public LineChartRender(ILineData lineData,IXAxisData xAxisData, IYAxisData yAxisData,float offset) {
         super();
         this.lineData = lineData;
         this.xAxisData = xAxisData;
         this.yAxisData = yAxisData;
-        this.pointData = pointData;
         this.offset = offset;
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setAntiAlias(true);
@@ -71,7 +69,7 @@ public class LineChartRender extends ChartRender<LineData> {
                 currentYAxis = animatedValue*yAxisData.getAxisLength();
             }else {
                 if ((lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale() >= yAxisData.getAxisLength()/2){
-                    switch (lineData.getAnimatedMod()){
+                    switch (lineData.getLineAnimated()){
                         case SYNC://同时到达
                             currentYAxis = yAxisData.getAxisLength()/2+((lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale()
                                     -yAxisData.getAxisLength()/2)/yAxisData.getAxisLength()*2*(animatedValue*yAxisData.getAxisLength()-yAxisData.getAxisLength()/2);
@@ -82,7 +80,7 @@ public class LineChartRender extends ChartRender<LineData> {
                             break;
                     }
                 }else {
-                    switch (lineData.getAnimatedMod()){
+                    switch (lineData.getLineAnimated()){
                         case SYNC:
                             currentYAxis = yAxisData.getAxisLength()/2-(yAxisData.getAxisLength()/2-
                                     (lineData.getValue().get(j).y-yAxisData.getMinimum())*yAxisData.getAxisScale())/
@@ -116,13 +114,15 @@ public class LineChartRender extends ChartRender<LineData> {
          */
         outpointPaint.setColor(lineData.getColor());
         inPointPaint.setColor(Color.WHITE);
-        pointData.setInPaint(inPointPaint);
-        pointData.setOutPaint(outpointPaint);
-
-        if (lineData.isTextSize)
-            for (int j=0; j<pointList.size(); j++) {
-                mPointRender.drawCirclePoint(canvas, pointList.get(j),pointData,lineData.getTextSize(),lineData.getValue().get(j));
-            }
+        ((IPointData)lineData).setInPaint(inPointPaint);
+        ((IPointData)lineData).setOutPaint(outpointPaint);
+        if (((IPointData)lineData).getInRadius() == -1)
+            ((IPointData)lineData).setInRadius(xAxisData.getAxisLength()/100);
+        if (((IPointData)lineData).getOutRadius() == -1)
+            ((IPointData)lineData).setOutRadius(xAxisData.getAxisLength()/70);
+        for (int j=0; j<pointList.size(); j++) {
+            mPointRender.drawCirclePoint(canvas, pointList.get(j),lineData.getValue().get(j),(IPointData) lineData,lineData.getTextSize(),lineData.getIsTextSize());
+        }
         canvas.restore();
     }
 }

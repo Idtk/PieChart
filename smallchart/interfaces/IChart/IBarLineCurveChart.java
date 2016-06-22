@@ -6,7 +6,7 @@ package com.idtk.smallchart.interfaces.IChart;
  * GitHub : https://github.com/Idtk
  * 描述 : 柱状图、折线图、曲线图绘制接口
  */
-public interface IBarLineCurveChart extends IChart{
+public interface IBarLineCurveChart{
     /**
      * 计算X轴最大值、最小值、区间长度
      */
@@ -21,7 +21,7 @@ public interface IBarLineCurveChart extends IChart{
      * 坐标轴字符大小设置
      * @param axisTextSize 字符大小
      */
-    void setAxisTextSize(int axisTextSize);
+    void setAxisTextSize(float axisTextSize);
 
     /**
      * 坐标轴颜色设置
@@ -33,7 +33,7 @@ public interface IBarLineCurveChart extends IChart{
      * 坐标轴宽度设置
      * @param axisWidth 宽度
      */
-    void setAxisWidth(int axisWidth);
+    void setAxisWidth(float axisWidth);
 
     /**
      * Y坐标轴单位设置

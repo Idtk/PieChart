@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.data.XAxisData;
-import com.idtk.smallchart.data.YAxisData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.IData.IYAxisData;
 
 import java.text.NumberFormat;
 
@@ -19,12 +19,12 @@ import java.text.NumberFormat;
 public class YAxisRender extends AxisRender {
     private Paint mPaint = new Paint();
     private Paint linePaint = new Paint();
-    private YAxisData yAxisData = new YAxisData();
-    private XAxisData xAxisData = new XAxisData();
+    private IYAxisData yAxisData;
+    private IXAxisData xAxisData;
     private NumberFormat numberFormat;
     private PointF mPoint = new PointF();
 
-    public YAxisRender(YAxisData yAxisData, XAxisData xAxisData) {
+    public YAxisRender(IYAxisData yAxisData, IXAxisData xAxisData) {
         super();
         this.yAxisData = yAxisData;
         this.xAxisData = xAxisData;

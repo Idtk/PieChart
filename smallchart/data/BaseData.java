@@ -1,5 +1,7 @@
 package com.idtk.smallchart.data;
 
+import android.graphics.Color;
+
 import com.idtk.smallchart.interfaces.IData.IBaseData;
 
 /**
@@ -10,13 +12,13 @@ import com.idtk.smallchart.interfaces.IData.IBaseData;
  */
 public class BaseData implements IBaseData {
 
-    protected int color = android.graphics.Color.BLACK;
-
-    protected int textSize = 30;
+    protected int color = Color.BLACK;
+    protected float paintWidth = 1;
+    protected float textSize = 30;
     /**
-     * 是否显示图表的Y轴值
+     * 是否显示图表的Y值
      */
-    public boolean isTextSize = true;
+    protected boolean isTextSize = true;
 
     public void setColor(int color) {
         this.color = color;
@@ -26,11 +28,27 @@ public class BaseData implements IBaseData {
         return color;
     }
 
-    public void setTextSize(int textSize) {
+    public void setTextSize(float textSize) {
         this.textSize = textSize;
     }
 
-    public int getTextSize() {
+    public float getTextSize() {
         return textSize;
+    }
+
+    public void setIsTextSize(boolean isTextSize){
+        this.isTextSize = isTextSize;
+    }
+
+    public boolean getIsTextSize(){
+        return isTextSize;
+    }
+
+    public void setPaintWidth(float paintWidth) {
+        this.paintWidth = paintWidth;
+    }
+
+    public float getPaintWidth() {
+        return paintWidth;
     }
 }

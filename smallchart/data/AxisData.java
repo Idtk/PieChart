@@ -11,11 +11,10 @@ import com.idtk.smallchart.interfaces.IData.IAxisData;
 public class AxisData extends BaseData implements IAxisData{
 
     protected float axisLength;
-    protected float paintWidth;
     protected float maximum;
     protected float minimum;
     protected float interval;
-    protected String unit;
+    protected String unit = "";
     /**
      * 辅助收敛坐标轴
      */
@@ -36,14 +35,6 @@ public class AxisData extends BaseData implements IAxisData{
 
     public float getAxisLength() {
         return axisLength;
-    }
-
-    public void setPaintWidth(float paintWidth) {
-        this.paintWidth = paintWidth;
-    }
-
-    public float getPaintWidth() {
-        return paintWidth;
     }
 
     public void setMaximum(float maximum) {

@@ -9,5 +9,4 @@ import com.idtk.smallchart.interfaces.IData.IXAxisData;
  * 描述 : X轴数据类
  */
 public class XAxisData extends AxisData implements IXAxisData {
-
 }

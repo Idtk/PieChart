@@ -2,9 +2,8 @@ package com.idtk.smallchart.compute;
 
 import android.graphics.Paint;
 
-import com.idtk.smallchart.data.AxisData;
-import com.idtk.smallchart.data.YAxisData;
 import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.IData.IYAxisData;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -17,13 +16,13 @@ import java.util.ArrayList;
  */
 public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
 
-    protected YAxisData yAxisData = new YAxisData();
+    protected IYAxisData yAxisData;
     private NumberFormat numberFormat;
     private Paint paint = new Paint();
 
-    public ComputeYAxis(AxisData axisData) {
+    public ComputeYAxis(IYAxisData axisData) {
         super(axisData);
-        yAxisData = (YAxisData) axisData;
+        yAxisData = axisData;
         paint.setColor(yAxisData.getColor());
         paint.setTextSize(yAxisData.getTextSize());
         paint.setStrokeWidth(yAxisData.getPaintWidth());
@@ -49,11 +48,11 @@ public class ComputeYAxis<T extends IBarLineCurveData> extends Compute {
         }
         //默认所有的BarLineCurveData。getValue()长度相同
         if (mBarLineCurveDatas.size()>0)
-        initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
+            initScaling(yAxisData.getMinimum(),yAxisData.getMaximum(),mBarLineCurveDatas.get(0).getValue().size(),yAxisData);
     }
 
     /**
-     * 计算Y轴最大值、最小值
+     * 计算Y轴最大值、最小值,强制设置最小值为0
      * @param mBarLineCurveDatas 图表数据
      */
     public void computeYAxisMin(ArrayList<T> mBarLineCurveDatas){

@@ -8,7 +8,12 @@ import android.graphics.Canvas;
  * GitHub : https://github.com/Idtk
  * 描述 ; 图表渲染基类
  */
-public abstract class ChartRender<T> extends Render{
+public abstract class ChartRender extends Render{
+
+    public ChartRender() {
+        super();
+    }
+
     /**
      * 图表渲染方法
      * @param canvas 画布

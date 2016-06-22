@@ -6,5 +6,5 @@ package com.idtk.smallchart.interfaces.IChart;
  * GitHub : https://github.com/Idtk
  * 描述 : 混合图绘制接口
  */
-public interface ICombineChart extends IBarLineCurveChart {
+public interface ICombineChart{
 }

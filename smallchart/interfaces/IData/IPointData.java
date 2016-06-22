@@ -2,7 +2,7 @@ package com.idtk.smallchart.interfaces.IData;
 
 import android.graphics.Paint;
 
-import com.idtk.smallchart.data.PointData;
+import com.idtk.smallchart.data.PointShape;
 
 /**
  * Created by Idtk on 2016/6/8.
@@ -12,6 +12,7 @@ import com.idtk.smallchart.data.PointData;
  */
 public interface IPointData extends IBaseData {
 
+    float NOSETING=-1;
     /**
      * 设置图表点外半径
      * @param outRadius 外半径
@@ -64,13 +65,13 @@ public interface IPointData extends IBaseData {
      * 设置图表点形状
      * @param pointShape 形状
      */
-    void setPointShape(PointData.PointShape pointShape);
+    void setPointShape(PointShape pointShape);
 
     /**
      * 获取图表点形状
      * @return 形状
      */
-    PointData.PointShape getPointShape();
+    PointShape getPointShape();
 
 
 

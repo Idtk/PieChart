@@ -2,9 +2,8 @@ package com.idtk.smallchart.compute;
 
 import android.graphics.Paint;
 
-import com.idtk.smallchart.data.AxisData;
-import com.idtk.smallchart.data.XAxisData;
 import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.IData.IXAxisData;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -17,13 +16,13 @@ import java.util.ArrayList;
  */
 public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
 
-    private XAxisData xAxisData = new XAxisData();
+    private IXAxisData xAxisData;
     private NumberFormat numberFormat;
     private Paint paint = new Paint();
 
-    public ComputeXAxis(AxisData axisData) {
+    public ComputeXAxis(IXAxisData axisData) {
         super(axisData);
-        xAxisData = (XAxisData) axisData;
+        xAxisData = axisData;
         paint.setColor(xAxisData.getColor());
         paint.setTextSize(xAxisData.getTextSize());
         paint.setStrokeWidth(xAxisData.getPaintWidth());

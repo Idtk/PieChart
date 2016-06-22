@@ -1,6 +1,6 @@
 package com.idtk.smallchart.compute;
 
-import com.idtk.smallchart.data.AxisData;
+import com.idtk.smallchart.interfaces.IData.IAxisData;
 
 /**
  * Created by Idtk on 2016/6/6.
@@ -10,7 +10,7 @@ import com.idtk.smallchart.data.AxisData;
  */
 public class Compute {
 
-    public Compute(AxisData axisData) {
+    public Compute(IAxisData axisData) {
         super();
     }
 
@@ -24,7 +24,7 @@ public class Compute {
      * @param min 最小值
      * @param count 第几组数据
      */
-    protected void initMaxMin(float max, float min, int count, AxisData axisData){
+    protected void initMaxMin(float max, float min, int count, IAxisData axisData){
 
         int number = 0;
         //判断刻度值精度
@@ -64,7 +64,7 @@ public class Compute {
      * @param max 最大值
      * @param length 数据长度
      */
-    protected void initScaling(float min, float max,int length,AxisData axisData){
+    protected void initScaling(float min, float max,int length,IAxisData axisData){
         float scaling;
         int count = 0;
         //初步计算刻度值
