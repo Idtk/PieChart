@@ -2,7 +2,7 @@ package com.idtk.smallchart.data;
 
 import android.graphics.Color;
 
-import com.idtk.smallchart.interfaces.IData.IBaseData;
+import com.idtk.smallchart.interfaces.iData.IBaseData;
 
 /**
  * Created by Idtk on 2016/6/8.

@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.iData.IXAxisData;
 
 import java.text.NumberFormat;
 

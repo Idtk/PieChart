@@ -2,7 +2,7 @@ package com.idtk.smallchart.data;
 
 import android.graphics.Color;
 
-import com.idtk.smallchart.interfaces.IData.IRadarAxisData;
+import com.idtk.smallchart.interfaces.iData.IRadarAxisData;
 
 /**
  * Created by Idtk on 2016/6/21.
@@ -14,6 +14,8 @@ public class RadarAxisData extends AxisData implements IRadarAxisData {
 
     private String[] types;
     private int webColor = Color.GRAY;
+    private float[] cosArray;
+    private float[] sinArray;
 
     public void setTypes(String[] types) {
         this.types = types;
@@ -29,5 +31,21 @@ public class RadarAxisData extends AxisData implements IRadarAxisData {
 
     public int getWebColor() {
         return webColor;
+    }
+
+    public float[] getCosArray() {
+        return cosArray;
+    }
+
+    public void setCosArray(float[] cosArray) {
+        this.cosArray = cosArray;
+    }
+
+    public float[] getSinArray() {
+        return sinArray;
+    }
+
+    public void setSinArray(float[] sinArray) {
+        this.sinArray = sinArray;
     }
 }

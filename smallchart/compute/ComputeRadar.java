@@ -2,9 +2,9 @@ package com.idtk.smallchart.compute;
 
 import android.graphics.Paint;
 
-import com.idtk.smallchart.interfaces.IData.IAxisData;
-import com.idtk.smallchart.interfaces.IData.IRadarAxisData;
-import com.idtk.smallchart.interfaces.IData.IRadarData;
+import com.idtk.smallchart.interfaces.iData.IAxisData;
+import com.idtk.smallchart.interfaces.iData.IRadarAxisData;
+import com.idtk.smallchart.interfaces.iData.IRadarData;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -37,11 +37,13 @@ public class ComputeRadar extends Compute {
      * @param radarDataList 坐标集合
      */
     public void computeRadar(ArrayList<IRadarData> radarDataList){
+        int radarDataMaxSize=0;
         for (int i=0; i<radarDataList.size(); i++){
             IRadarData radarData = radarDataList.get(i);
             if (radarData.getValue().size()>0){
                 float max = radarData.getValue().get(0);
                 initAxis(radarData,max,0,i);
+                radarDataMaxSize=Math.max(radarData.getValue().size(),radarDataMaxSize);
             }
         }
         //默认所有的BarLineCurveData。getValue()长度相同
@@ -82,8 +84,10 @@ public class ComputeRadar extends Compute {
     protected void initScaling(float min, float max, int length, IAxisData axisData) {
         float scaling;
         int count = 0;
-        //初步计算刻度值
-        if (length<7){
+        /**
+         * 初步计算刻度值,排除length=0,或scaling=0的情况
+         */
+        if (length<7&&length!=0){
             scaling = (max-min)/length;
 //            LogUtil.d("TAG",max+":"+min+":"+scaling+":"+length);
         }else {
@@ -101,7 +105,7 @@ public class ComputeRadar extends Compute {
             }
             scaling = (float) (Math.ceil(scaling)*Math.pow(10,count));
         }else {
-            while (scaling<1){
+            while (0<scaling&&scaling<1){
                 scaling=scaling*10;
                 count++;
             }

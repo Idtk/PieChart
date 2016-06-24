@@ -1,4 +1,4 @@
-package com.idtk.smallchart.interfaces.IData;
+package com.idtk.smallchart.interfaces.iData;
 
 import android.graphics.drawable.Drawable;
 

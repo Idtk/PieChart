@@ -1,6 +1,6 @@
 package com.idtk.smallchart.data;
 
-import com.idtk.smallchart.interfaces.IData.IYAxisData;
+import com.idtk.smallchart.interfaces.iData.IYAxisData;
 
 /**
  * Created by Idtk on 2016/6/6.

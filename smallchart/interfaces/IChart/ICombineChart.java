@@ -1,4 +1,4 @@
-package com.idtk.smallchart.interfaces.IChart;
+package com.idtk.smallchart.interfaces.iChart;
 
 /**
  * Created by Idtk on 2016/6/7.

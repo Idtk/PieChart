@@ -2,13 +2,15 @@ package com.idtk.smallchart.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 
 import com.idtk.smallchart.compute.ComputeRadar;
 import com.idtk.smallchart.data.RadarAxisData;
-import com.idtk.smallchart.interfaces.IChart.IRadarChart;
-import com.idtk.smallchart.interfaces.IData.IRadarAxisData;
-import com.idtk.smallchart.interfaces.IData.IRadarData;
+import com.idtk.smallchart.interfaces.iChart.IRadarChart;
+import com.idtk.smallchart.interfaces.iData.IRadarAxisData;
+import com.idtk.smallchart.interfaces.iData.IRadarData;
 import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.RadarAxisRender;
 import com.idtk.smallchart.render.RadarChartRender;
@@ -25,10 +27,16 @@ public class RadarChart extends PieRadarChart<IRadarData> implements IRadarChart
 
     protected IRadarAxisData mRadarAxisData = new RadarAxisData();
     protected ComputeRadar mComputeRadar = new ComputeRadar(mRadarAxisData);
-    protected float radius;
-
     private RadarAxisRender mRadarAxisRender = new RadarAxisRender(mRadarAxisData);
     private RadarChartRender mRadarChartRender;
+    protected float radius;
+    /**
+     * 获取个角度cos sin
+     */
+    private PathMeasure measure = new PathMeasure();
+    private float[] pos = new float[2];
+    private float[] tan = new float[2];
+    private Path mPath = new Path();
 
     public RadarChart(Context context) {
         super(context);
@@ -48,6 +56,22 @@ public class RadarChart extends PieRadarChart<IRadarData> implements IRadarChart
         radius = Math.min(mWidth,mHeight)*0.35f;
         mRadarAxisData.setAxisLength(radius);
         mRadarAxisData.setAxisScale(radius/(mRadarAxisData.getMaximum()-mRadarAxisData.getMinimum()));
+
+        mPath.addCircle(0,0,mRadarAxisData.getAxisLength(), Path.Direction.CW);
+        measure.setPath(mPath,true);
+        float[] cosArray = new float[mRadarAxisData.getTypes().length];
+        float[] sinArray = new float[mRadarAxisData.getTypes().length];
+        for (int i=0; i<mRadarAxisData.getTypes().length; i++){
+            measure.getPosTan((float) (Math.PI*2*mRadarAxisData.getAxisLength()*i/mRadarAxisData.getTypes().length),pos,tan);
+            cosArray[i] = tan[0];
+            sinArray[i] = tan[1];
+
+        }
+        mPath.reset();
+
+        mRadarAxisData.setCosArray(cosArray);
+        mRadarAxisData.setSinArray(sinArray);
+
         chartRenderList.clear();
         for (IRadarData data : mDataList){
             mRadarChartRender = new RadarChartRender(data,mRadarAxisData);
@@ -57,10 +81,10 @@ public class RadarChart extends PieRadarChart<IRadarData> implements IRadarChart
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+//        super.onDraw(canvas);
         canvas.translate(mViewWidth/2,mViewHeight/2);
         canvas.save();
-        canvas.rotate(-90);
+        canvas.rotate(-180);
         for (ChartRender chartRender : chartRenderList){
             chartRender.drawGraph(canvas,0);
         }
@@ -84,7 +108,7 @@ public class RadarChart extends PieRadarChart<IRadarData> implements IRadarChart
         mComputeRadar.computeRadar(mDataList);
     }
 
-    public void setWebWidth(float webWidth) {
+    public void setAxisWidth(float webWidth) {
         mRadarAxisData.setPaintWidth(webWidth);
     }
 
@@ -92,15 +116,18 @@ public class RadarChart extends PieRadarChart<IRadarData> implements IRadarChart
         mRadarAxisData.setTypes(types);
     }
 
-    public void setWebTextSize(float textSize){
+    public void setAxisTextSize(float textSize){
         mRadarAxisData.setTextSize(textSize);
     }
 
-    public void setColor(int color){
+    public void setAxisValueColor(int color){
         mRadarAxisData.setColor(color);
     }
 
-    public void setWebColor(int color){
+    public void setAxisColor(int color){
         mRadarAxisData.setWebColor(color);
     }
+
+
+
 }

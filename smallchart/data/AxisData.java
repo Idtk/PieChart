@@ -1,6 +1,6 @@
 package com.idtk.smallchart.data;
 
-import com.idtk.smallchart.interfaces.IData.IAxisData;
+import com.idtk.smallchart.interfaces.iData.IAxisData;
 
 /**
  * Created by Idtk on 2016/6/6.
@@ -103,9 +103,16 @@ public class AxisData extends BaseData implements IAxisData{
 
     @Override
     public String toString() {
-        return " axisLength : "+ axisLength+" paintWidth : "+ paintWidth+
-                " maximum : " +maximum+" minimum : "+ minimum+" interval: "+ interval+ " unit : "
-                + unit+" narrowMax : "+ narrowMax+" narrowMin : "+ narrowMin + " decimalPlaces : "
-                +decimalPlaces+ " axisScale : "+ axisScale;
+        return "AxisData{" +
+                "axisLength=" + axisLength +
+                ", maximum=" + maximum +
+                ", minimum=" + minimum +
+                ", interval=" + interval +
+                ", unit='" + unit + '\'' +
+                ", narrowMax=" + narrowMax +
+                ", narrowMin=" + narrowMin +
+                ", decimalPlaces=" + decimalPlaces +
+                ", axisScale=" + axisScale +
+                '}';
     }
 }

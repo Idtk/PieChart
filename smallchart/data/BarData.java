@@ -1,6 +1,6 @@
 package com.idtk.smallchart.data;
 
-import com.idtk.smallchart.interfaces.IData.IBarData;
+import com.idtk.smallchart.interfaces.iData.IBarData;
 
 /**
  * Created by Idtk on 2016/6/6.

@@ -6,9 +6,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.interfaces.IData.IBarData;
-import com.idtk.smallchart.interfaces.IData.IXAxisData;
-import com.idtk.smallchart.interfaces.IData.IYAxisData;
+import com.idtk.smallchart.interfaces.iData.IBarData;
+import com.idtk.smallchart.interfaces.iData.IXAxisData;
+import com.idtk.smallchart.interfaces.iData.IYAxisData;
 
 import java.text.NumberFormat;
 

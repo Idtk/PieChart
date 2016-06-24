@@ -4,12 +4,12 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.idtk.smallchart.chart.BarChart;
 import com.idtk.smallchart.chart.CombineChart;
 import com.idtk.smallchart.chart.CurveChart;
 import com.idtk.smallchart.chart.LineChart;
+import com.idtk.smallchart.chart.PieChart;
 import com.idtk.smallchart.chart.RadarChart;
 import com.idtk.smallchart.data.BarData;
 import com.idtk.smallchart.data.CurveData;
@@ -17,9 +17,9 @@ import com.idtk.smallchart.data.LineData;
 import com.idtk.smallchart.data.PieData;
 import com.idtk.smallchart.data.PointShape;
 import com.idtk.smallchart.data.RadarData;
-import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
-import com.idtk.smallchart.interfaces.IData.IPieData;
-import com.idtk.smallchart.interfaces.IData.IRadarData;
+import com.idtk.smallchart.interfaces.iData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.iData.IPieData;
+import com.idtk.smallchart.interfaces.iData.IRadarData;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private BarChart barChart;
     private CombineChart combineChart;
     private RadarChart radarChart;
+    private PieChart pieChart;
     private LineData mLineData = new LineData();
     private BarData mLineData2 = new BarData();
     private CurveData mLineData3 = new CurveData();
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<IBarLineCurveData> mLineDatas = new ArrayList<>();
 
     private float[][] points = new float[][]{{1,10}, {2,47}, {3,11}, {4,38}, {5,9},{6,52}, {7,14}, {8,37}, {9,29}, {10,31}};
-    private float[][] points2 = new float[][]{{1,29}, {2,13}, {3,51}, {4,20}, {5,19},{6,20}, {7,54}, {8,7}, {9,19}, {10,41}};
+    private float[][] points2 = new float[][]{{1,52}, {2,13}, {3,51}, {4,20}, {5,19},{6,20}, {7,54}, {8,7}, {9,19}, {10,41}};
     private int[] mColors = {0xFFCCFF00, 0xFF6495ED, 0xFFE32636, 0xFF800000, 0xFF808000, 0xFFFF8C69, 0xFF808080,
             0xFFE6B800, 0xFF7CFC00};
     private ArrayList<IRadarData> radarDataList = new ArrayList<>();
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        classForName2();
-        initData();
+//        initData();
 //        lineChart = (LineChart) findViewById(R.id.lineChart);
 //        lineChart.setData(mLineData);
 //        lineChart.isAnimated = false;
@@ -78,9 +79,13 @@ public class MainActivity extends AppCompatActivity {
 //        combineChart.isAnimated = false;
 //        combineChart.setDataList(mLineDatas);
 
-        radarChart = (RadarChart) findViewById(R.id.radarChart);
-        radarChart.setDataList(radarDataList);
-        radarChart.setTypes(new String[]{"Party A", "Party B", "Party C", "Party D", "Party E", "Party F", "Party G", "Party H"});
+//        radarChart = (RadarChart) findViewById(R.id.radarChart);
+//        radarChart.setDataList(radarDataList);
+//        radarChart.setTypes(new String[]{"Party A", "Party B", "Party C", "Party D", "Party E", "Party F", "Party G", "Party H"});
+
+        initData2();
+        pieChart = (PieChart) findViewById(R.id.pieChart);
+        pieChart.setDataList(mPieDataList);
     }
 
     private void initData2(){
@@ -89,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             pieData.setName("区域"+i);
             pieData.setValue((float)i+1);
             pieData.setColor(mColors[i]);
-            Log.i("pieData",pieData.getValue()+"");
+//            Log.i("pieData",pieData.getValue()+"");
             mPieDataList.add(pieData);
         }
     }
@@ -101,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
             mPointArrayList2.add(new PointF(points[i][0],points[i][1]+10));
             mPointArrayList3.add(new PointF(points[i][0],points[i][1]+20));
             mPointArrayList4.add(new PointF(points[i][0],points[i][1]+15));
-            radarValue.add(points2[i][1]);
-            radarValue2.add(points[i][1]);
+            radarValue.add(points[i][1]);
+            radarValue2.add(points2[i][1]);
         }
         mLineData.setValue(mPointArrayList);
         mLineData.setColor(Color.YELLOW);

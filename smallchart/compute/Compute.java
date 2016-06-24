@@ -1,6 +1,6 @@
 package com.idtk.smallchart.compute;
 
-import com.idtk.smallchart.interfaces.IData.IAxisData;
+import com.idtk.smallchart.interfaces.iData.IAxisData;
 
 /**
  * Created by Idtk on 2016/6/6.
@@ -67,8 +67,10 @@ public class Compute {
     protected void initScaling(float min, float max,int length,IAxisData axisData){
         float scaling;
         int count = 0;
-        //初步计算刻度值
-        if (length<16){
+        /**
+         * 初步计算刻度值,排除length=0,或scaling=0的情况
+         */
+        if (length<16&&length!=0){
             scaling = (max-min)/(length-1);
 //            LogUtil.d("TAG",max+":"+min+":"+scaling+":"+length);
         }else {
@@ -86,7 +88,7 @@ public class Compute {
             }
             scaling = (float) (Math.ceil(scaling)*Math.pow(10,count));
         }else {
-            while (scaling<1){
+            while (0<scaling&&scaling<1){
                 scaling=scaling*10;
                 count++;
             }

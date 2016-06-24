@@ -2,8 +2,8 @@ package com.idtk.smallchart.data;
 
 import android.graphics.Paint;
 
-import com.idtk.smallchart.interfaces.IData.ILineData;
-import com.idtk.smallchart.interfaces.IData.IPointData;
+import com.idtk.smallchart.interfaces.iData.ILineData;
+import com.idtk.smallchart.interfaces.iData.IPointData;
 
 /**
  * Created by Idtk on 2016/6/7.

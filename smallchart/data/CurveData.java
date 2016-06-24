@@ -3,8 +3,8 @@ package com.idtk.smallchart.data;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 
-import com.idtk.smallchart.interfaces.IData.ICurveData;
-import com.idtk.smallchart.interfaces.IData.IPointData;
+import com.idtk.smallchart.interfaces.iData.ICurveData;
+import com.idtk.smallchart.interfaces.iData.IPointData;
 
 /**
  * Created by Idtk on 2016/6/7.

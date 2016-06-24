@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.interfaces.IChart.ILineChart;
-import com.idtk.smallchart.interfaces.IData.ILineData;
+import com.idtk.smallchart.interfaces.iChart.ILineChart;
+import com.idtk.smallchart.interfaces.iData.ILineData;
 import com.idtk.smallchart.render.LineChartRender;
 import com.idtk.smallchart.render.XAxisRender;
 import com.idtk.smallchart.render.YAxisRender;

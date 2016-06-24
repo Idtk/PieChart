@@ -5,8 +5,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.idtk.smallchart.interfaces.IChart.IChart;
-import com.idtk.smallchart.interfaces.IData.IChartData;
+import com.idtk.smallchart.interfaces.iChart.IChart;
+import com.idtk.smallchart.interfaces.iData.IChartData;
 
 import java.util.ArrayList;
 

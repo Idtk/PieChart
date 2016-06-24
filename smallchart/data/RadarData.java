@@ -1,6 +1,6 @@
 package com.idtk.smallchart.data;
 
-import com.idtk.smallchart.interfaces.IData.IRadarData;
+import com.idtk.smallchart.interfaces.iData.IRadarData;
 
 import java.util.ArrayList;
 
@@ -29,4 +29,5 @@ public class RadarData extends ChartData implements IRadarData {
     public int getAlpha() {
         return alpha;
     }
+
 }

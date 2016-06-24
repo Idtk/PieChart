@@ -3,8 +3,8 @@ package com.idtk.smallchart.chart;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.interfaces.IChart.IPieRadarChart;
-import com.idtk.smallchart.interfaces.IData.IChartData;
+import com.idtk.smallchart.interfaces.iChart.IPieRadarChart;
+import com.idtk.smallchart.interfaces.iData.IChartData;
 import com.idtk.smallchart.render.ChartRender;
 
 import java.util.ArrayList;

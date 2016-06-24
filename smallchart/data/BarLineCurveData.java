@@ -2,7 +2,7 @@ package com.idtk.smallchart.data;
 
 import android.graphics.PointF;
 
-import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.iData.IBarLineCurveData;
 
 import java.util.ArrayList;
 

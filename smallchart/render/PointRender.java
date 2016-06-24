@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.interfaces.IData.IPointData;
+import com.idtk.smallchart.interfaces.iData.IPointData;
 
 import java.text.NumberFormat;
 
@@ -27,7 +27,7 @@ public class PointRender<T extends IPointData> extends Render {
         mPaint.setStyle(Paint.Style.STROKE);
     }
 
-    public void drawCirclePoint(Canvas canvas, PointF pointF, PointF dataPointF, T pointData, float textSize, boolean isTextSize){
+    public void drawCirclePoint(Canvas canvas, PointF pointF, PointF dataPointF, T pointData, float textSize, boolean isTextSize, int decimalPlaces){
         mPointF.x = pointF.x;
         mPointF.y = -pointF.y;
         switch (pointData.getPointShape()){
@@ -48,7 +48,7 @@ public class PointRender<T extends IPointData> extends Render {
         }
         if (isTextSize){
             numberFormatY = NumberFormat.getNumberInstance();
-            numberFormatY.setMaximumFractionDigits(0);
+            numberFormatY.setMaximumFractionDigits(decimalPlaces);
             mPaint.setTextSize(textSize);
             fontMetrics= mPaint.getFontMetrics();
             mPointF.y = -mPointF.y+(fontMetrics.top-fontMetrics.bottom);

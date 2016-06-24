@@ -2,8 +2,8 @@ package com.idtk.smallchart.compute;
 
 import android.graphics.Paint;
 
-import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
-import com.idtk.smallchart.interfaces.IData.IXAxisData;
+import com.idtk.smallchart.interfaces.iData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.iData.IXAxisData;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

@@ -6,10 +6,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
-import com.idtk.smallchart.interfaces.IData.ILineData;
-import com.idtk.smallchart.interfaces.IData.IPointData;
-import com.idtk.smallchart.interfaces.IData.IXAxisData;
-import com.idtk.smallchart.interfaces.IData.IYAxisData;
+import com.idtk.smallchart.interfaces.iData.ILineData;
+import com.idtk.smallchart.interfaces.iData.IPointData;
+import com.idtk.smallchart.interfaces.iData.IXAxisData;
+import com.idtk.smallchart.interfaces.iData.IYAxisData;
 
 import java.util.ArrayList;
 
@@ -121,7 +121,8 @@ public class LineChartRender extends ChartRender {
         if (((IPointData)lineData).getOutRadius() == -1)
             ((IPointData)lineData).setOutRadius(xAxisData.getAxisLength()/70);
         for (int j=0; j<pointList.size(); j++) {
-            mPointRender.drawCirclePoint(canvas, pointList.get(j),lineData.getValue().get(j),(IPointData) lineData,lineData.getTextSize(),lineData.getIsTextSize());
+            mPointRender.drawCirclePoint(canvas, pointList.get(j),lineData.getValue().get(j),
+                    (IPointData) lineData,lineData.getTextSize(),lineData.getIsTextSize(),yAxisData.getDecimalPlaces());
         }
         canvas.restore();
     }

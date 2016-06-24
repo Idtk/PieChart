@@ -5,8 +5,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.interfaces.IChart.IBarChart;
-import com.idtk.smallchart.interfaces.IData.IBarData;
+import com.idtk.smallchart.interfaces.iChart.IBarChart;
+import com.idtk.smallchart.interfaces.iData.IBarData;
 import com.idtk.smallchart.render.BarChartRender;
 import com.idtk.smallchart.render.XAxisOffsetRender;
 import com.idtk.smallchart.render.YAxisRender;
@@ -74,4 +74,6 @@ public class BarChart extends BarLineCurveChart<IBarData> implements IBarChart{
     public void computeYAxis() {
         mComputeYAxis.computeYAxisMin(mDataList);
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.idtk.smallchart.interfaces.IChart;
+package com.idtk.smallchart.interfaces.iChart;
 
 /**
  * Created by Idtk on 2016/6/20.
@@ -13,20 +13,14 @@ public interface IRadarChart{
     void computeRadar();
 
     /**
-     * 设置各角类型文本粗细
-     * @param webWidth 宽度
+     * 设置各角类型文本颜色
+     * @param color 颜色
      */
-    void setWebWidth(float webWidth);
+    void setAxisValueColor(int color);
 
     /**
      *设置各角文本集合
      * @param types 文本字符串集合
      */
     void setTypes(String[] types);
-
-    /**
-     * 设置文本字符大小
-     * @param textSize 字符大小
-     */
-    void setWebTextSize(float textSize);
 }

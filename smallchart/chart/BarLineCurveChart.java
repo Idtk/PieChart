@@ -3,7 +3,6 @@ package com.idtk.smallchart.chart;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.idtk.smallchart.animation.ChartAnimator;
@@ -11,10 +10,10 @@ import com.idtk.smallchart.compute.ComputeXAxis;
 import com.idtk.smallchart.compute.ComputeYAxis;
 import com.idtk.smallchart.data.XAxisData;
 import com.idtk.smallchart.data.YAxisData;
-import com.idtk.smallchart.interfaces.IChart.IBarLineCurveChart;
-import com.idtk.smallchart.interfaces.IData.IBarLineCurveData;
-import com.idtk.smallchart.interfaces.IData.IXAxisData;
-import com.idtk.smallchart.interfaces.IData.IYAxisData;
+import com.idtk.smallchart.interfaces.iChart.IBarLineCurveChart;
+import com.idtk.smallchart.interfaces.iData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.iData.IXAxisData;
+import com.idtk.smallchart.interfaces.iData.IYAxisData;
 import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.XAxisOffsetRender;
 import com.idtk.smallchart.render.XAxisRender;
@@ -42,11 +41,11 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     protected XAxisRender mXAxisRender;
     protected YAxisRender mYAxisRender;
 
-    protected float axisTextSize = 30;
-    protected int axisColor = Color.BLACK;
-    protected float axisWidth = 2;
-    protected String XAxisUnit = "";
-    protected String YAxisUnit = "";
+//    protected float axisTextSize = 30;
+//    protected int axisColor = Color.BLACK;
+//    protected float axisWidth = 2;
+//    protected String XAxisUnit = "";
+//    protected String YAxisUnit = "";
 
     protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
     protected float animatedValue;
@@ -71,14 +70,14 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
 
         mXAxisData.setAxisLength(mWidth*0.8f);
         mYAxisData.setAxisLength(mHeight*0.8f);
-        mXAxisData.setTextSize(axisTextSize);
+        /*mXAxisData.setTextSize(axisTextSize);
         mYAxisData.setTextSize(axisTextSize);
         mXAxisData.setColor(axisColor);
         mYAxisData.setColor(axisColor);
         mXAxisData.setPaintWidth(axisWidth);
         mYAxisData.setPaintWidth(axisWidth);
         mXAxisData.setUnit(XAxisUnit);
-        mYAxisData.setUnit(YAxisUnit);
+        mYAxisData.setUnit(YAxisUnit);*/
 
         animated();
 
@@ -103,7 +102,6 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         canvas.restore();
         drawGraphical(canvas);
     }
-
     /**
      * 计算坐标轴刻度长度与View长度的比
      */
@@ -172,27 +170,35 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
 
     @Override
     public void setAxisTextSize(float axisTextSize) {
-        this.axisTextSize = axisTextSize;
+//        this.axisTextSize = axisTextSize;
+        mXAxisData.setTextSize(axisTextSize);
+        mYAxisData.setTextSize(axisTextSize);
     }
 
     @Override
     public void setAxisColor(int axisColor) {
-        this.axisColor = axisColor;
+//        this.axisColor = axisColor;
+        mXAxisData.setColor(axisColor);
+        mYAxisData.setColor(axisColor);
     }
 
     @Override
     public void setAxisWidth(float axisWidth) {
-        this.axisWidth = axisWidth;
+//        this.axisWidth = axisWidth;
+        mXAxisData.setPaintWidth(axisWidth);
+        mYAxisData.setPaintWidth(axisWidth);
     }
 
     @Override
     public void setXAxisUnit(String XAxisUnit) {
-        this.XAxisUnit = XAxisUnit;
+//        this.XAxisUnit = XAxisUnit;
+        mXAxisData.setUnit(XAxisUnit);
     }
 
     @Override
     public void setYAxisUnit(String YAxisUnit) {
-        this.YAxisUnit = YAxisUnit;
+//        this.YAxisUnit = YAxisUnit;
+        mYAxisData.setUnit(YAxisUnit);
     }
 
 }

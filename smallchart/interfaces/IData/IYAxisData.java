@@ -1,4 +1,4 @@
-package com.idtk.smallchart.interfaces.IData;
+package com.idtk.smallchart.interfaces.iData;
 
 /**
  * Created by Idtk on 2016/6/6.
