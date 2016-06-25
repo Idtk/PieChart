@@ -3,8 +3,10 @@ package com.idtk.smallchart.chart;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 
+import com.idtk.smallchart.LogUtil;
 import com.idtk.smallchart.animation.ChartAnimator;
 import com.idtk.smallchart.compute.ComputeXAxis;
 import com.idtk.smallchart.compute.ComputeYAxis;
@@ -19,6 +21,7 @@ import com.idtk.smallchart.render.XAxisOffsetRender;
 import com.idtk.smallchart.render.XAxisRender;
 import com.idtk.smallchart.render.YAxisRender;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -51,6 +54,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     protected float animatedValue;
     public boolean isAnimated = true;
     protected ChartAnimator mChartAnimator;
+
 
     public BarLineCurveChart(Context context) {
         super(context);
@@ -166,6 +170,52 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         for (int i=0; i<chartRenderList.size(); i++){
             chartRenderList.get(i).drawGraph(canvas,animatedValue);
         }
+    }
+
+    @Override
+    public int getCurrentWidth() {
+        convergenceFlag = false;
+        int wrapSize;
+        if (mDataList!=null&&mDataList.size()>0){
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(mXAxisData.getDecimalPlaces());
+            paintText.setTextSize(mXAxisData.getTextSize());
+            paintText.setStrokeWidth(mXAxisData.getPaintWidth());
+            float xAxisWidth = paintText.measureText(numberFormat.format(mXAxisData.getMaximum()))
+                    *(float) Math.ceil((mXAxisData.getMaximum()-mXAxisData.getMinimum())/mXAxisData.getInterval());
+            wrapSize = (int) (xAxisWidth*1.2f);
+        }else {
+            wrapSize = 0;
+        }
+        LogUtil.d("TAGX",mXAxisData.getMaximum()+"__"+mXAxisData.getMinimum()+"__"+mXAxisData.getInterval());
+        return wrapSize;
+    }
+
+    @Override
+    public int getCurrentHeight() {
+        convergenceFlag =false;
+        Paint paintValue = new Paint();
+        int wrapSize;
+        if (mDataList!=null&&mDataList.size()>0){
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(mYAxisData.getDecimalPlaces());
+            paintText.setStrokeWidth(mYAxisData.getPaintWidth());
+            paintText.setTextSize(mYAxisData.getTextSize());
+            Paint.FontMetrics fontMetrics= paintText.getFontMetrics();
+            float top = fontMetrics.top;
+            float bottom = fontMetrics.bottom;
+            float yAxisWidth = (bottom-top)*(float) Math.ceil((mYAxisData.getMaximum()-mYAxisData.getMinimum())
+                    /mYAxisData.getInterval());
+            paintValue.setStrokeWidth(mDataList.get(0).getPaintWidth());
+            paintValue.setTextSize(mDataList.get(0).getTextSize());
+            Paint.FontMetrics fontMetricsValue= paintValue.getFontMetrics();
+            float valueWidth =  fontMetricsValue.bottom-fontMetricsValue.top;
+            wrapSize = (int) (yAxisWidth*1.2f+valueWidth*8);
+        }else {
+            wrapSize = 0;
+        }
+        LogUtil.d("TAGY",mYAxisData.getMaximum()+"__"+mYAxisData.getMinimum()+"__"+mYAxisData.getInterval()+"__"+mDataList.size());
+        return wrapSize;
     }
 
     @Override

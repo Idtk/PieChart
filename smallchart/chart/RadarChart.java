@@ -2,6 +2,7 @@ package com.idtk.smallchart.chart;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.util.AttributeSet;
@@ -15,6 +16,7 @@ import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.RadarAxisRender;
 import com.idtk.smallchart.render.RadarChartRender;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -102,6 +104,48 @@ public class RadarChart extends PieRadarChart<IRadarData> implements IRadarChart
     public void setDataList(ArrayList<IRadarData> chartDataList) {
         super.setDataList(chartDataList);
         computeRadar();
+    }
+
+    @Override
+    public int getCurrentWidth() {
+        int wrapSize;
+        if (mDataList!=null&&mDataList.size()>1&&mRadarAxisData.getTypes().length>1){
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(mRadarAxisData.getDecimalPlaces());
+            paintText.setStrokeWidth(mRadarAxisData.getPaintWidth());
+            paintText.setTextSize(mRadarAxisData.getTextSize());
+            Paint.FontMetrics fontMetrics= paintText.getFontMetrics();
+            float top = fontMetrics.top;
+            float bottom = fontMetrics.bottom;
+            float webWidth = (bottom-top)*(float) Math.ceil((mRadarAxisData.getMaximum()-mRadarAxisData.getMinimum())
+                    /mRadarAxisData.getInterval());
+            float nameWidth = paintText.measureText(mRadarAxisData.getTypes()[0]);
+            wrapSize = (int) (webWidth*2+nameWidth*1.1);
+        }else {
+            wrapSize = 0;
+        }
+        return wrapSize;
+    }
+
+    @Override
+    public int getCurrentHeight() {
+        int wrapSize;
+        if (mDataList!=null&&mDataList.size()>1&&mRadarAxisData.getTypes().length>1){
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(mRadarAxisData.getDecimalPlaces());
+            paintText.setStrokeWidth(mRadarAxisData.getPaintWidth());
+            paintText.setTextSize(mRadarAxisData.getTextSize());
+            Paint.FontMetrics fontMetrics= paintText.getFontMetrics();
+            float top = fontMetrics.top;
+            float bottom = fontMetrics.bottom;
+            float webWidth = (bottom-top)*(float) Math.ceil((mRadarAxisData.getMaximum()-mRadarAxisData.getMinimum())
+                    /mRadarAxisData.getInterval());
+            float nameWidth = paintText.measureText(mRadarAxisData.getTypes()[0]);
+            wrapSize = (int) (webWidth*2+nameWidth*1.1);
+        }else {
+            wrapSize = 0;
+        }
+        return wrapSize;
     }
 
     public void computeRadar() {

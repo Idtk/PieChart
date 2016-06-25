@@ -59,11 +59,11 @@ public interface IPieData extends IChartData {
      * 获取百分比文字颜色
      * @return 颜色
      */
-    int getTextColor();
+//    int getTextColor();
 
     /**
      * 设置百分比文字颜色
      * @param textColor 颜色
      */
-    void setTextColor(int textColor);
+//    void setTextColor(int textColor);
 }

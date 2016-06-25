@@ -9,7 +9,7 @@ import com.idtk.smallchart.interfaces.iData.IChartData;
  * 描述 : 图表数据基类
  */
 public class ChartData extends BaseData implements IChartData{
-    protected String name;
+    protected String name="";
 
     public void setName(String name) {
         this.name = name;

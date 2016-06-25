@@ -2,9 +2,11 @@ package com.idtk.smallchart.chart;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.idtk.smallchart.LogUtil;
 import com.idtk.smallchart.interfaces.iChart.IChart;
 import com.idtk.smallchart.interfaces.iData.IChartData;
 
@@ -24,6 +26,11 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
 
     protected ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener;
 
+    /**
+     * 测量用画笔
+     */
+    protected Paint paintText = new Paint();
+
     public Chart(Context context) {
         super(context);
     }
@@ -35,6 +42,22 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
     public Chart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(
+                Math.max(getSuggestedMinimumWidth(),
+                        resolveSize(getCurrentWidth(),
+                                widthMeasureSpec)),
+                Math.max(getSuggestedMinimumHeight(),
+                        resolveSize(getCurrentHeight(),
+                                heightMeasureSpec)));
+        LogUtil.d("TAG",getCurrentWidth()+"______"+getCurrentHeight());
+    }
+
+
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -57,4 +80,8 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
      * @param chartDataList 图表数据
      */
     public abstract void setDataList(ArrayList<T> chartDataList);
+
+    public abstract int getCurrentWidth();
+
+    public abstract int getCurrentHeight();
 }

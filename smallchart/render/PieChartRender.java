@@ -39,10 +39,11 @@ public class PieChartRender extends ChartRender implements TouchListener{
         this.pieAxisData = pieAxisData;
         this.pieData = pieData;
 
-        paintText.setColor(pieData.getTextColor());
-        paintText.setTextSize(pieData.getTextSize());
+        paintText.setAntiAlias(true);
+        paintText.setColor(pieAxisData.getColor());
+        paintText.setTextSize(pieAxisData.getTextSize());
         paintText.setTextAlign(Paint.Align.CENTER);
-        paintText.setTextSize(pieData.getTextSize());
+        paintText.setStrokeWidth(pieAxisData.getPaintWidth());
         numberFormat =NumberFormat.getPercentInstance();
         numberFormat.setMinimumFractionDigits(pieAxisData.getDecimalPlaces());
     }
@@ -71,7 +72,7 @@ public class PieChartRender extends ChartRender implements TouchListener{
         canvas.save();
         canvas.rotate(-pieAxisData.getStartAngle());
         //根据Paint的TextSize计算Y轴的值
-        if (animatedValue>pieData.getCurrentAngle()-pieData.getAngle()/2) {
+        if (pieAxisData.getIsTextSize()&&animatedValue>pieData.getCurrentAngle()-pieData.getAngle()/2) {
             if (touchFlag) {
                 drawText(canvas,pieData,pieData.getCurrentAngle()+pieAxisData.getStartAngle(),numberFormat,true);
             } else {

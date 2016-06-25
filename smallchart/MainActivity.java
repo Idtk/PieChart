@@ -2,7 +2,9 @@ package com.idtk.smallchart;
 
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.idtk.smallchart.chart.BarChart;
@@ -17,7 +19,7 @@ import com.idtk.smallchart.data.LineData;
 import com.idtk.smallchart.data.PieData;
 import com.idtk.smallchart.data.PointShape;
 import com.idtk.smallchart.data.RadarData;
-import com.idtk.smallchart.interfaces.iData.IBarLineCurveData;
+import com.idtk.smallchart.interfaces.iData.ICurveData;
 import com.idtk.smallchart.interfaces.iData.IPieData;
 import com.idtk.smallchart.interfaces.iData.IRadarData;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<PointF> mPointArrayList2 = new ArrayList<>();
     private ArrayList<PointF> mPointArrayList3 = new ArrayList<>();
     private ArrayList<PointF> mPointArrayList4 = new ArrayList<>();
-    private ArrayList<IBarLineCurveData> mLineDatas = new ArrayList<>();
+    private ArrayList<ICurveData> mLineDatas = new ArrayList<>();
 
     private float[][] points = new float[][]{{1,10}, {2,47}, {3,11}, {4,38}, {5,9},{6,52}, {7,14}, {8,37}, {9,29}, {10,31}};
     private float[][] points2 = new float[][]{{1,52}, {2,13}, {3,51}, {4,20}, {5,19},{6,20}, {7,54}, {8,7}, {9,19}, {10,41}};
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        classForName2();
-//        initData();
+        initData();
 //        lineChart = (LineChart) findViewById(R.id.lineChart);
 //        lineChart.setData(mLineData);
 //        lineChart.isAnimated = false;
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
 //        lineChart.setPointInRadius(20);
 
-//        curveChart = (CurveChart) findViewById(R.id.curveChart);
-//        curveChart.isAnimated = false;
-//        curveChart.setDataList(mLineDatas);
+        curveChart = (CurveChart) findViewById(R.id.curveChart);
+        curveChart.isAnimated = false;
+        curveChart.setDataList(mLineDatas);
 
 //        barChart = (BarChart) findViewById(R.id.barChart);
 //        barChart.setDataList(mLineDatas);
@@ -83,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
 //        radarChart.setDataList(radarDataList);
 //        radarChart.setTypes(new String[]{"Party A", "Party B", "Party C", "Party D", "Party E", "Party F", "Party G", "Party H"});
 
-        initData2();
-        pieChart = (PieChart) findViewById(R.id.pieChart);
-        pieChart.setDataList(mPieDataList);
+//        initData2();
+//        pieChart = (PieChart) findViewById(R.id.pieChart);
+//        pieChart.setDataList(mPieDataList);
+//        pieChart.setAxisColor(Color.WHITE);
+//        pieChart.setAxisTextSize(50);
     }
 
     private void initData2(){
@@ -110,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
             radarValue2.add(points2[i][1]);
         }
         mLineData.setValue(mPointArrayList);
-        mLineData.setColor(Color.YELLOW);
+        mLineData.setColor(Color.MAGENTA);
 //        mLineData.setName("LineChart");
-        mLineData.setPaintWidth(5);
-        mLineData.setTextSize(30);
-        mLineData.setPointShape(PointShape.RECT);
-        mLineData.setOutRadius(10);
-        mLineData.setIsTextSize(false);
+//        mLineData.setPaintWidth(5);
+//        mLineData.setTextSize(30);
+//        mLineData.setPointShape(PointShape.SOLIDROUND);
+//        mLineData.setOutRadius(10);
+//        mLineData.setIsTextSize(false);
 
         mLineData2.setValue(mPointArrayList2);
         mLineData2.setColor(Color.CYAN);
@@ -125,11 +129,13 @@ public class MainActivity extends AppCompatActivity {
         mLineData2.setTextSize(30);
 
         mLineData3.setValue(mPointArrayList3);
-        mLineData3.setColor(Color.MAGENTA);
+        mLineData3.setColor(Color.RED);
 //        mLineData3.setName("LineChart");
         mLineData3.setPaintWidth(5);
         mLineData3.setIntensity(0.2f);
         mLineData3.setTextSize(30);
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
+        mLineData3.setDrawable(drawable);
         mLineData3.setPointShape(PointShape.SOLIDROUND);
 
         mLineData4.setValue(mPointArrayList4);
@@ -137,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
         mLineData4.setTextSize(30);
 
 
-        mLineDatas.add(mLineData);
-        mLineDatas.add(mLineData2);
+//        mLineDatas.add(mLineData2);
+//        mLineDatas.add(mLineData);
         mLineDatas.add(mLineData3);
 //        mLineDatas.add(mLineData4);
 

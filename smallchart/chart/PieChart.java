@@ -18,6 +18,7 @@ import com.idtk.smallchart.interfaces.iData.IPieData;
 import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.PieChartRender;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -226,6 +227,39 @@ public class PieChart extends PieRadarChart<IPieData> implements IPieChart{
     public void setDataList(ArrayList<IPieData> chartDataList) {
         super.setDataList(chartDataList);
         computePie();
+    }
+
+    @Override
+    public int getCurrentWidth() {
+        int wrapSize;
+        if (mDataList!=null&&mDataList.size()>1){
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(mPieAxisData.getDecimalPlaces());
+            paintText.setTextSize(mPieAxisData.getTextSize());
+            paintText.setStrokeWidth(mPieAxisData.getPaintWidth());
+            float percentWidth = paintText.measureText(numberFormat.format(10));
+            float nameWidth = paintText.measureText(mPieAxisData.getName());
+            wrapSize = (int) ((percentWidth*4+nameWidth*1.1)* mPieAxisData.getOffsetRadiusScale());
+        }else {
+            wrapSize = 0;
+        }
+        return wrapSize;
+    }
+    @Override
+    public int getCurrentHeight() {
+        int wrapSize;
+        if (mDataList!=null&&mDataList.size()>1){
+            NumberFormat numberFormat =NumberFormat.getPercentInstance();
+            numberFormat.setMinimumFractionDigits(mPieAxisData.getDecimalPlaces());
+            paintText.setTextSize(mPieAxisData.getTextSize());
+            paintText.setStrokeWidth(mPieAxisData.getPaintWidth());
+            float percentWidth = paintText.measureText(numberFormat.format(10));
+            float nameWidth = paintText.measureText(mPieAxisData.getName());
+            wrapSize = (int) ((percentWidth*4+nameWidth*1.1)* mPieAxisData.getOffsetRadiusScale());
+        }else {
+            wrapSize = 0;
+        }
+        return wrapSize;
     }
 
     @Override

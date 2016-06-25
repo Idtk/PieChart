@@ -1,7 +1,5 @@
 package com.idtk.smallchart.data;
 
-import android.graphics.Color;
-
 import com.idtk.smallchart.interfaces.iData.IPieData;
 
 /**
@@ -16,7 +14,7 @@ public class PieData extends ChartData implements IPieData{
     private float percentage;
     private float angle = 0;
     private float currentAngle;
-    private int textColor = Color.WHITE;
+//    private int textColor = Color.WHITE;
 
     public void setValue(float value) {
         this.value = value;
@@ -50,11 +48,13 @@ public class PieData extends ChartData implements IPieData{
         this.currentAngle = currentAngle;
     }
 
-    public int getTextColor() {
-        return textColor;
-    }
+//    public int getTextColor() {
+//        return textColor;
+//    }
 
-    public void setTextColor(int textColor) {
-        this.textColor = textColor;
-    }
+//    public void setTextColor(int textColor) {
+//        this.textColor = textColor;
+//    }
+
+
 }
