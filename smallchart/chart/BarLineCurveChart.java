@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 
-import com.idtk.smallchart.LogUtil;
 import com.idtk.smallchart.animation.ChartAnimator;
 import com.idtk.smallchart.compute.ComputeXAxis;
 import com.idtk.smallchart.compute.ComputeYAxis;
@@ -16,7 +15,6 @@ import com.idtk.smallchart.interfaces.iChart.IBarLineCurveChart;
 import com.idtk.smallchart.interfaces.iData.IBarLineCurveData;
 import com.idtk.smallchart.interfaces.iData.IXAxisData;
 import com.idtk.smallchart.interfaces.iData.IYAxisData;
-import com.idtk.smallchart.render.ChartRender;
 import com.idtk.smallchart.render.XAxisOffsetRender;
 import com.idtk.smallchart.render.XAxisRender;
 import com.idtk.smallchart.render.YAxisRender;
@@ -37,20 +35,14 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
     protected ComputeXAxis mComputeXAxis = new ComputeXAxis(mXAxisData);
     protected ComputeYAxis mComputeYAxis = new ComputeYAxis(mYAxisData);
 
-//    protected ArrayList<T> mDataList = new ArrayList<>();
     public boolean convergenceFlag = true;
 
     protected XAxisOffsetRender mXAxisOffsetRender;
     protected XAxisRender mXAxisRender;
     protected YAxisRender mYAxisRender;
 
-//    protected float axisTextSize = 30;
-//    protected int axisColor = Color.BLACK;
-//    protected float axisWidth = 2;
-//    protected String XAxisUnit = "";
-//    protected String YAxisUnit = "";
 
-    protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
+//    protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
     protected float animatedValue;
     public boolean isAnimated = true;
     protected ChartAnimator mChartAnimator;
@@ -187,7 +179,7 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
         }else {
             wrapSize = 0;
         }
-        LogUtil.d("TAGX",mXAxisData.getMaximum()+"__"+mXAxisData.getMinimum()+"__"+mXAxisData.getInterval());
+//        LogUtil.d("TAGX",mXAxisData.getMaximum()+"__"+mXAxisData.getMinimum()+"__"+mXAxisData.getInterval());
         return wrapSize;
     }
 
@@ -210,11 +202,11 @@ public abstract class BarLineCurveChart<T extends IBarLineCurveData> extends Cha
             paintValue.setTextSize(mDataList.get(0).getTextSize());
             Paint.FontMetrics fontMetricsValue= paintValue.getFontMetrics();
             float valueWidth =  fontMetricsValue.bottom-fontMetricsValue.top;
-            wrapSize = (int) (yAxisWidth*1.2f+valueWidth*8);
+            wrapSize = (int) (yAxisWidth*2f+valueWidth*2);
         }else {
             wrapSize = 0;
         }
-        LogUtil.d("TAGY",mYAxisData.getMaximum()+"__"+mYAxisData.getMinimum()+"__"+mYAxisData.getInterval()+"__"+mDataList.size());
+//        LogUtil.d("TAGY",mYAxisData.getMaximum()+"__"+mYAxisData.getMinimum()+"__"+mYAxisData.getInterval()+"__"+mDataList.size());
         return wrapSize;
     }
 

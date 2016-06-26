@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 
 import com.idtk.smallchart.interfaces.iChart.IPieRadarChart;
 import com.idtk.smallchart.interfaces.iData.IChartData;
-import com.idtk.smallchart.render.ChartRender;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  */
 public abstract class PieRadarChart<T extends IChartData> extends Chart<T> implements IPieRadarChart{
 
-    protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
+//    protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
 
     public PieRadarChart(Context context) {
         super(context);

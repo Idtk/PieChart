@@ -6,9 +6,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.idtk.smallchart.LogUtil;
 import com.idtk.smallchart.interfaces.iChart.IChart;
 import com.idtk.smallchart.interfaces.iData.IChartData;
+import com.idtk.smallchart.render.ChartRender;
 
 import java.util.ArrayList;
 
@@ -25,6 +25,8 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
     protected ArrayList<T> mDataList = new ArrayList<>();
 
     protected ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener;
+
+    protected ArrayList<ChartRender> chartRenderList = new ArrayList<>();
 
     /**
      * 测量用画笔
@@ -53,7 +55,7 @@ public abstract class Chart<T extends IChartData> extends View implements IChart
                 Math.max(getSuggestedMinimumHeight(),
                         resolveSize(getCurrentHeight(),
                                 heightMeasureSpec)));
-        LogUtil.d("TAG",getCurrentWidth()+"______"+getCurrentHeight());
+//        LogUtil.d("TAG",getCurrentWidth()+"______"+getCurrentHeight());
     }
 
 

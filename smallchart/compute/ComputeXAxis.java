@@ -19,6 +19,10 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
     private IXAxisData xAxisData;
     private NumberFormat numberFormat;
     private Paint paint = new Paint();
+    /**
+     * 限制收敛次数
+     */
+    private int times=0;
 
     public ComputeXAxis(IXAxisData axisData) {
         super(axisData);
@@ -77,6 +81,7 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
      * @param barLineCurveDatas  X轴数据
      */
     public void convergence(ArrayList<T> barLineCurveDatas){
+        times++;
         int count = 0;
         int newCount = 0;
 //        initScaling(xAxisData.getMinimum(),xAxisData.getMaximum(),BarLineCurveDatas.get(0).getValue().size(),xAxisData);
@@ -99,7 +104,7 @@ public class ComputeXAxis<T extends IBarLineCurveData> extends Compute {
             xAxisData.setMaximum(xAxisData.getMaximum()-xAxisData.getInterval());
         }
 
-        if (xAxisData.getMaximum()-xAxisData.getMinimum()<=(xAxisData.getInterval()*2)){
+        if (xAxisData.getMaximum()-xAxisData.getMinimum()<=(xAxisData.getInterval()*2)&&times<5){
             initScaling(xAxisData.getMinimum(),xAxisData.getMaximum(),barLineCurveDatas.get(0).getValue().size(),xAxisData);
             convergence(barLineCurveDatas);
         }
