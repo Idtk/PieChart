@@ -1,6 +1,6 @@
 # CustomView<br>
 
-# **此项目已合并至[SmallChart](https://github.com/Idtk/SmallChart),预计将在2016.9-10期间进行删除。**
+# **此项目已合并至[SmallChart](https://github.com/Idtk/SmallChart)**
 
 ## Introduction<br>
 &nbsp;&nbsp;&nbsp;&nbsp;可定义环形块颜色与名称，显示数据百分比的环形图。用户可自定义动画效果，内外圆半径比，百分比小数位，画笔颜色，字体大小等。<br>
