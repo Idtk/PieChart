@@ -50,7 +50,12 @@ private void initData(){
 ## Demo<br>
 <img src="https://github.com/Idtk/CustomView/blob/master/gif/PieChart.gif" alt="PieChart" title="PieChart"/><br>
 
+******
 ## About
-**博客:www.idtkm.com**<br>
-**GitHub:https://github.com/Idtk**<br>
-**邮箱:IdtkMa@gmail.com**<br>
+
+&nbsp;&nbsp;**博客: www.idtkm.com**<br>
+&nbsp;&nbsp;**GitHub: https://github.com/Idtk**<br>
+&nbsp;&nbsp;**微博: http://weibo.com/Idtk**<br>
+&nbsp;&nbsp;**邮箱: IdtkMa@gmail.com**<br>
+&nbsp;&nbsp;**稀土掘金: http://gold.xitu.io/user/56ff44087db2a20059ff7913**<br>
+&nbsp;&nbsp;**开发者头条: https://toutiao.io/subjects/89638**<br>
